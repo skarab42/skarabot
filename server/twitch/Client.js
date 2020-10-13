@@ -8,7 +8,7 @@ module.exports = class Client {
     this.api = new ApiClient({ authProvider: this.authProvider });
   }
 
-  auth(req, res, next) {
+  async auth(req, res, next) {
     if (req.path === "/token") {
       res.end(`
         <script>
@@ -22,6 +22,12 @@ module.exports = class Client {
         <script>window.location = '/'</script>
       `);
       this.authProvider.setToken(req.query);
+    } else if (req.path === "/twitch") {
+      const { api, call, args } = req.query;
+      let argv = (args || "").split(",").map(arg => args.trim());
+      const response = await this.api.helix[api][call](argv);
+      const json = JSON.stringify(response._data || response);
+      res.end(json);
     }
     next();
   }

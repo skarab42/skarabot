@@ -11,7 +11,7 @@ const public = sirv("public", { dev: true });
 const twitchConfig = {
   clientId: "i1zqws5ibrt0vdaiuenhcpoe4t5rnb",
   redirectURI: `http://${address}/token`,
-  forceVerify: true
+  forceVerify: false
 };
 
 const twitchClient = new TwitchClient(twitchConfig);
@@ -24,6 +24,4 @@ polka()
     if (err) throw err;
     console.log(`> ${name} v${version}`);
     console.log(`> running on ${address}`);
-    const me = await twitchClient.api.helix.users.getMe();
-    console.log(me);
   });
