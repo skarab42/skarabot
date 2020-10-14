@@ -1,11 +1,52 @@
 const AuthProvider = require("./AuthProvider");
 const { ApiClient } = require("twitch");
+const { ChatClient } = require("twitch-chat-client");
 
 module.exports = class Client {
   constructor(config) {
     this.config = config;
     this.authProvider = new AuthProvider(config);
     this.api = new ApiClient({ authProvider: this.authProvider });
+    this.chat = new ChatClient(this.authProvider, {
+      channels: config.channels
+    });
+    this.io = null;
+    this.chat.connect();
+    this.chat.onPrivmsg(async (channel, user, message, msg) => {
+      // console.log(`${channel} <${user}> ${message}`);
+      // if (message === "ping") {
+      //   this.chat.say(channel, "pong");
+      // }
+      this.io &&
+        this.io.emit("twitch.chat.onPrivmsg", { channel, user, message, msg });
+    });
+  }
+
+  setSocketIO(io) {
+    this.io = io;
+    this.io.on("connection", socket => {
+      socket.on("twitch.chat.say", (channel, message) => {
+        this.chat.say(channel, message);
+      });
+      socket.on("twitch.api", async (api, method, ...args) => {
+        let cb = null;
+
+        if (typeof args[args.length - 1] === "function") {
+          cb = args.pop();
+        }
+
+        const label = `twitch.helix.${api}.${method}`;
+
+        try {
+          const ret = await this.api.helix[api][method](...args);
+          cb && cb({ error: null, data: ret._data });
+          console.log(`>>> ${label}:`, ret);
+        } catch (error) {
+          console.error(`!!! ${label}:`, error);
+          cb && cb({ error, data: null });
+        }
+      });
+    });
   }
 
   async auth(req, res, next) {
