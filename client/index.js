@@ -1,24 +1,23 @@
 const socket = require("socket.io-client")();
 
-socket.on("twitch.chat.onPrivmsg", payload => {
-  console.log("onPrivmsg", payload);
-  console.log(`${payload.channel} <${payload.user}> ${payload.message}`);
-  if (payload.message === "ping") {
-    socket.emit("twitch.chat.say", payload.channel, "pong");
+const userIds = [];
+
+socket.on("twitch.chat.onMessage", ({ channel, user, message, data, msg }) => {
+  const userId = msg._tags["user-id"];
+  console.log(data);
+  if (!userIds.includes(userId)) {
+    console.log("add user:", userId);
+    userIds.push(userId);
+    socket.emit(
+      "twitch.api",
+      "users",
+      "getUserById",
+      userId,
+      ({ data, error }) => {
+        const profileURL = data["profile_image_url"];
+        const displayName = data["display_name"];
+        console.log(displayName, profileURL);
+      }
+    );
   }
 });
-
-socket.emit("twitch.api", "users", "getMe", true, (...args) => {
-  console.log({ args });
-});
-
-// fetch("twitch?api=users&call=getMe&args=true")
-//   .then(response => {
-//     return response.json();
-//   })
-//   .then(json => {
-//     console.log({ json });
-//   })
-//   .catch(error => {
-//     console.error(error);
-//   });

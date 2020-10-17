@@ -12,14 +12,25 @@ module.exports = class Client {
     });
     this.io = null;
     this.chat.connect();
-    this.chat.onPrivmsg(async (channel, user, message, msg) => {
-      // console.log(`${channel} <${user}> ${message}`);
-      // if (message === "ping") {
-      //   this.chat.say(channel, "pong");
-      // }
-      this.io &&
-        this.io.emit("twitch.chat.onPrivmsg", { channel, user, message, msg });
+    this.chat.onMessage(async (channel, user, message, msg) => {
+      msg._tags = Object.fromEntries(msg._tags || []);
+      this._onMessage({ channel, user, message, data: {}, msg });
     });
+  }
+
+  emit(eventName, ...args) {
+    this.io && this.io.emit(eventName, ...args);
+  }
+
+  _onMessage(message) {
+    this.emit("twitch.chat.onMessage", message);
+  }
+
+  onMessage(fn) {
+    const next = this._onMessage;
+    const thisFn = fn.bind(this);
+    this._onMessage = message => thisFn(message, next.bind(this, message));
+    return this;
   }
 
   setSocketIO(io) {
@@ -47,6 +58,7 @@ module.exports = class Client {
         }
       });
     });
+    return this;
   }
 
   async auth(req, res, next) {
