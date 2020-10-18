@@ -20,4 +20,6 @@ const { server } = polka()
 
 twitchClient
   .setSocketIO(io(server))
-  .onMessage(require("./twitch/plugins/emit"));
+  .onMessage(require("./twitch/plugins/chat-message/timestamp"))
+  .onMessage(require("./twitch/plugins/chat-message/users"))
+  .onMessage(require("./twitch/plugins/chat-message/emit"));
