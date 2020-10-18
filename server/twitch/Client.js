@@ -14,8 +14,9 @@ module.exports = class Client {
     this.chat.connect();
     this.onMessageCallbacks = [];
     this.chat.onMessage(async (channel, user, message, msg) => {
-      msg._tags = Object.fromEntries(msg._tags || []);
-      this._onMessage({ channel, user, message, data: {}, msg });
+      message = { channel, user, message, msg, data: {} };
+      message.msg._tags = Object.fromEntries(msg._tags || []);
+      this._onMessage({ message, client: this });
     });
   }
 
@@ -25,16 +26,16 @@ module.exports = class Client {
 
   _onMessage(message) {
     let i = 0;
-    const thisFn = this.onMessageCallbacks[i];
+    const fn = this.onMessageCallbacks[i];
     const next = () => {
       const nextFn = this.onMessageCallbacks[++i];
       nextFn && nextFn(message, next);
     };
-    thisFn(message, next);
+    fn(message, next);
   }
 
   onMessage(fn) {
-    this.onMessageCallbacks.push(fn.bind(this));
+    this.onMessageCallbacks.push(fn);
     return this;
   }
 
