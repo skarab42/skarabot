@@ -12,6 +12,7 @@ module.exports = class Client {
     });
     this.io = null;
     this.chat.connect();
+    this.onMessageCallbacks = [];
     this.chat.onMessage(async (channel, user, message, msg) => {
       msg._tags = Object.fromEntries(msg._tags || []);
       this._onMessage({ channel, user, message, data: {}, msg });
@@ -23,13 +24,17 @@ module.exports = class Client {
   }
 
   _onMessage(message) {
-    this.emit("twitch.chat.onMessage", message);
+    let i = 0;
+    const thisFn = this.onMessageCallbacks[i];
+    const next = () => {
+      const nextFn = this.onMessageCallbacks[++i];
+      nextFn && nextFn(message, next);
+    };
+    thisFn(message, next);
   }
 
   onMessage(fn) {
-    const next = this._onMessage;
-    const thisFn = fn.bind(this);
-    this._onMessage = message => thisFn(message, next.bind(this, message));
+    this.onMessageCallbacks.push(fn.bind(this));
     return this;
   }
 

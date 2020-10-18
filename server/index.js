@@ -18,20 +18,6 @@ const { server } = polka()
     console.log(`> running on ${config.server.address}`);
   });
 
-function parseBadges(chatMessage, next) {
-  const badgesStr = chatMessage.msg._tags.badges || "";
-  const badges = badgesStr.split(",").map(b => {
-    let [key, val] = b.split("/");
-    return [key, parseInt(val)];
-  });
-  chatMessage.data.badges = Object.fromEntries(badges);
-  next();
-}
-
 twitchClient
   .setSocketIO(io(server))
-  .onMessage(parseBadges)
-  .onMessage((chatMessage, next) => {
-    chatMessage.data.say = "kapoué";
-    next();
-  });
+  .onMessage(require("./twitch/plugins/emit"));
