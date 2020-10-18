@@ -8,6 +8,7 @@
     "build": "rollup -c"
   },
   "dependencies": {
+    "conf": "^7.1.2",
     "open": "^7.3.0",
     "polka": "^0.5.2",
     "sirv": "^1.0.6",
