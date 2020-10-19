@@ -13,6 +13,7 @@
     "polka": "^0.5.2",
     "sirv": "^1.0.6",
     "socket.io": "^2.3.0",
+    "soundex": "^0.2.1",
     "twitch": "^4.2.6",
     "twitch-auth": "^4.2.6",
     "twitch-chat-client": "^4.2.6"
