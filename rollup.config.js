@@ -12,12 +12,11 @@ const outputDir = "public";
 const serverPath = "server/index.js";
 
 export default {
-  input: `${inputDir}/index.js`,
+  input: [`${inputDir}/index.js`, `${inputDir}/wall-of-fame.js`],
   output: {
-    name: "index",
-    format: "iife",
+    format: "es",
     sourcemap: true,
-    file: `${outputDir}/index.js`
+    dir: `${outputDir}/js/`
   },
   plugins: [
     commonjs(),
