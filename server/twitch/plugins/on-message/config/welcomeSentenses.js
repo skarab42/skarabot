@@ -13,5 +13,9 @@ module.exports = [
   "tagazok",
   "zblhu",
   "salutations",
-  "bonsoir"
+  "bonsoir",
+  "heyguys",
+  "luvpeekr",
+  "redalihey",
+  "Iti63hey"
 ];
