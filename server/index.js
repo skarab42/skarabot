@@ -20,6 +20,8 @@ const { server } = polka()
 
 twitchClient
   .setSocketIO(io(server))
-  .onMessage(require("./twitch/plugins/chat-message/timestamp"))
-  .onMessage(require("./twitch/plugins/chat-message/users"))
-  .onMessage(require("./twitch/plugins/chat-message/emit"));
+  .onMessage(require("./twitch/plugins/on-message/timestamp"))
+  .onMessage(require("./twitch/plugins/on-message/users-log"))
+  .onMessage(require("./twitch/plugins/on-message/user-first-seen"))
+  .onMessage(require("./twitch/plugins/on-message/emit"))
+  .onMessage(require("./twitch/plugins/on-message/user-last-seen"));
