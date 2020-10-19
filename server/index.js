@@ -21,6 +21,7 @@ const { server } = polka()
 twitchClient
   .setSocketIO(io(server))
   .onMessage(require("./twitch/plugins/on-message/timestamp"))
+  .onMessage(require("./twitch/plugins/on-message/start-time"))
   .onMessage(require("./twitch/plugins/on-message/users-log"))
   .onMessage(require("./twitch/plugins/on-message/user-first-seen"))
   .onMessage(require("./twitch/plugins/on-message/user-rewards"))

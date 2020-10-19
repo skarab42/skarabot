@@ -10,7 +10,7 @@ const welcomeSentenses = require("./config/welcomeSentenses").map(s =>
   soundex(s)
 );
 
-module.exports = async ({ message, client }, next) => {
+module.exports = ({ message, client }, next) => {
   let user = message.data.user;
   let points = message.message.length * messageLengthRatio;
 
@@ -19,14 +19,7 @@ module.exports = async ({ message, client }, next) => {
   }
 
   const firstWord = soundex(message.message.split(" ")[0].toLowerCase());
-
-  const channel = message.channel.slice(1);
-  const stream = await client.api.helix.streams.getStreamByUserName(channel);
-  const startedAt = stream._data["started_at"];
-
-  const gmt = Math.abs(new Date().getTimezoneOffset()) * 60;
-  const startTime = new Date(startedAt).getTime() + gmt;
-  const firstSeen = user.lastSeen < startTime;
+  const firstSeen = user.lastSeen < message.data.startTime;
 
   if (welcomeSentenses.includes(firstWord)) {
     if (firstSeen) {
