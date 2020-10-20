@@ -11,6 +11,7 @@ module.exports = async ({ message, client }, next) => {
 
   if (!stream) {
     message.data.startTime = 0;
+    startTime = 0;
     return next();
   }
 
