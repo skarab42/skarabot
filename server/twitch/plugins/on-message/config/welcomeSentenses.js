@@ -4,6 +4,7 @@ module.exports = [
   "salut",
   "hi",
   "hellut",
+  "cc",
   "yo",
   "hey",
   "boop",
