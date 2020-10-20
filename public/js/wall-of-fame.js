@@ -1,10 +1,16 @@
 
 (function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
-// const socket = require("socket.io-client")();
+import { l as lib } from './index-41ff57ee.js';
 
-// socket.on("twitch.chat.onMessage", chatMessage => {
-//   console.log("onMessage:", chatMessage);
-// });
+const socket = lib();
+
+socket.on("wall-of-fame.move", chatMessage => {
+  const { id, position } = chatMessage.data.user;
+  const $img = document.querySelector(`#user-${id}`);
+  $img.style.top = `${position.y}px`;
+  $img.style.left = `${position.x}px`;
+  console.log("move:", { id, position });
+});
 
 const imgSize = { width: 100, height: 100 };
 
@@ -14,9 +20,10 @@ function random(min, max) {
 
 const $wall = document.querySelector("#wall");
 
-function addSticker({ avatarURL, position }) {
+function addSticker({ id, avatarURL, position }) {
   const $img = new Image(imgSize.width, imgSize.height);
   $img.src = avatarURL;
+  $img.id = `user-${id}`;
   $img.style.position = "absolute";
   $img.style.top = `${position.y}px`;
   $img.style.left = `${position.x}px`;
@@ -26,8 +33,8 @@ function addSticker({ avatarURL, position }) {
 
 function addStickers(users) {
   Object.values(users)
-    .map(({ avatarURL, position }) => {
-      return avatarURL ? { avatarURL, position } : null;
+    .map(({ id, avatarURL, position }) => {
+      return avatarURL ? { id, avatarURL, position } : null;
     })
     .filter(item => item)
     .forEach(addSticker);
@@ -39,4 +46,10 @@ fetch("/users")
   .catch(error => {
     console.error(error);
   });
+
+var wallOfFame = {
+
+};
+
+export default wallOfFame;
 //# sourceMappingURL=wall-of-fame.js.map
