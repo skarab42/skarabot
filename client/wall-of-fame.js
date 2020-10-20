@@ -1,8 +1,12 @@
-// const socket = require("socket.io-client")();
+const socket = require("socket.io-client")();
 
-// socket.on("twitch.chat.onMessage", chatMessage => {
-//   console.log("onMessage:", chatMessage);
-// });
+socket.on("wall-of-fame.move", chatMessage => {
+  const { id, position } = chatMessage.data.user;
+  const $img = document.querySelector(`#user-${id}`);
+  $img.style.top = `${position.y}px`;
+  $img.style.left = `${position.x}px`;
+  console.log("move:", { id, position });
+});
 
 const imgSize = { width: 100, height: 100 };
 
@@ -12,9 +16,10 @@ function random(min, max) {
 
 const $wall = document.querySelector("#wall");
 
-function addSticker({ avatarURL, position }) {
+function addSticker({ id, avatarURL, position }) {
   const $img = new Image(imgSize.width, imgSize.height);
   $img.src = avatarURL;
+  $img.id = `user-${id}`;
   $img.style.position = "absolute";
   $img.style.top = `${position.y}px`;
   $img.style.left = `${position.x}px`;
@@ -24,8 +29,8 @@ function addSticker({ avatarURL, position }) {
 
 function addStickers(users) {
   Object.values(users)
-    .map(({ avatarURL, position }) => {
-      return avatarURL ? { avatarURL, position } : null;
+    .map(({ id, avatarURL, position }) => {
+      return avatarURL ? { id, avatarURL, position } : null;
     })
     .filter(item => item)
     .forEach(addSticker);
