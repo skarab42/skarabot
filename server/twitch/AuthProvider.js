@@ -17,7 +17,7 @@ module.exports = class AuthProvider extends EventEmitter {
   constructor({
     clientId,
     redirectURI = "http://localhost",
-    forceVerify = false,
+    forceVerify = false
   } = {}) {
     super();
 
@@ -33,7 +33,7 @@ module.exports = class AuthProvider extends EventEmitter {
   }
 
   hasScopes(scopes) {
-    return scopes.every((scope) => this.currentScopes.includes(scope));
+    return scopes.every(scope => this.currentScopes.includes(scope));
   }
 
   getAuthUrl(scopes) {
@@ -54,22 +54,24 @@ module.exports = class AuthProvider extends EventEmitter {
   }
 
   getAccessToken(scopes = null) {
-    return new Promise((resolve, reject) => {
+    // TODO detect and reject promise on error
+    return new Promise(resolve => {
       scopes = normalizeScopes(scopes);
 
+      // eslint-disable-next-line no-console
       console.log("\x1b[35m%s\x1b[0m", `Twitch request scopes [${scopes}]`);
 
       if (!this.forceVerify && this.accessToken && this.hasScopes(scopes)) {
         return resolve(this.accessToken);
       }
 
-      this.__resolve = (accessToken) => {
-        scopes.forEach((scope) => this.currentScopes.push(scope));
+      this.__resolve = accessToken => {
+        scopes.forEach(scope => this.currentScopes.push(scope));
 
         this.accessToken = new AccessToken({
           access_token: accessToken,
           scope: this.currentScopes,
-          refresh_token: "",
+          refresh_token: ""
         });
 
         resolve(this.accessToken);

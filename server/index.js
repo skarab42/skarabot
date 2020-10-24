@@ -16,8 +16,10 @@ const { server } = polka()
   .use(userAPI)
   .listen(config.server.port, async err => {
     if (err) throw err;
+    /* eslint-disable no-console */
     console.log(`> ${name} v${version}`);
     console.log(`> running on ${config.server.address}`);
+    /* eslint-enable no-console */
   });
 
 twitchClient

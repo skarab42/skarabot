@@ -4,17 +4,13 @@ let queueTimeoutId = null;
 const queueTimeout = 5000;
 const usersQueue = new Map();
 
-function log(...args) {
-  console.log("[users-log]", ...args);
-}
-
+// TODO print/log error....
 function error(...args) {
-  // TODO handle error....
-  log("[error]", ...args);
+  // eslint-disable-next-line no-console
+  console.error("[error]", ...args);
 }
 
 function clearQueue() {
-  log("clearQueue");
   usersQueue.clear();
   clearTimeout(queueTimeoutId);
   queueTimeoutId = null;
@@ -23,7 +19,6 @@ function clearQueue() {
 function updateUser(helixUser) {
   const { _data } = helixUser;
   const id = _data["id"];
-  log("updateUser:", id);
   users.update({
     id,
     avatarURL: _data["profile_image_url"] || null,
@@ -32,7 +27,6 @@ function updateUser(helixUser) {
 }
 
 function processQueue(client) {
-  log("processQueue:", usersQueue.size);
   client.api.helix.users
     .getUsersByIds([...usersQueue.keys()])
     .then(helixUsers => helixUsers.forEach(updateUser))

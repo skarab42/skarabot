@@ -39,6 +39,12 @@ module.exports = class Client {
     return this;
   }
 
+  // TODO print/log error
+  onApiError(api, error) {
+    // eslint-disable-next-line no-console
+    console.error(`${api}:`, error);
+  }
+
   setSocketIO(io) {
     this.io = io;
     this.io.on("connection", socket => {
@@ -57,9 +63,8 @@ module.exports = class Client {
         try {
           const ret = await this.api.helix[api][method](...args);
           cb && cb({ error: null, data: ret._data });
-          console.log(`>>> ${label}:`, ret);
         } catch (error) {
-          console.error(`!!! ${label}:`, error);
+          this.onApiError(label, error);
           cb && cb({ error, data: null });
         }
       });
@@ -83,7 +88,7 @@ module.exports = class Client {
       this.authProvider.setToken(req.query);
     } else if (req.path === "/twitch") {
       const { api, call, args } = req.query;
-      let argv = (args || "").split(",").map(arg => args.trim());
+      let argv = (args || "").split(",").map(arg => arg.trim());
       const response = await this.api.helix[api][call](argv);
       const json = JSON.stringify(response._data || response);
       res.end(json);

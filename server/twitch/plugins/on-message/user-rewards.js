@@ -1,4 +1,3 @@
-const usersStore = require("../../../store/users");
 const users = require("../../../libs/users");
 const soundex = require("soundex");
 
@@ -10,7 +9,7 @@ const welcomeSentenses = require("./config/welcomeSentenses").map(s =>
   soundex(s)
 );
 
-module.exports = ({ message, client }, next) => {
+module.exports = ({ message }, next) => {
   let user = message.data.user;
   let points = message.message.length * messageLengthRatio;
 

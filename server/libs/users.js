@@ -49,7 +49,7 @@ function update(user) {
   return user;
 }
 
-function del(id, user) {
+function del(id) {
   usersStore.delete(`list.${id}`);
 }
 

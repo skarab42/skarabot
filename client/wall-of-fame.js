@@ -5,7 +5,6 @@ socket.on("wall-of-fame.move", chatMessage => {
   const $img = document.querySelector(`#user-${id}`);
   $img.style.top = `${position.y}px`;
   $img.style.left = `${position.x}px`;
-  console.log("move:", { id, position });
 });
 
 const imgSize = { width: 100, height: 100 };
@@ -36,9 +35,13 @@ function addStickers(users) {
     .forEach(addSticker);
 }
 
+// TODO print/log error
+function onError(error) {
+  // eslint-disable-next-line
+  console.error(error);
+}
+
 fetch("/users")
   .then(response => response.json())
   .then(addStickers)
-  .catch(error => {
-    console.error(error);
-  });
+  .catch(onError);
