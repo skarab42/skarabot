@@ -9,6 +9,12 @@ socket.on("wall-of-fame.move", chatMessage => {
 
 const imgSize = { width: 100, height: 100 };
 
+// TODO print/log error
+function onError(error) {
+  // eslint-disable-next-line
+  console.error("ERROR >>>", error);
+}
+
 function random(min, max) {
   return Math.random() * (max - min) + min;
 }
@@ -23,7 +29,8 @@ function addSticker({ id, avatarURL, position }) {
   $img.style.top = `${position.y}px`;
   $img.style.left = `${position.x}px`;
   $img.style.borderRadius = random(0, 100) + "%";
-  $wall.append($img);
+  $img.onload = () => $wall.append($img);
+  $img.onerror = () => onError(`Image not found (user-${id})`);
 }
 
 function addStickers(users) {
@@ -33,12 +40,6 @@ function addStickers(users) {
     })
     .filter(item => item)
     .forEach(addSticker);
-}
-
-// TODO print/log error
-function onError(error) {
-  // eslint-disable-next-line
-  console.error(error);
 }
 
 fetch("/users")
