@@ -5,7 +5,7 @@ const messageLengthRatio = 0.01;
 const welcomePoints = 10;
 const replyPoints = 10;
 
-const welcomeSentenses = require("./config/welcomeSentenses").map(s =>
+const welcomeSentences = require("./config/welcomeSentences").map(s =>
   soundex(s)
 );
 
@@ -20,7 +20,7 @@ module.exports = ({ message }, next) => {
   const firstWord = soundex(message.message.split(" ")[0].toLowerCase());
   const firstSeen = user.lastSeen < message.data.startTime;
 
-  if (welcomeSentenses.includes(firstWord)) {
+  if (welcomeSentences.includes(firstWord)) {
     if (firstSeen) {
       points += welcomePoints;
     } else {
