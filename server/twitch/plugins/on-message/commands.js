@@ -16,7 +16,7 @@ module.exports = ({ message, client }, next) => {
     commandFn({ command, message, client });
   } else {
     command.name = "alias";
-    command.args.push(name);
+    command.args.unshift(name);
     commands.alias({ command, message, client });
   }
 
