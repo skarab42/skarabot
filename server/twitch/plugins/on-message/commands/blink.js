@@ -17,12 +17,12 @@ module.exports = ({ command, message, client }) => {
     );
   }
 
-  if (isNaN(count)) {
+  if (isNaN(count) || count <= 0) {
     client.chat.say(message.channel, `Usage: !blink <count> (max:${maxCount})`);
     return;
   }
 
-  const cost = count * costRatio;
+  const cost = Math.abs(count * costRatio);
 
   if (user.points < cost) {
     client.chat.say(
@@ -32,7 +32,7 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
-  user.points -= Math.abs(cost);
+  user.points -= cost;
   users.update(user);
 
   client.io.emit("wof.blink", { user, count });
