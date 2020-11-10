@@ -1,8 +1,11 @@
 const socket = require("socket.io-client")();
+const { default: anime } = require("animejs");
 
 const imgSize = { width: 100, height: 100 };
 const $wall = document.querySelector("#wall");
 
+const startScale = 5;
+const animeDuration = 3000;
 const showTimeout = 5000;
 let showTimeoutId = null;
 
@@ -29,15 +32,26 @@ function show() {
 }
 
 function addSticker({ id, avatarURL, position }) {
-  const $img = new Image(imgSize.width, imgSize.height);
+  const [w, h] = [imgSize.width * startScale, imgSize.height * startScale];
+  const [x, y] = [random(-200, 200), random(-200, 200)];
+  const $img = new Image(w, h);
   $img.src = avatarURL;
   $img.id = `user-${id}`;
   $img.style.position = "absolute";
-  $img.style.top = `${position.y}px`;
-  $img.style.left = `${position.x}px`;
+  $img.style.top = `${window.innerHeight / 2 - h / 2 + y}px`;
+  $img.style.left = `${window.innerWidth / 2 - w / 2 + x}px`;
   $img.style.borderRadius = random(0, 100) + "%";
   $img.onload = () => {
     show();
+    anime({
+      targets: $img,
+      top: position.y,
+      left: position.x,
+      width: imgSize.width,
+      height: imgSize.height,
+      delay: random(0, 2000),
+      duration: animeDuration
+    });
     $wall.append($img);
   };
   $img.onerror = () => {

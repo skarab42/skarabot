@@ -9,8 +9,9 @@
     "lint": "eslint --fix ./server/**/* ./client/**/*"
   },
   "dependencies": {
+    "animejs": "^3.2.1",
     "conf": "^7.1.2",
-    "node-fetch": "^2.6.1",
+    "nsfwjs": "^2.3.0",
     "open": "^7.3.0",
     "polka": "^0.5.2",
     "sirv": "^1.0.6",
