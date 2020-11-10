@@ -32,7 +32,7 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
-  user.points -= cost;
+  user.points -= Math.abs(cost);
   users.update(user);
 
   client.io.emit("wof.blink", { user, count });
