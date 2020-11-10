@@ -23,8 +23,8 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
-  user.points += points;
-  users.update(user);
+  userStore.points += points;
+  users.update(userStore);
 
-  client.chat.say(message.channel, `${nick} tu as ${user.points}pts.`);
+  client.chat.say(message.channel, `${nick} tu as ${userStore.points}pts.`);
 };
