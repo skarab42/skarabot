@@ -44,6 +44,12 @@ function get(id, defaultUser = null) {
   return usersStore.get(`list.${id}`, defaultUser);
 }
 
+function getByName(name) {
+  return Object.values(getAll()).find(
+    user => user.name.toLowerCase() === name.toLowerCase()
+  );
+}
+
 function update(user) {
   user = { ...get(user.id), ...user };
   set(user.id, user);
@@ -55,19 +61,7 @@ function del(id) {
 }
 
 function getAll() {
-  const usersList = usersStore.get("list", {});
-
-  // Object.values(usersList).forEach(user => {
-  //   if (user.avatarURL) {
-  //     fetch(user.avatarURL).then(res => {
-  //       if (res.status !== 200) {
-  //         console.log(user);
-  //       }
-  //     });
-  //   }
-  // });
-
-  return usersList;
+  return usersStore.get("list", {});
 }
 
 module.exports = {
@@ -76,5 +70,6 @@ module.exports = {
   get,
   getAll,
   update,
+  getByName,
   delete: del
 };
