@@ -12,7 +12,7 @@ const outputDir = "public";
 const serverPath = "server/index.js";
 
 export default {
-  input: [`${inputDir}/index.js`, `${inputDir}/wall-of-fame.js`],
+  input: [`${inputDir}/streamer-highlight.js`, `${inputDir}/wall-of-fame.js`],
   output: {
     format: "es",
     sourcemap: true,

@@ -11,7 +11,9 @@ module.exports = ({ message, client }, next) => {
   const now = message.data.timestamp;
   const elapsed = message.data.timestamp - user.lastHighlight;
 
-  if (user.viewCount < minViewCount || elapsed < delayMs) {
+  if (message.data.badges.broadcaster) {
+    console.log("MOI MOI");
+  } else if (user.viewCount < minViewCount || elapsed < delayMs) {
     return next();
   }
 
@@ -29,13 +31,20 @@ module.exports = ({ message, client }, next) => {
         return next();
       }
 
-      const { url, viewable } = data[0]._data;
+      const { id, url, viewable } = data[0]._data;
 
-      client.chat.say(message.channel, `${sayMessage} -> ${user.name} ${url}`);
+      if (!message.data.badges.broadcaster) {
+        client.chat.say(
+          message.channel,
+          `${sayMessage} -> ${user.name} ${url}`
+        );
+      }
 
       if (viewable !== "public") {
         return next();
       }
+
+      client.io.emit("streamer-highlight", { id });
 
       next();
     })
