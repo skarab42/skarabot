@@ -5,6 +5,7 @@ const imgSize = { width: 100, height: 100 };
 const $wall = document.querySelector("#wall");
 
 const startScale = 5;
+const blinkTime = 1000;
 const animeDuration = 3000;
 const showTimeout = 5000;
 let showTimeoutId = null;
@@ -25,10 +26,10 @@ function hide() {
   $wall.style.display = "none";
 }
 
-function show() {
+function show(timeout = 0) {
   $wall.style.display = "block";
   showTimeoutId && clearTimeout(showTimeoutId);
-  showTimeoutId = setTimeout(hide, showTimeout);
+  showTimeoutId = setTimeout(hide, timeout || showTimeout);
 }
 
 function addSticker({ id, avatarURL, position }) {
@@ -78,6 +79,19 @@ socket.on("wof.move", chatMessage => {
 });
 
 socket.on("wof.add-user", addSticker);
+
+socket.on("wof.blink", ({ user, count }) => {
+  const timeout = count * blinkTime;
+  const duration = blinkTime / 2;
+  const keyframes = [];
+
+  for (var i = 0; i < count; i++) {
+    keyframes.push({ scale: 2, duration }, { scale: 1, duration });
+  }
+
+  show(timeout);
+  anime({ targets: `#user-${user.id}`, keyframes });
+});
 
 fetch("/users")
   .then(response => response.json())
