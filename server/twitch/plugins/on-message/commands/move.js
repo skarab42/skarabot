@@ -31,6 +31,6 @@ module.exports = ({ command, message, client }) => {
     user.position.x = minMax(0, screenLimit.x, user.position.x + offsets.x);
     user.position.y = minMax(0, screenLimit.y, user.position.y + offsets.y);
     users.update(user);
-    client.emit("wall-of-fame.move", message);
+    client.emit("wof.move", message);
   }
 };

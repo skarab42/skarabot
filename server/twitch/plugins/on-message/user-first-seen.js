@@ -24,7 +24,7 @@ function clearQueue() {
   queueTimeoutId = null;
 }
 
-function updateUser(helixUser) {
+function updateUser({ helixUser, client }) {
   const { _data } = helixUser;
   const id = _data["id"];
   let avatarURL = _data["profile_image_url"] || null;
@@ -33,17 +33,21 @@ function updateUser(helixUser) {
     avatarURL = null;
   }
 
-  users.update({
+  const user = users.update({
     id,
     avatarURL,
     viewCount: _data["view_count"] || 0
   });
+
+  avatarURL && client.io.emit("wof.add-user", user);
 }
 
 function processQueue(client) {
   client.api.helix.users
     .getUsersByIds([...usersQueue.keys()])
-    .then(helixUsers => helixUsers.forEach(updateUser))
+    .then(helixUsers =>
+      helixUsers.forEach(helixUser => updateUser({ helixUser, client }))
+    )
     .catch(error)
     .then(clearQueue);
 }

@@ -4,14 +4,13 @@ import { l as lib } from './index-183ac9bc.js';
 
 const socket = lib();
 
-socket.on("wall-of-fame.move", chatMessage => {
-  const { id, position } = chatMessage.data.user;
-  const $img = document.querySelector(`#user-${id}`);
-  $img.style.top = `${position.y}px`;
-  $img.style.left = `${position.x}px`;
-});
-
 const imgSize = { width: 100, height: 100 };
+const $wall = document.querySelector("#wall");
+
+const showTimeout = 5000;
+let showTimeoutId = null;
+
+hide();
 
 // TODO print/log error
 function onError(error) {
@@ -23,7 +22,15 @@ function random(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-const $wall = document.querySelector("#wall");
+function hide() {
+  $wall.style.display = "none";
+}
+
+function show() {
+  $wall.style.display = "block";
+  showTimeoutId && clearTimeout(showTimeoutId);
+  showTimeoutId = setTimeout(hide, showTimeout);
+}
 
 function addSticker({ id, avatarURL, position }) {
   const $img = new Image(imgSize.width, imgSize.height);
@@ -33,7 +40,10 @@ function addSticker({ id, avatarURL, position }) {
   $img.style.top = `${position.y}px`;
   $img.style.left = `${position.x}px`;
   $img.style.borderRadius = random(0, 100) + "%";
-  $img.onload = () => $wall.append($img);
+  $img.onload = () => {
+    show();
+    $wall.append($img);
+  };
   $img.onerror = () => {
     $img.remove();
     onError(`Image not found (user-${id})`);
@@ -49,6 +59,15 @@ function addStickers(users) {
     .filter(item => item)
     .forEach(addSticker);
 }
+
+socket.on("wof.move", chatMessage => {
+  const { id, position } = chatMessage.data.user;
+  const $img = document.querySelector(`#user-${id}`);
+  $img.style.top = `${position.y}px`;
+  $img.style.left = `${position.x}px`;
+});
+
+socket.on("wof.add-user", addSticker);
 
 fetch("/users")
   .then(response => response.json())
