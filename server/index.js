@@ -31,6 +31,7 @@ twitchClient
   .onMessage(require("./twitch/plugins/on-message/user-first-seen"))
   .onMessage(require("./twitch/plugins/on-message/user-rewards"))
   .onMessage(require("./twitch/plugins/on-message/wall-of-fame"))
+  .onMessage(require("./twitch/plugins/on-message/streamer-highlight"))
   .onMessage(require("./twitch/plugins/on-message/commands"))
   .onMessage(require("./twitch/plugins/on-message/emit"))
   .onMessage(require("./twitch/plugins/on-message/user-last-seen"));

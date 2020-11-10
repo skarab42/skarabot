@@ -8,6 +8,7 @@ function create(user) {
     avatarURL: null,
     firstSeen: 0,
     lastSeen: 0,
+    lastHighlight: 0,
     viewCount: 0,
     messageCount: 1,
     points: 0,
@@ -28,10 +29,7 @@ function create(user) {
 // Object.values(getAll()).forEach(user => {
 //   update({
 //     ...user,
-//     position: {
-//       x: random(0, screenSize.width),
-//       y: random(0, screenSize.height)
-//     }
+//     lastHighlight: 0
 //   });
 // });
 
