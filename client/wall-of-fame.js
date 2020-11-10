@@ -30,7 +30,11 @@ function addSticker({ id, avatarURL, position }) {
   $img.style.left = `${position.x}px`;
   $img.style.borderRadius = random(0, 100) + "%";
   $img.onload = () => $wall.append($img);
-  $img.onerror = () => onError(`Image not found (user-${id})`);
+  $img.onerror = () => {
+    $img.remove();
+    onError(`Image not found (user-${id})`);
+    socket.emit("wof.image-not-found", id);
+  };
 }
 
 function addStickers(users) {

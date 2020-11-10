@@ -1,4 +1,5 @@
 const usersStore = require("../store/users");
+// const fetch = require("node-fetch");
 
 function create(user) {
   return {
@@ -54,7 +55,19 @@ function del(id) {
 }
 
 function getAll() {
-  return usersStore.get("list", {});
+  const usersList = usersStore.get("list", {});
+
+  // Object.values(usersList).forEach(user => {
+  //   if (user.avatarURL) {
+  //     fetch(user.avatarURL).then(res => {
+  //       if (res.status !== 200) {
+  //         console.log(user);
+  //       }
+  //     });
+  //   }
+  // });
+
+  return usersList;
 }
 
 module.exports = {

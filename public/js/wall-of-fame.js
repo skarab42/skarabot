@@ -1,6 +1,6 @@
 
-(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
-import { l as lib } from './index-41ff57ee.js';
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35730/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
+import { l as lib } from './index-183ac9bc.js';
 
 const socket = lib();
 
@@ -34,7 +34,11 @@ function addSticker({ id, avatarURL, position }) {
   $img.style.left = `${position.x}px`;
   $img.style.borderRadius = random(0, 100) + "%";
   $img.onload = () => $wall.append($img);
-  $img.onerror = () => onError(`Image not found (user-${id})`);
+  $img.onerror = () => {
+    $img.remove();
+    onError(`Image not found (user-${id})`);
+    socket.emit("wof.image-not-found", id);
+  };
 }
 
 function addStickers(users) {

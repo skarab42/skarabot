@@ -1,5 +1,13 @@
 const users = require("../../../libs/users");
 
+// Object.values(users.getAll()).forEach(user => {
+//   if (user.avatarURL && user.avatarURL.includes("/user-default-pictures-uv/")) {
+//     // user.avatarURL = null;
+//     // users.update(user);
+//     console.log(user);
+//   }
+// });
+
 let queueTimeoutId = null;
 const queueTimeout = 5000;
 const usersQueue = new Map();
@@ -19,9 +27,15 @@ function clearQueue() {
 function updateUser(helixUser) {
   const { _data } = helixUser;
   const id = _data["id"];
+  let avatarURL = _data["profile_image_url"] || null;
+
+  if (avatarURL && avatarURL.includes("/user-default-pictures-uv/")) {
+    avatarURL = null;
+  }
+
   users.update({
     id,
-    avatarURL: _data["profile_image_url"] || null,
+    avatarURL,
     viewCount: _data["view_count"] || 0
   });
 }
