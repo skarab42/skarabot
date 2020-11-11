@@ -48,8 +48,8 @@ function getByName(name) {
   );
 }
 
-function update(user) {
-  user = { ...get(user.id), ...user };
+function update(newUser) {
+  const user = { ...get(newUser.id), ...newUser };
   set(user.id, user);
   return user;
 }

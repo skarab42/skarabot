@@ -22,5 +22,5 @@ module.exports = ({ command, message, client }) => {
   user.points -= cost;
   users.update(user);
 
-  console.log(colors.red(errorMessage));
+  console.log(colors.red.bold(errorMessage));
 };
