@@ -3,7 +3,7 @@ const commands = require("./commands/index");
 module.exports = ({ message, client }, next) => {
   const text = message.message;
 
-  if (text[0] !== "!") {
+  if (text[0] !== "!" || text[1] === "!") {
     return next();
   }
 
