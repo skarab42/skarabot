@@ -7,6 +7,10 @@ module.exports = ({ message }, next) => {
   const { color } = msg._tags;
   const nick = colors.hex(color)(`[${user}]`);
 
+  if (text.startsWith("!error")) {
+    return next();
+  }
+
   console.log(`${nick} ${text}`);
 
   next();
