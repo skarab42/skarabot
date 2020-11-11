@@ -26,5 +26,7 @@ module.exports = ({ command, message, client }) => {
   userStore.points += points;
   users.update(userStore);
 
-  client.chat.say(message.channel, `${nick} tu as ${userStore.points}pts.`);
+  const cleanPoints = Math.floor(userStore.points);
+
+  client.chat.say(message.channel, `${nick} tu as ${cleanPoints}pts.`);
 };
