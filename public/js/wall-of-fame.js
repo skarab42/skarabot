@@ -1,6 +1,6 @@
 
-(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35730/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
-import { g as getAugmentedNamespace, l as lib } from './index-a2398fdd.js';
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
+import { g as getAugmentedNamespace, l as lib } from './index-b6290109.js';
 
 /*
  * anime.js v3.2.1
@@ -1409,8 +1409,20 @@ socket.on("wof.blink", ({ user, count }) => {
     keyframes.push({ scale: 2, duration }, { scale: 1, duration });
   }
 
+  const targets = `#user-${user.id}`;
+  const $img = document.querySelector(targets);
+
+  const zIndex = $img.style.zIndex;
+  $img.style.zIndex = 9999;
+
   show(timeout);
-  anime$1({ targets: `#user-${user.id}`, keyframes });
+  anime$1({
+    targets,
+    keyframes,
+    complete: () => {
+      $img.style.zIndex = zIndex;
+    }
+  });
 });
 
 fetch("/users")

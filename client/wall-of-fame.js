@@ -89,8 +89,20 @@ socket.on("wof.blink", ({ user, count }) => {
     keyframes.push({ scale: 2, duration }, { scale: 1, duration });
   }
 
+  const targets = `#user-${user.id}`;
+  const $img = document.querySelector(targets);
+
+  const zIndex = $img.style.zIndex;
+  $img.style.zIndex = 9999;
+
   show(timeout);
-  anime({ targets: `#user-${user.id}`, keyframes });
+  anime({
+    targets,
+    keyframes,
+    complete: () => {
+      $img.style.zIndex = zIndex;
+    }
+  });
 });
 
 fetch("/users")
