@@ -34,6 +34,7 @@ twitchClient
   .onMessage(require("./twitch/plugins/on-message/user-rewards"))
   .onMessage(require("./twitch/plugins/on-message/terminal-chat"))
   .onMessage(require("./twitch/plugins/on-message/questions"))
+  .onMessage(require("./twitch/plugins/on-message/ideas"))
   .onMessage(require("./twitch/plugins/on-message/wall-of-fame"))
   .onMessage(require("./twitch/plugins/on-message/streamer-highlight"))
   .onMessage(require("./twitch/plugins/on-message/commands"))

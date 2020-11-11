@@ -6,8 +6,22 @@
   const socket = io();
 
   let logs = [];
+  let filters = {
+    'question': false,
+    'idea': true
+  };
+  let icons = {
+    'question': '⁉️',
+    'idea': '‼️'
+  };
+  let iconColors = {
+    'question': 'bg-red-600',
+    'idea': 'bg-blue-600'
+  };
 
-  $: filteredLogs = logs.filter(log => ({type}) => type === 'question')
+  let labelClass = "px-2 text-gray-400 bg-purple-700 rounded p-1 cursor-pointer";
+
+  $: filteredLogs = logs.filter(({type}) => filters[type])
 
   // TODO print/log error
   function onError(error) {
@@ -27,6 +41,14 @@
     return ms(Date.now() - timestamp)
   }
 
+  function icon(type) {
+    return icons[type];
+  }
+
+  function iconColor(type) {
+    return iconColors[type];
+  }
+
   socket.on('logs.update', update)
 
   fetch("/logs-api")
@@ -38,20 +60,36 @@
 <style>
   .grid {
     align-items: center;
-    grid-template-columns: 50px 100px auto;
+    grid-template-columns: 50px 50px 100px auto;
   }
 </style>
 
+<div class="pt-5 px-5 flex space-x-2 uppercase">
+  <label class="{labelClass}">
+    <input type="checkbox" bind:checked={filters.question} />
+    <span>question</span>
+  </label>
+  <label class="{labelClass}">
+    <input type="checkbox" bind:checked={filters.idea} />
+    <span>ideas</span>
+  </label>
+</div>
+
 <div class="m-5 flex flex-col space-y-2">
-  {#each filteredLogs as {id, time, data}}
+  {#each filteredLogs as {id, type, time, data}}
   <div in:fade out:fade class="flex items-center bg-gray-500 rounded">
     <div class="grid p-2 flex-auto">
+      <div>
+        <span class="{iconColor(type)} px-2 bg-red-500 rounded-full">
+          {icon(type)}
+        </span>
+      </div>
       <div class="opacity-50">
         {elsapsed(time)}
       </div>
       <div class="font-bold truncate">{data.user}</div>
       <div>
-        {data.question}
+        {data.text}
       </div>
     </div>
     <div class="p-2 cursor-pointer" on:click={onRemove.bind(null, id)}>❌</div>
