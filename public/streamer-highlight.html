@@ -3,9 +3,37 @@
   <head>
     <meta charset="utf-8" />
     <title>Streamer Highlight - skarabot</title>
+    <style media="screen">
+      body {
+        height: 100%;
+      }
+
+      #title {
+        color: #eee;
+        font-size: 42px;
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: "Luckiest Guy", cursive;
+      }
+
+      #player {
+        box-shadow: 0px 0px 33px 6px rgba(0, 0, 0, 0.66);
+      }
+
+      .overlay {
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+    </style>
   </head>
   <body>
-    <div id="video"></div>
+    <div id="video">
+      <div id="title"></div>
+      <div id="player"></div>
+    </div>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script type="module" src="js/streamer-highlight.js"></script>
   </body>

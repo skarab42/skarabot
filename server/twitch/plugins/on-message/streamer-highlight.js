@@ -6,14 +6,31 @@ const minViewCount = 500;
 
 const sayMessage = "C'est un avion ? une fusée ? non c'est un streamer Twitch";
 
+// 1h00m00s -> 3600000
+// 30m00s   -> 1800000
+// 60s      -> 60000
+function humanTimeToTimestamp(input) {
+  const matches = input.match(/([0-9]+h)?([0-9]+m)?([0-9]+s)/);
+  if (!matches) return false;
+  let [h, m, timestamp] = matches.slice(1, 4).map(i => parseInt(i));
+  !isNaN(h) && (timestamp += h * 3600);
+  !isNaN(m) && (timestamp += m * 60);
+  return timestamp;
+}
+
 module.exports = ({ message, client }, next) => {
   const user = message.data.user;
   const now = message.data.timestamp;
   const elapsed = message.data.timestamp - user.lastHighlight;
 
   if (message.data.badges.broadcaster) {
-    console.log("MOI MOI");
-  } else if (user.viewCount < minViewCount || elapsed < delayMs) {
+    return next();
+  }
+
+  // if (message.data.badges.broadcaster) {
+  //   console.log("MOI MOI");
+  // } else
+  if (user.viewCount < minViewCount || elapsed < delayMs) {
     return next();
   }
 
@@ -31,20 +48,19 @@ module.exports = ({ message, client }, next) => {
         return next();
       }
 
-      const { id, url, viewable } = data[0]._data;
+      let { id, url, duration } = data[0]._data;
+      duration = humanTimeToTimestamp(duration);
 
-      if (!message.data.badges.broadcaster) {
-        client.chat.say(
-          message.channel,
-          `${sayMessage} -> ${user.name} ${url}`
-        );
-      }
+      // if (!message.data.badges.broadcaster) {
+      client.chat.say(message.channel, `${sayMessage} -> ${user.name} ${url}`);
+      // }
 
-      if (viewable !== "public") {
-        return next();
-      }
+      // TODO FIX ME
+      // if (viewable !== "public") {
+      //   return next();
+      // }
 
-      client.io.emit("streamer-highlight", { id });
+      client.io.emit("streamer-highlight", { id, user, duration });
 
       next();
     })
