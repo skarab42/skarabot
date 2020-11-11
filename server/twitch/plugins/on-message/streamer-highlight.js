@@ -18,7 +18,7 @@ function humanTimeToTimestamp(input) {
   return timestamp;
 }
 
-module.exports = ({ message, client }, next) => {
+module.exports = async ({ message, client }, next) => {
   const user = message.data.user;
   const now = message.data.timestamp;
   const elapsed = message.data.timestamp - user.lastHighlight;
@@ -34,6 +34,15 @@ module.exports = ({ message, client }, next) => {
     return next();
   }
 
+  const channel = await client.api.kraken.channels.getChannel(user.id);
+
+  function userBanner() {
+    client.chat.say(
+      message.channel,
+      `${sayMessage} -> ${user.name} http://twitch.tv/${user.name}`
+    );
+  }
+
   client.api.helix.videos
     .getVideosByUser(user.id)
     .then(({ data }) => {
@@ -41,10 +50,7 @@ module.exports = ({ message, client }, next) => {
       users.update(user);
 
       if (!data.length) {
-        client.chat.say(
-          message.channel,
-          `${sayMessage} -> ${user.name} http://twitch.tv/${user.name}`
-        );
+        userBanner();
         return next();
       }
 
@@ -55,12 +61,9 @@ module.exports = ({ message, client }, next) => {
       client.chat.say(message.channel, `${sayMessage} -> ${user.name} ${url}`);
       // }
 
-      // TODO FIX ME
-      // if (viewable !== "public") {
-      //   return next();
-      // }
-
-      client.io.emit("streamer-highlight", { id, user, duration });
+      if (!channel._data.mature) {
+        client.io.emit("streamer-highlight", { id, user, duration });
+      }
 
       next();
     })
