@@ -9,18 +9,22 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
-  const userStore = users.getByName(nick);
+  points = parseInt(points);
+
+  if (!nick || !points || isNaN(points)) {
+    client.chat.say(message.channel, `Usage: !add-points <nick> <points>`);
+    return;
+  }
+
+  let userStore = users.getByName(nick);
 
   if (!userStore) {
     client.chat.say(message.channel, `L'utilisateur ${nick} est introuvable!`);
     return;
   }
 
-  points = parseInt(points);
-
-  if (!nick || !points) {
-    client.chat.say(message.channel, `Usage: !add-points <nick> <points>`);
-    return;
+  if (userStore.id === user.id) {
+    userStore = user;
   }
 
   userStore.points += points;
