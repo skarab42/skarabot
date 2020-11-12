@@ -93,8 +93,6 @@
   </div>
 {/if}
 
-<a href="/logs">refresh</a>
-
 <div class="m-5 flex flex-col space-y-2">
   {#each filteredLogs as { id, type, time, data }}
     <div in:fade out:fade class="flex items-center bg-gray-500 rounded">
