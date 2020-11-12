@@ -36,7 +36,7 @@ function updateUser({ helixUser, client }) {
   const user = users.update({
     id,
     avatarURL,
-    viewCount: _data["view_count"] || 0
+    viewCount: _data["view_count"] || 0,
   });
 
   avatarURL && client.io.emit("wof.add-user", user);
@@ -45,8 +45,8 @@ function updateUser({ helixUser, client }) {
 function processQueue(client) {
   client.api.helix.users
     .getUsersByIds([...usersQueue.keys()])
-    .then(helixUsers =>
-      helixUsers.forEach(helixUser => updateUser({ helixUser, client }))
+    .then((helixUsers) =>
+      helixUsers.forEach((helixUser) => updateUser({ helixUser, client }))
     )
     .catch(error)
     .then(clearQueue);

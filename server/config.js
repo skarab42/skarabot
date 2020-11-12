@@ -7,12 +7,12 @@ module.exports = {
     host,
     port,
     address,
-    publicPath: "public"
+    publicPath: "public",
   },
   twitch: {
     clientId: "i1zqws5ibrt0vdaiuenhcpoe4t5rnb",
     redirectURI: `http://${address}/token`,
     forceVerify: false,
-    channels: ["skarab42"]
-  }
+    channels: ["skarab42"],
+  },
 };

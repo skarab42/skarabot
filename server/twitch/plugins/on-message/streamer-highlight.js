@@ -12,7 +12,7 @@ const sayMessage = "C'est un avion ? une fusée ? non c'est un streamer Twitch";
 function humanTimeToTimestamp(input) {
   const matches = input.match(/([0-9]+h)?([0-9]+m)?([0-9]+s)/);
   if (!matches) return false;
-  let [h, m, timestamp] = matches.slice(1, 4).map(i => parseInt(i));
+  let [h, m, timestamp] = matches.slice(1, 4).map((i) => parseInt(i));
   !isNaN(h) && (timestamp += h * 3600);
   !isNaN(m) && (timestamp += m * 60);
   return timestamp;
@@ -67,8 +67,9 @@ module.exports = async ({ message, client }, next) => {
 
       next();
     })
-    .catch(error => {
-      console.log("ERROR:", error);
+    .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.log("ERROR:", error); // TODO handle error...
       next();
     });
 };

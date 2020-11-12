@@ -51,7 +51,7 @@ function addSticker({ id, avatarURL, position }) {
       width: imgSize.width,
       height: imgSize.height,
       delay: random(0, 2000),
-      duration: animeDuration
+      duration: animeDuration,
     });
     $wall.append($img);
   };
@@ -67,11 +67,11 @@ function addStickers(users) {
     .map(({ id, avatarURL, position }) => {
       return avatarURL ? { id, avatarURL, position } : null;
     })
-    .filter(item => item)
+    .filter((item) => item)
     .forEach(addSticker);
 }
 
-socket.on("wof.move", chatMessage => {
+socket.on("wof.move", (chatMessage) => {
   const { id, position } = chatMessage.data.user;
   const $img = document.querySelector(`#user-${id}`);
   $img.style.top = `${position.y}px`;
@@ -101,11 +101,11 @@ socket.on("wof.blink", ({ user, count }) => {
     keyframes,
     complete: () => {
       $img.style.zIndex = zIndex;
-    }
+    },
   });
 });
 
 fetch("/users")
-  .then(response => response.json())
+  .then((response) => response.json())
   .then(addStickers)
   .catch(onError);

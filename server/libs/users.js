@@ -13,7 +13,7 @@ function create(user) {
     messageCount: 1,
     points: 0,
     position: { x: 0, y: 0 },
-    ...user
+    ...user,
   };
 }
 
@@ -44,7 +44,7 @@ function get(id, defaultUser = null) {
 
 function getByName(name) {
   return Object.values(getAll()).find(
-    user => user.name.toLowerCase() === name.toLowerCase()
+    (user) => user.name.toLowerCase() === name.toLowerCase()
   );
 }
 
@@ -69,5 +69,5 @@ module.exports = {
   getAll,
   update,
   getByName,
-  delete: del
+  delete: del,
 };

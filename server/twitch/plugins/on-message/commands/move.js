@@ -11,7 +11,7 @@ module.exports = ({ command, message, client }) => {
   const user = message.data.user;
   const offsets = { x: 0, y: 0 };
 
-  command.args.forEach(arg => {
+  command.args.forEach((arg) => {
     const key = arg[0];
     const val = arg.slice(1);
     offsets[key] = parseInt(val);

@@ -5,7 +5,7 @@ const messageLengthRatio = 0.01;
 const welcomePoints = 10;
 const replyPoints = 10;
 
-const welcomeSentences = require("./config/welcomeSentences").map(s =>
+const welcomeSentences = require("./config/welcomeSentences").map((s) =>
   soundex(s)
 );
 

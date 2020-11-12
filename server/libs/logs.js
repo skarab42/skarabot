@@ -18,7 +18,7 @@ function add(type, data) {
 }
 
 function del(id) {
-  const logs = getAll().filter(l => l.id !== id);
+  const logs = getAll().filter((l) => l.id !== id);
   logsStore.set(`logs`, logs);
   return logs;
 }
@@ -27,5 +27,5 @@ module.exports = {
   create,
   add,
   getAll,
-  delete: del
+  delete: del,
 };

@@ -18,5 +18,5 @@ module.exports = [
   "heyguys",
   "luvpeekr",
   "redalihey",
-  "Iti63hey"
+  "Iti63hey",
 ];

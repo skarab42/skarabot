@@ -8,7 +8,7 @@ module.exports = class Client {
     this.authProvider = new AuthProvider(config);
     this.api = new ApiClient({ authProvider: this.authProvider });
     this.chat = new ChatClient(this.authProvider, {
-      channels: config.channels
+      channels: config.channels,
     });
     this.io = null;
     this.chat.connect();
@@ -47,7 +47,7 @@ module.exports = class Client {
 
   setSocketIO(io) {
     this.io = io;
-    this.io.on("connection", socket => {
+    this.io.on("connection", (socket) => {
       socket.on("twitch.chat.say", (channel, message) => {
         this.chat.say(channel, message);
       });
@@ -88,7 +88,7 @@ module.exports = class Client {
       this.authProvider.setToken(req.query);
     } else if (req.path === "/twitch") {
       const { api, call, args } = req.query;
-      let argv = (args || "").split(",").map(arg => arg.trim());
+      let argv = (args || "").split(",").map((arg) => arg.trim());
       const response = await this.api.helix[api][call](argv);
       const json = JSON.stringify(response._data || response);
       res.end(json);

@@ -11,6 +11,7 @@ module.exports = ({ message }, next) => {
     return next();
   }
 
+  // eslint-disable-next-line no-console
   console.log(`${nick} ${text}`);
 
   next();

@@ -13,8 +13,8 @@ module.exports = ({ message }, next) => {
       ...user,
       position: {
         x: random(0, screenLimit.x),
-        y: random(0, screenLimit.y)
-      }
+        y: random(0, screenLimit.y),
+      },
     });
   }
 

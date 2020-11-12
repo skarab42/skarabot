@@ -1,7 +1,7 @@
 const create = require("./create");
 
 const defaults = {
-  list: {}
+  list: {},
 };
 
 module.exports = create({ name: "alias", defaults });

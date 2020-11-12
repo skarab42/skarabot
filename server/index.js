@@ -16,7 +16,7 @@ const { server } = polka()
   .use(twitchAuth)
   .use(userAPI)
   .use(logsAPI)
-  .listen(config.server.port, async err => {
+  .listen(config.server.port, async (err) => {
     if (err) throw err;
     /* eslint-disable no-console */
     console.log(`> ${name} v${version}`);

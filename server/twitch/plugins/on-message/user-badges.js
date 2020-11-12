@@ -6,7 +6,7 @@ module.exports = ({ message }, next) => {
     return next();
   }
 
-  badges.split(",").forEach(badge => {
+  badges.split(",").forEach((badge) => {
     const [key, val] = badge.split("/");
     message.data.badges[key] = parseInt(val);
   });

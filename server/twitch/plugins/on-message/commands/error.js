@@ -22,5 +22,6 @@ module.exports = ({ command, message, client }) => {
   user.points -= cost;
   users.update(user);
 
+  // eslint-disable-next-line no-console
   console.log(colors.red.bold(errorMessage));
 };

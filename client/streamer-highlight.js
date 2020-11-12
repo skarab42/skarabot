@@ -9,7 +9,7 @@ const videoWidth = 600;
 const videoDuration = 15000;
 const videoSize = {
   width: videoWidth,
-  height: videoWidth / 1.777777
+  height: videoWidth / 1.777777,
 };
 
 $video.style.position = "absolute";
@@ -25,13 +25,13 @@ function showVideo(show = true, { user } = {}) {
     keyframes: [
       {
         top: window.innerHeight / 2 - videoSize.height / 2 - 40,
-        duration: 2000
+        duration: 2000,
       },
       {
         scale: 2,
-        duration: 1000
-      }
-    ]
+        duration: 1000,
+      },
+    ],
   });
   if (!show) $player.innerHTML = "";
 }
