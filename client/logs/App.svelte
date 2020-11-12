@@ -7,7 +7,7 @@
 
   let logs = [];
   let filters = {
-    question: false,
+    question: true,
     idea: true,
   };
   let icons = {
@@ -22,7 +22,9 @@
   let labelClass =
     "px-2 text-gray-400 bg-purple-700 rounded p-1 cursor-pointer";
 
-  $: filteredLogs = logs.filter(({ type }) => filters[type]);
+  $: filteredLogs = logs.filter(({ type }) => filters[type]).reverse();
+
+  const isOverlay = window.location.search === "?overlay";
 
   // TODO print/log error
   function onError(error) {
@@ -50,7 +52,14 @@
     return iconColors[type];
   }
 
+  function onFiltersChange() {
+    socket.emit("logs.filtersChange", filters);
+  }
+
   socket.on("logs.update", update);
+  socket.on("logs.filtersChange", (newFilters) => {
+    filters = { ...filters, ...newFilters };
+  });
 
   fetch("/logs-api")
     .then((response) => response.json())
@@ -61,20 +70,30 @@
 <style>
   .grid {
     align-items: center;
-    grid-template-columns: 50px 50px 100px auto;
+    grid-template-columns: 30px 100px auto;
   }
 </style>
 
-<div class="pt-5 px-5 flex space-x-2 uppercase">
-  <label class={labelClass}>
-    <input type="checkbox" bind:checked={filters.question} />
-    <span>question</span>
-  </label>
-  <label class={labelClass}>
-    <input type="checkbox" bind:checked={filters.idea} />
-    <span>ideas</span>
-  </label>
-</div>
+{#if !isOverlay}
+  <div class="pt-5 px-5 flex space-x-2 uppercase">
+    <label class={labelClass}>
+      <input
+        type="checkbox"
+        bind:checked={filters.question}
+        on:change={onFiltersChange} />
+      <span>question</span>
+    </label>
+    <label class={labelClass}>
+      <input
+        type="checkbox"
+        bind:checked={filters.idea}
+        on:change={onFiltersChange} />
+      <span>ideas</span>
+    </label>
+  </div>
+{/if}
+
+<a href="/logs">refresh</a>
 
 <div class="m-5 flex flex-col space-y-2">
   {#each filteredLogs as { id, type, time, data }}
@@ -85,13 +104,17 @@
             {icon(type)}
           </span>
         </div>
-        <div class="opacity-50">{elsapsed(time)}</div>
-        <div class="font-bold truncate">{data.user}</div>
+        <div class="flex flex-col text-center">
+          <div class="font-bold truncate">{data.user}</div>
+          <div class="opacity-50">{elsapsed(time)}</div>
+        </div>
         <div>{data.text}</div>
       </div>
-      <div class="p-2 cursor-pointer" on:click={onRemove.bind(null, id)}>
-        ❌
-      </div>
+      {#if !isOverlay}
+        <div class="p-2 cursor-pointer" on:click={onRemove.bind(null, id)}>
+          ❌
+        </div>
+      {/if}
     </div>
   {:else}
     <div class="p-2 bg-blue-400">✔ Il n'y a pas de question...</div>

@@ -12,7 +12,11 @@ module.exports = (server) => {
     });
 
     socket.on("logs.remove", (id) => {
-      socket.emit("logs.update", logs.delete(id));
+      io.emit("logs.update", logs.delete(id));
+    });
+
+    socket.on("logs.filtersChange", (filters) => {
+      socket.broadcast.emit("logs.filtersChange", filters);
     });
   });
 
