@@ -6,7 +6,8 @@
     "start": "node server",
     "watch": "rollup -c -w",
     "build": "rollup -c",
-    "lint": "eslint --fix ./server/**/* ./client/**/*"
+    "prettify": "prettier --write ./server ./client",
+    "lint": "eslint --fix ./server ./client && yarn prettify"
   },
   "dependencies": {
     "animejs": "^3.2.1",
@@ -31,6 +32,9 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "chokidar": "^3.4.2",
     "eslint": "^7.12.0",
+    "eslint-plugin-svelte3": "^2.7.3",
+    "prettier": "^2.1.2",
+    "prettier-plugin-svelte": "^1.4.1",
     "rollup": "^2.29.0",
     "rollup-plugin-cleaner": "^1.0.0",
     "rollup-plugin-livereload": "^2.0.0",
