@@ -6,7 +6,7 @@ module.exports = ({ message, client }, next) => {
 
   const isIdea = text.startsWith("!!!") || text.endsWith("!!!");
 
-  if (text.includes("?") && !isIdea) {
+  if (text.includes("???") && !isIdea) {
     logs.add("question", { user, text });
     client.io.emit("logs.update", logs.getAll());
   }
