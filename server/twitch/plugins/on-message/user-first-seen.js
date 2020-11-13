@@ -55,7 +55,7 @@ function processQueue(client) {
 module.exports = ({ message, client }, next) => {
   const { user } = message.data;
 
-  if (user.lastSeen !== 0) {
+  if (message.data.startTime < user.lastSeen) {
     return next();
   }
 
