@@ -1,6 +1,6 @@
 const users = require("../../../libs/users");
 
-const delayH = 1;
+const delayH = 2;
 const delayMs = delayH * 3600000;
 const minViewCount = 500;
 
