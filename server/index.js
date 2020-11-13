@@ -9,9 +9,11 @@ const sirv = require("sirv");
 
 const twitchClient = new TwitchClient(config.twitch);
 const twitchAuth = twitchClient.auth.bind(twitchClient);
+const userServ = sirv(config.server.userDir, { dev: true });
 const publicServ = sirv(config.server.publicPath, { dev: true });
 
 const { server } = polka()
+  .use(userServ)
   .use(publicServ)
   .use(twitchAuth)
   .use(userAPI)
