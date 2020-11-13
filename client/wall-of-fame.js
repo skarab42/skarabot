@@ -10,6 +10,8 @@ const animeDuration = 3000;
 const showTimeout = 5000;
 let showTimeoutId = null;
 
+let usersCount = 0;
+
 hide();
 
 // TODO print/log error
@@ -32,7 +34,7 @@ function show(timeout = 0) {
   showTimeoutId = setTimeout(hide, timeout || showTimeout);
 }
 
-function addSticker({ id, avatarURL, position }) {
+function addSticker({ id, avatarURL, position }, index) {
   const [w, h] = [imgSize.width * startScale, imgSize.height * startScale];
   const [x, y] = [random(-200, 200), random(-200, 200)];
   const $img = new Image(w, h);
@@ -42,6 +44,7 @@ function addSticker({ id, avatarURL, position }) {
   $img.style.top = `${window.innerHeight / 2 - h / 2 + y}px`;
   $img.style.left = `${window.innerWidth / 2 - w / 2 + x}px`;
   $img.style.borderRadius = random(0, 100) + "%";
+  $img.style.zIndex = index;
   $img.onload = () => {
     show();
     anime({
@@ -63,12 +66,14 @@ function addSticker({ id, avatarURL, position }) {
 }
 
 function addStickers(users) {
-  Object.values(users)
-    .map(({ id, avatarURL, position }) => {
-      return avatarURL ? { id, avatarURL, position } : null;
+  const usersArr = Object.values(users)
+    .map(({ id, avatarURL, position, lastSeen }) => {
+      return avatarURL ? { id, avatarURL, position, lastSeen } : null;
     })
     .filter((item) => item)
-    .forEach(addSticker);
+    .sort((a, b) => a.lastSeen - b.lastSeen);
+  usersCount = usersArr.length;
+  usersArr.forEach(addSticker);
 }
 
 socket.on("wof.move", (chatMessage) => {
@@ -93,7 +98,7 @@ socket.on("wof.blink", ({ user, count }) => {
   const $img = document.querySelector(targets);
 
   const zIndex = $img.style.zIndex;
-  $img.style.zIndex = 9999;
+  $img.style.zIndex = usersCount;
 
   show(timeout);
   anime({
