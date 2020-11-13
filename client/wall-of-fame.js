@@ -109,3 +109,9 @@ fetch("/users")
   .then((response) => response.json())
   .then(addStickers)
   .catch(onError);
+
+// TODO dégage moi ça de là!!!!!
+socket.on("play.sound", ({ file }) => {
+  const audio = new Audio(`download/${file}`);
+  audio.play();
+});
