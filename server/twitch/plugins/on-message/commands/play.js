@@ -2,7 +2,7 @@ const { downloadDir } = require("../config/download");
 const fs = require("fs");
 
 let lastPlayTime = 0;
-const playCooldown = 1000 * 60;
+const playCooldown = 1000 * 15;
 
 module.exports = ({ command, message, client }) => {
   let [name] = command.args;
