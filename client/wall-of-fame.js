@@ -81,9 +81,10 @@ socket.on("wof.move", (chatMessage) => {
   const $img = document.querySelector(`#user-${id}`);
   $img.style.top = `${position.y}px`;
   $img.style.left = `${position.x}px`;
+  $img.style.zIndex = usersCount;
 });
 
-socket.on("wof.add-user", addSticker);
+socket.on("wof.add-user", (user) => addSticker(user, usersCount));
 
 socket.on("wof.blink", ({ user, count }) => {
   const timeout = count * blinkTime;
