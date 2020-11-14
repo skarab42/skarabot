@@ -2,6 +2,7 @@
   import ms from "ms";
   import io from "socket.io-client";
   import { fade } from "svelte/transition";
+  import Item from "./Item.svelte";
 
   const socket = io();
 
@@ -10,21 +11,13 @@
     question: true,
     idea: true,
   };
-  let icons = {
-    question: "⁉️",
-    idea: "‼️",
-  };
-  let iconColors = {
-    question: "bg-red-600",
-    idea: "bg-blue-600",
-  };
+
+  const isOverlay = window.location.search === "?overlay";
 
   let labelClass =
     "px-2 text-gray-400 bg-purple-700 rounded p-1 cursor-pointer";
 
   $: filteredLogs = logs.filter(({ type }) => filters[type]).reverse();
-
-  const isOverlay = window.location.search === "?overlay";
 
   // TODO print/log error
   function onError(error) {
@@ -32,24 +25,12 @@
     console.error("ERROR >>>", error);
   }
 
-  function onRemove(id) {
+  function onRemove({ detail: id }) {
     socket.emit("logs.remove", id);
   }
 
   function update(inputs) {
     logs = inputs;
-  }
-
-  function elsapsed(timestamp) {
-    return ms(Date.now() - timestamp);
-  }
-
-  function icon(type) {
-    return icons[type];
-  }
-
-  function iconColor(type) {
-    return iconColors[type];
   }
 
   function onFiltersChange() {
@@ -68,9 +49,9 @@
 </script>
 
 <style>
-  .grid {
-    align-items: center;
-    grid-template-columns: 30px 100px auto;
+  :global(body) {
+    font-family: "Roboto", sans-serif;
+    background-color: rgba(0, 0, 0, 0.7);
   }
 </style>
 
@@ -81,7 +62,7 @@
         type="checkbox"
         bind:checked={filters.question}
         on:change={onFiltersChange} />
-      <span>question</span>
+      <span>questions</span>
     </label>
     <label class={labelClass}>
       <input
@@ -94,27 +75,9 @@
 {/if}
 
 <div class="m-5 flex flex-col space-y-2">
-  {#each filteredLogs as { id, type, time, data }}
-    <div in:fade out:fade class="flex items-center bg-gray-500 rounded">
-      <div class="grid p-2 flex-auto">
-        <div>
-          <span class="{iconColor(type)} px-2 bg-red-500 rounded-full">
-            {icon(type)}
-          </span>
-        </div>
-        <div class="flex flex-col text-center">
-          <div class="font-bold truncate">{data.user}</div>
-          <div class="opacity-50">{elsapsed(time)}</div>
-        </div>
-        <div>{data.text}</div>
-      </div>
-      {#if !isOverlay}
-        <div class="p-2 cursor-pointer" on:click={onRemove.bind(null, id)}>
-          ❌
-        </div>
-      {/if}
-    </div>
+  {#each filteredLogs as item}
+    <Item {item} {isOverlay} on:remove={onRemove} />
   {:else}
-    <div class="p-2 bg-blue-400">✔ Il n'y a pas de question...</div>
+    <div class="p-2 bg-blue-400">✔ La liste est vide...</div>
   {/each}
 </div>
