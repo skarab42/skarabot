@@ -1,7 +1,5 @@
 <script>
-  import ms from "ms";
   import io from "socket.io-client";
-  import { fade } from "svelte/transition";
   import Item from "./Item.svelte";
 
   const socket = io();
