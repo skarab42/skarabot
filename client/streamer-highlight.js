@@ -1,9 +1,12 @@
 const socket = require("socket.io-client")();
 const { default: anime } = require("animejs");
+const ms = require("ms");
 
 const $video = document.querySelector("#video");
 const $player = document.querySelector("#player");
 const $title = document.querySelector("#title");
+const $counter = document.querySelector("#counter");
+const $countdown = document.querySelector("#countdown");
 
 const videoWidth = 600;
 const videoDuration = 15000;
@@ -55,13 +58,14 @@ function processQueue() {
   if (!queue.length || lock) return;
   lock = true;
 
-  const { id, user, duration } = queue.shift();
+  const { id, user, channel, duration } = queue.shift();
 
   const player = new Twitch.Player("player", { video: id, ...videoSize });
 
   player.setVolume(0.5);
 
   player.addEventListener(Twitch.Player.READY, () => {
+    socket.emit("video-play", { user, channel });
     showVideo(true, { user });
     player.seek(duration / 2);
     player.play();
@@ -74,3 +78,21 @@ function processQueue() {
 }
 
 socket.on("streamer-highlight", push);
+
+let countdown = 0;
+let countdownId = null;
+
+socket.on("pause", ({ minutes }) => {
+  clearInterval(countdownId);
+  countdown = minutes * 60 * 1000;
+  $countdown.innerHTML = ms(countdown);
+  $counter.style.display = "block";
+  countdownId = setInterval(() => {
+    $countdown.innerHTML = ms(countdown);
+    countdown -= 1000;
+    if (countdown <= 0) {
+      clearInterval(countdownId);
+      $counter.style.display = "none";
+    }
+  }, 1000);
+});

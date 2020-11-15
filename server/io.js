@@ -1,7 +1,7 @@
 const users = require("./libs/users");
 const logs = require("./libs/logs");
 
-module.exports = (server) => {
+module.exports = ({ server, twitchClient }) => {
   const io = require("socket.io")(server);
 
   io.on("connection", (socket) => {
@@ -17,6 +17,11 @@ module.exports = (server) => {
 
     socket.on("logs.filtersChange", (filters) => {
       socket.broadcast.emit("logs.filtersChange", filters);
+    });
+
+    socket.on("video-play", ({ user, channel }) => {
+      // console.log("video-play", user);
+      twitchClient.chat.say(channel, `Vous regardez twitch.tv/${user.name}`);
     });
   });
 

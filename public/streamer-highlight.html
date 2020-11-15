@@ -8,7 +8,8 @@
         height: 100%;
       }
 
-      #title {
+      #title,
+      #counter {
         color: #eee;
         font-size: 42px;
         text-align: center;
@@ -23,12 +24,24 @@
       .overlay {
         background-color: rgba(0, 0, 0, 0.8);
       }
+
+      #counter {
+        width: 100%;
+        display: none;
+        font-size: 60px;
+        padding: 42px 0;
+        position: absolute;
+        background-color: rgba(0, 42, 0, 0.8);
+      }
     </style>
   </head>
   <body>
     <div id="video">
       <div id="title"></div>
       <div id="player"></div>
+    </div>
+    <div id="counter">
+      Les fleurs en bouquet fanent mais jamais ne renaissent <span id="countdown"></div>
     </div>
     <link
       href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap"

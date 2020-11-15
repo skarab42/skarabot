@@ -27,7 +27,7 @@ const { server } = polka()
   });
 
 twitchClient
-  .setSocketIO(socketIO(server))
+  .setSocketIO(socketIO({ server, twitchClient }))
   .onMessage(require("./twitch/plugins/on-message/timestamp"))
   .onMessage(require("./twitch/plugins/on-message/start-time"))
   .onMessage(require("./twitch/plugins/on-message/user-log"))
