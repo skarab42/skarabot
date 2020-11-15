@@ -7,6 +7,11 @@ module.exports = ({ command, message, client }) => {
   const user = message.user;
   const sudo = message.data.badges.broadcaster;
 
+  if (!name) {
+    client.chat.say(message.channel, `Usage: !alias <name> <value>`);
+    return;
+  }
+
   if (name[0] === "+" && value) {
     sudo && alias.set(`list.${name.slice(1)}`, value);
   } else if (name[0] === "-") {
