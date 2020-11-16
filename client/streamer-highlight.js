@@ -9,7 +9,7 @@ const $counter = document.querySelector("#counter");
 const $countdown = document.querySelector("#countdown");
 
 const videoWidth = 600;
-const videoDuration = 5; // seconds
+const videoDuration = 15; // seconds
 const videoSize = {
   width: videoWidth,
   height: videoWidth / 1.777777,
@@ -71,13 +71,14 @@ function processQueue() {
   if (!queue.length || lock) return;
   lock = true;
 
-  const { id, user, duration } = queue.shift();
+  const { id, user, channel, duration } = queue.shift();
   const min = parseInt(duration * 0.25);
   const max = parseInt(duration * 0.75);
 
   player.pause();
   player.setVideo(id);
   player.setVolume(0.5);
+  player.pause();
   player.seek(random(min, max));
 
   onPlaying = () => {
@@ -87,6 +88,9 @@ function processQueue() {
       player.pause();
       done();
     }, videoDuration * 1000);
+    setTimeout(() => {
+      socket.emit("video-play", { user, channel });
+    }, videoDuration / 2);
     onPlaying = () => {};
   };
 

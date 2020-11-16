@@ -20,7 +20,6 @@ module.exports = ({ server, twitchClient }) => {
     });
 
     socket.on("video-play", ({ user, channel }) => {
-      // console.log("video-play", user);
       twitchClient.chat.say(channel, `Vous regardez twitch.tv/${user.name}`);
     });
   });

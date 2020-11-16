@@ -51,7 +51,12 @@ module.exports = async ({ message, client }, next) => {
       // }
 
       if (!channel._data.mature) {
-        client.io.emit("streamer-highlight", { id, user, duration });
+        client.io.emit("streamer-highlight", {
+          id,
+          user,
+          channel: message.channel,
+          duration,
+        });
       }
 
       next();
