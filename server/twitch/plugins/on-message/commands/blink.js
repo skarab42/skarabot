@@ -5,7 +5,7 @@ const costRatio = 10;
 
 module.exports = ({ command, message, client }) => {
   const user = message.data.user;
-  let [count] = command.args;
+  let [count, target] = command.args;
 
   count = parseInt(count);
 
@@ -32,8 +32,21 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
+  let targetUser = null;
+
+  if (target) {
+    targetUser = users.getByName(target);
+    if (!targetUser || !targetUser.avatarURL) {
+      client.chat.say(
+        message.channel,
+        `Désolé ${user.name} "${target}" est introuvable sur le mur.`
+      );
+      return;
+    }
+  }
+
   user.points -= cost;
   users.update(user);
 
-  client.io.emit("wof.blink", { user, count });
+  client.io.emit("wof.blink", { user: targetUser || user, count });
 };
