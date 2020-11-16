@@ -1,130 +1,52 @@
-const { default: anime } = require("animejs");
 const socket = require("socket.io-client")();
-const random = require("./utils/random");
-const ms = require("ms");
+const shuffle = require("./utils/shuffle");
+const counter = require("./counter");
+const player = require("./player");
 
-const $video = document.querySelector("#video");
-const $title = document.querySelector("#title");
-const $counter = document.querySelector("#counter");
-const $countdown = document.querySelector("#countdown");
-
-const videoWidth = 600;
-const videoDuration = 15; // seconds
-const videoSize = {
-  width: videoWidth,
-  height: videoWidth / 1.777777,
-};
-
-const player = new Twitch.Player("player", {
-  channel: "skarab42",
-  autoplay: false,
-  ...videoSize,
-});
-
-let onPlaying = () => {};
-
-player.addEventListener(Twitch.Player.PLAYING, () => onPlaying());
-
-$video.style.position = "absolute";
+let queue = [];
+let lock = false;
 
 function showOverlay(show = true) {
   document.body.classList[show ? "add" : "remove"]("overlay");
 }
 
-function showVideo(show = true, { user } = {}) {
-  $video.style.display = show ? "block" : "none";
-  $video.style.top = `-${videoSize.height}px`;
-  $video.style.left = `${window.innerWidth / 2 - videoSize.width / 2}px`;
-  $title.innerHTML = user ? `${user.name} présente ...` : "";
-  anime({
-    targets: $video,
-    keyframes: [
-      {
-        top: window.innerHeight / 2 - videoSize.height / 2 - 40,
-        duration: 2000,
-      },
-      {
-        scale: 2,
-        duration: 1000,
-      },
-    ],
-  });
-}
-
-let queue = [];
-let lock = false;
-
-function clear() {
+function clearQueue() {
   queue = [];
 }
 
-function done() {
+function next() {
   lock = false;
   processQueue();
 }
 
-function push(video) {
+function processQueue() {
+  showOverlay(queue.length);
+
+  if (!queue.length || lock) return;
+  lock = true;
+
+  player.playAndDestroy(queue.shift(), next);
+}
+
+function videoPush(video) {
   queue.push(video);
   processQueue();
 }
 
-function processQueue() {
-  if (!queue.length || lock) return;
-  lock = true;
-
-  const { id, user, channel, duration } = queue.shift();
-  const min = parseInt(duration * 0.25);
-  const max = parseInt(duration * 0.75);
-
-  player.pause();
-  player.setVideo(id);
-  player.setVolume(0.5);
-  player.pause();
-  player.seek(random(min, max));
-
-  onPlaying = () => {
-    showOverlay(true);
-    showVideo(true, { user });
-    setTimeout(() => {
-      showOverlay(queue.length);
-      showVideo(false);
-      player.pause();
-      done();
-    }, videoDuration * 1000);
-    setTimeout(() => {
-      socket.emit("video-play", { user, channel });
-    }, videoDuration / 2);
-    onPlaying = () => {};
-  };
-
-  player.play();
+function pauseStart({ minutes, videos }) {
+  videos.forEach(videoPush);
+  showOverlay(true);
+  counter.start(minutes, () => {
+    !queue.length && shuffle(videos).forEach(videoPush);
+  });
 }
 
-socket.on("streamer-highlight", push);
+function pauseStop() {
+  showOverlay(false);
+  counter.stop();
+  clearQueue();
+}
 
-let countdown = 0;
-let countdownId = null;
-
-socket.on("pause.start", ({ minutes, videos }) => {
-  videos.forEach(push);
-  clearInterval(countdownId);
-  countdown = minutes * 60 * 1000;
-  $countdown.innerHTML = ms(countdown);
-  $counter.style.display = "block";
-  countdownId = setInterval(() => {
-    $countdown.innerHTML = ms(countdown);
-    countdown -= 1000;
-    if (countdown <= 0) {
-      countdown += 42000;
-    }
-    if (!queue.length) {
-      videos.forEach(push);
-    }
-  }, 1000);
-});
-
-socket.on("pause.stop", () => {
-  clear();
-  clearInterval(countdownId);
-  $counter.style.display = "none";
-});
+socket.on("video.push", videoPush);
+socket.on("pause.start", pauseStart);
+socket.on("pause.stop", pauseStop);
