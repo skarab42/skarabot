@@ -4,4 +4,4 @@ const defaults = {
   channels: [],
 };
 
-module.exports = create({ name: "users", defaults });
+module.exports = create({ name: "pause-channels", defaults });
