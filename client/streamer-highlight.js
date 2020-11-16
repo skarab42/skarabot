@@ -27,12 +27,15 @@ player.addEventListener(Twitch.Player.PLAYING, () => onPlaying());
 
 $video.style.position = "absolute";
 
+function showOverlay(show = true) {
+  document.body.classList[show ? "add" : "remove"]("overlay");
+}
+
 function showVideo(show = true, { user } = {}) {
   $video.style.display = show ? "block" : "none";
   $video.style.top = `-${videoSize.height}px`;
   $video.style.left = `${window.innerWidth / 2 - videoSize.width / 2}px`;
   $title.innerHTML = user ? `${user.name} présente ...` : "";
-  document.body.classList[show ? "add" : "remove"]("overlay");
   anime({
     targets: $video,
     keyframes: [
@@ -47,8 +50,6 @@ function showVideo(show = true, { user } = {}) {
     ],
   });
 }
-
-showVideo(false);
 
 let queue = [];
 let lock = false;
@@ -82,8 +83,10 @@ function processQueue() {
   player.seek(random(min, max));
 
   onPlaying = () => {
+    showOverlay(true);
     showVideo(true, { user });
     setTimeout(() => {
+      showOverlay(queue.length);
       showVideo(false);
       player.pause();
       done();
