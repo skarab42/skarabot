@@ -1,4 +1,4 @@
-const { humanTimeToTimestamp } = require("../utils");
+const { shuffle, humanTimeToTimestamp } = require("../utils");
 const store = require("../../../../store/pause-channels");
 
 // DONE: command !pause <min>
@@ -7,8 +7,9 @@ const store = require("../../../../store/pause-channels");
 // DONE: command !pause stop
 // DONE: loop videos
 // DONE: command !pause [+-]<user>
+// DONE: check if mature chanel
 
-// TODO: check if mature chanel
+// WIP: random playlist
 // TODO: show live stream first
 
 let channels = store.get("channels");
@@ -17,7 +18,9 @@ async function getVideoByUserName({ client, name, channel }) {
   const userId = await client.api.helix.users.getUserByName(name);
   const { data } = await client.api.helix.videos.getVideosByUser(userId);
   if (!data.length) return null;
-  let { id, duration } = data[0]._data;
+  const userChannel = await client.api.kraken.channels.getChannel(userId);
+  if (userChannel._data.mature) return null;
+  let { id, duration } = shuffle(data)[0]._data;
   duration = humanTimeToTimestamp(duration);
   return { id, user: { name }, channel, duration };
 }
@@ -71,7 +74,7 @@ module.exports = ({ command, message, client }) => {
   Promise.all(promises)
     .then((videos) => {
       videos = videos.filter((video) => video);
-      client.emit("pause.start", { minutes, videos });
+      client.emit("pause.start", { minutes, videos: shuffle(videos) });
     })
     .catch((error) => {
       console.log("ERROR >>>", error);
