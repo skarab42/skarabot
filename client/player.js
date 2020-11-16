@@ -1,4 +1,5 @@
 const { default: animejs } = require("animejs");
+const socket = require("socket.io-client")();
 const random = require("./utils/random");
 
 const playDuration = 15; // seconds
@@ -52,6 +53,9 @@ function playAndDestroy(video, next) {
   player.addEventListener(Twitch.Player.PLAYING, () => {
     setTitle(video.user);
     showVideo(true);
+    setTimeout(() => {
+      socket.emit("video-play", video);
+    }, playDuration / 2);
     setTimeout(() => {
       showVideo(false);
       removePlayer();
