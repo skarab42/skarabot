@@ -16,8 +16,12 @@ const serverPath = "server/index.js";
 
 const input = [];
 
-fs.readdirSync(path.resolve(__dirname, inputDir)).forEach(file => {
-  input.push(`${inputDir}/${file}`);
+const inputPath = path.resolve(__dirname, inputDir);
+
+fs.readdirSync(inputPath).forEach((file) => {
+  if (!fs.lstatSync(path.join(inputPath, file)).isDirectory()) {
+    input.push(`${inputDir}/${file}`);
+  }
 });
 
 export default {
@@ -25,7 +29,7 @@ export default {
   output: {
     format: "es",
     sourcemap: true,
-    dir: `${outputDir}/js/`
+    dir: `${outputDir}/js/`,
   },
   plugins: [
     commonjs(),
@@ -34,6 +38,6 @@ export default {
     watch && livereload(outputDir),
     watch && spawnServer(serverPath),
     !watch && cleaner({ targets: [outputDir] }),
-    !watch && terser()
-  ]
+    !watch && terser(),
+  ],
 };
