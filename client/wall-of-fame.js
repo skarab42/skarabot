@@ -1,5 +1,6 @@
-const socket = require("socket.io-client")();
 const { default: anime } = require("animejs");
+const socket = require("socket.io-client")();
+const random = require("./utils/random");
 
 const imgSize = { width: 100, height: 100 };
 const $wall = document.querySelector("#wall");
@@ -18,10 +19,6 @@ hide();
 function onError(error) {
   // eslint-disable-next-line
   console.error("ERROR >>>", error);
-}
-
-function random(min, max) {
-  return Math.random() * (max - min) + min;
 }
 
 function hide() {
