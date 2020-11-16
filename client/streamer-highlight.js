@@ -4,17 +4,26 @@ const random = require("./utils/random");
 const ms = require("ms");
 
 const $video = document.querySelector("#video");
-const $player = document.querySelector("#player");
 const $title = document.querySelector("#title");
 const $counter = document.querySelector("#counter");
 const $countdown = document.querySelector("#countdown");
 
 const videoWidth = 600;
-const videoDuration = 15000;
+const videoDuration = 5; // seconds
 const videoSize = {
   width: videoWidth,
   height: videoWidth / 1.777777,
 };
+
+const player = new Twitch.Player("player", {
+  channel: "skarab42",
+  autoplay: false,
+  ...videoSize,
+});
+
+let onPlaying = () => {};
+
+player.addEventListener(Twitch.Player.PLAYING, () => onPlaying());
 
 $video.style.position = "absolute";
 
@@ -37,13 +46,16 @@ function showVideo(show = true, { user } = {}) {
       },
     ],
   });
-  if (!show) $player.innerHTML = "";
 }
 
 showVideo(false);
 
-const queue = [];
+let queue = [];
 let lock = false;
+
+function clear() {
+  queue = [];
+}
 
 function done() {
   lock = false;
@@ -59,25 +71,26 @@ function processQueue() {
   if (!queue.length || lock) return;
   lock = true;
 
-  const { id, user, channel, duration } = queue.shift();
+  const { id, user, duration } = queue.shift();
+  const min = parseInt(duration * 0.25);
+  const max = parseInt(duration * 0.75);
 
-  const player = new Twitch.Player("player", { video: id, ...videoSize });
-
+  player.pause();
+  player.setVideo(id);
   player.setVolume(0.5);
+  player.seek(random(min, max));
 
-  player.addEventListener(Twitch.Player.READY, () => {
-    socket.emit("video-play", { user, channel });
+  onPlaying = () => {
     showVideo(true, { user });
-    const min = parseInt(duration * 0.25);
-    const max = parseInt(duration * 0.75);
-    player.seek(random(min, max));
-    player.play();
     setTimeout(() => {
-      player.pause();
       showVideo(false);
+      player.pause();
       done();
-    }, videoDuration);
-  });
+    }, videoDuration * 1000);
+    onPlaying = () => {};
+  };
+
+  player.play();
 }
 
 socket.on("streamer-highlight", push);
@@ -85,7 +98,8 @@ socket.on("streamer-highlight", push);
 let countdown = 0;
 let countdownId = null;
 
-socket.on("pause", ({ minutes }) => {
+socket.on("pause.start", ({ minutes, videos }) => {
+  videos.forEach(push);
   clearInterval(countdownId);
   countdown = minutes * 60 * 1000;
   $countdown.innerHTML = ms(countdown);
@@ -94,8 +108,16 @@ socket.on("pause", ({ minutes }) => {
     $countdown.innerHTML = ms(countdown);
     countdown -= 1000;
     if (countdown <= 0) {
-      clearInterval(countdownId);
-      $counter.style.display = "none";
+      countdown += 42000;
+    }
+    if (!queue.length) {
+      videos.forEach(push);
     }
   }, 1000);
+});
+
+socket.on("pause.stop", () => {
+  clear();
+  clearInterval(countdownId);
+  $counter.style.display = "none";
 });

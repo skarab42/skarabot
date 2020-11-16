@@ -1,21 +1,48 @@
 const { humanTimeToTimestamp } = require("../utils");
 
 // DONE: command !pause <in>
-// TODO: command !pause stop
-// TODO: command !pause [+-]<user>
-// TODO: loop videos, increase countound if < 0 -> +42s
+// DONE: pick random start location
+// DONE: increase countound if < 0 -> +42s
+// DONE: command !pause stop
+
+// WIP: loop videos
+
+// TODO: command !pause [+-]<user> | check if mature chanel
+// TODO: show live stream first
 
 const channels = [
   "iti63",
-  "jenaiccambre",
-  "gnu_coding_cafe",
-  "akanoa",
-  "delphes99",
-  "dooctrix",
-  "sirlynixvanfrietjes",
-  "fablab_onlfait",
-  "ioodyme",
+  "iti63",
+  "iti63",
+  // "jenaiccambre",
+  // "gnu_coding_cafe",
+  // "akanoa",
+  // "dannou",
+  // "delphes99",
+  // "dooctrix",
+  // "sirlynixvanfrietjes",
+  // "fablab_onlfait",
+  // "ioodyme",
+  // "iti63",
+  // "jenaiccambre",
+  // "gnu_coding_cafe",
+  // "akanoa",
+  // "dannou",
+  // "delphes99",
+  // "dooctrix",
+  // "sirlynixvanfrietjes",
+  // "fablab_onlfait",
+  // "ioodyme",
 ];
+
+async function getVideoByUserName(client, name) {
+  const userId = await client.api.helix.users.getUserByName(name);
+  const { data } = await client.api.helix.videos.getVideosByUser(userId);
+  if (!data.length) return null;
+  let { id, duration } = data[0]._data;
+  duration = humanTimeToTimestamp(duration);
+  return { id, user: { name }, duration };
+}
 
 module.exports = ({ command, message, client }) => {
   const user = message.data.user;
@@ -26,26 +53,25 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
-  minutes = parseInt(minutes);
+  if (minutes === "stop") {
+    return client.emit("pause.stop");
+  }
+
+  minutes = parseFloat(minutes);
 
   if (!minutes || isNaN(minutes)) {
     client.chat.say(message.channel, `Usage: !pause <int>`);
     return;
   }
 
-  channels.forEach(async (channel) => {
-    const userId = await client.api.helix.users.getUserByName(channel);
-    const { data } = await client.api.helix.videos.getVideosByUser(userId);
-    if (!data.length) return null;
-    let { id, duration } = data[0]._data;
-    duration = humanTimeToTimestamp(duration);
-    client.emit("streamer-highlight", {
-      id,
-      user: { name: channel },
-      channel: message.channel,
-      duration,
-    });
-  });
+  const promises = channels.map((name) => getVideoByUserName(client, name));
 
-  client.emit("pause", { minutes });
+  Promise.all(promises)
+    .then((videos) => {
+      videos = videos.filter((video) => video);
+      client.emit("pause.start", { minutes, videos });
+    })
+    .catch((error) => {
+      console.log("ERROR >>>", error);
+    });
 };
