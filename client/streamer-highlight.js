@@ -1,5 +1,6 @@
-const socket = require("socket.io-client")();
 const { default: anime } = require("animejs");
+const socket = require("socket.io-client")();
+const random = require("./utils/random");
 const ms = require("ms");
 
 const $video = document.querySelector("#video");
@@ -67,7 +68,9 @@ function processQueue() {
   player.addEventListener(Twitch.Player.READY, () => {
     socket.emit("video-play", { user, channel });
     showVideo(true, { user });
-    player.seek(duration / 2);
+    const min = parseInt(duration * 0.25);
+    const max = parseInt(duration * 0.75);
+    player.seek(random(min, max));
     player.play();
     setTimeout(() => {
       player.pause();
