@@ -8,9 +8,9 @@ const store = require("../../../../store/pause-channels");
 // DONE: loop videos
 // DONE: command !pause [+-]<user>
 // DONE: check if mature chanel
+// DONE: random playlist
 
-// WIP: random playlist
-// TODO: show live stream first
+// TODO: show live stream first ???
 
 let channels = store.get("channels");
 
