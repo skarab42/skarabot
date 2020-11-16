@@ -20,18 +20,7 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
-  let extactMatch = null;
-  let partialMatch = [];
-
-  fileList.forEach((file) => {
-    if (file === name) {
-      extactMatch = file;
-    } else if (file.match(new RegExp(`${name}.[a-z0-9]{3}`))) {
-      partialMatch.push(file);
-    }
-  });
-
-  const matchFile = extactMatch || partialMatch[0];
+  const matchFile = fileList.find((file) => file.slice(0, -4) === name);
 
   if (!matchFile) {
     client.chat.say(message.channel, `Aucun fichier trouvé pour ${name}...`);
