@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Wall Frame - skarabot</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      #player {
+        top: 120px;
+        left: 70px;
+        width: 700px;
+        height: 500px;
+        position: absolute;
+        background-color: green;
+        transform: perspective(30cm) rotateZ(5deg) rotatex(5deg) rotateY(30deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wall">
+      <div id="player"></div>
+    </div>
+    <script type="module" src="js/wall-frame.js"></script>
+  </body>
+</html>

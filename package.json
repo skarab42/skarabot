@@ -16,6 +16,7 @@
     "conf": "^7.1.2",
     "env-paths": "^2.2.0",
     "fs-extra": "^9.0.1",
+    "js-video-url-parser": "^0.4.3",
     "ms": "^2.1.2",
     "open": "^7.3.0",
     "polka": "^0.5.2",
@@ -25,7 +26,8 @@
     "twitch": "^4.2.6",
     "twitch-auth": "^4.2.6",
     "twitch-chat-client": "^4.2.6",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.1",
+    "youtube-player": "^5.5.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.1.0",
