@@ -18,15 +18,21 @@
         border-radius: 50%;
         background-color: red;
       }
+
+      .player {
+        position: absolute;
+      }
     </style>
   </head>
   <body>
     <div id="wall">
       <div id="players">
-        <div id="youtube-player"></div>
+        <div id="youtube-player" class="player"></div>
+        <div id="twitch-player" class="player"></div>
       </div>
       <div id="handles"></div>
     </div>
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script type="module" src="js/wall-frame.js"></script>
   </body>
 </html>

@@ -16,6 +16,13 @@ const transform = new PerspectiveTransform(
 
 const handleSize = 42;
 const handles = {};
+let twitchIframe = null;
+
+const removeTwitchPlayer = () => {
+  if (!twitchIframe) return;
+  twitchIframe._iframe.remove();
+  twitchIframe = null;
+};
 
 $players.style.opacity = edit ? 0.5 : 1;
 $handles.style.display = edit ? "block" : "none";
@@ -70,10 +77,24 @@ const player = youtubePlayer("youtube-player", { ...size });
 player.mute();
 
 socket.on("frame.push", (target) => {
-  player.loadVideoById(target.id);
-  player.playVideo().then(() => {
-    console.log("playing...", target.id);
-  });
+  removeTwitchPlayer();
+
+  if (target.provider === "youtube") {
+    player.loadVideoById(target.id);
+    player.playVideo().then(() => {
+      console.log("playing...", target.id);
+    });
+  } else if (target.provider === "twitch") {
+    let props = { channel: null, video: null };
+
+    if (target.mediaType === "stream" && target.channel !== "collections") {
+      props.channel = target.channel;
+    } else if (target.mediaType === "video") {
+      props.video = target.id;
+    }
+
+    twitchPlayer({ ...size, ...props, muted: true });
+  }
 });
 
 socket.emit("frame.handles.getCoords");
@@ -85,3 +106,10 @@ socket.on("frame.handles.coords", (coords) => {
   });
   transform.update();
 });
+
+function twitchPlayer(props) {
+  twitchIframe = new Twitch.Player("twitch-player", {
+    autoplay: true,
+    ...props,
+  });
+}

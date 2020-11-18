@@ -1,17 +1,13 @@
-// import urlParser from "js-video-url-parser/lib/base";
-// import "js-video-url-parser/lib/provider/youtube";
-// import "js-video-url-parser/lib/provider/twitch";
-
 const urlParser = require("js-video-url-parser/lib/base");
 require("js-video-url-parser/lib/provider/youtube");
+require("js-video-url-parser/lib/provider/twitch");
 
 module.exports = async ({ command, message, client }) => {
   const { user } = message.data;
   let [url] = command.args;
 
-  if (!message.data.badges.broadcaster) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
-    return;
+  if (url.match(/^[a-z0-9_]+$/i)) {
+    url = `https://twitch.tv/${url}`;
   }
 
   const target = urlParser.parse(url);
@@ -21,6 +17,11 @@ module.exports = async ({ command, message, client }) => {
       message.channel,
       `Usage: !frame <url> (youtube|twitch)`
     );
+  }
+
+  if (!message.data.badges.broadcaster && target.provider !== "twitch") {
+    client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
+    return;
   }
 
   client.io.emit("frame.push", target);
