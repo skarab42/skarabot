@@ -2,28 +2,29 @@ const { default: animejs } = require("animejs");
 const socket = require("socket.io-client")();
 const random = require("./utils/random");
 
-const playDuration = 15; // seconds
+const playDuration = 30; // seconds
 const videoWidth = 600;
 const videoSize = {
   width: videoWidth,
   height: videoWidth / 1.777777,
 };
 
+const $counter = document.querySelector("#counter");
 const $video = document.querySelector("#video");
 const $title = document.querySelector("#title");
 
 function anime(targets) {
+  let top = window.innerHeight / 2 - videoSize.height / 2 - 40;
+
+  if ($counter.style.display !== "none") {
+    top += 42;
+  }
+
   animejs({
     targets,
     keyframes: [
-      {
-        top: window.innerHeight / 2 - videoSize.height / 2 - 40,
-        duration: 2000,
-      },
-      {
-        scale: 2,
-        duration: 1000,
-      },
+      { top, duration: 2000 },
+      { scale: 2, duration: 1000 },
     ],
   });
 }
@@ -48,6 +49,7 @@ function playAndDestroy(video, next) {
     autoplay: false,
     video: video.id,
     ...videoSize,
+    mute: true,
   });
 
   player.addEventListener(Twitch.Player.PLAYING, () => {
@@ -65,7 +67,7 @@ function playAndDestroy(video, next) {
 
   player.addEventListener(Twitch.Player.READY, () => {
     player.seek(timestamp);
-    player.setVolume(0.5);
+    player.setVolume(0);
     player.play();
   });
 
