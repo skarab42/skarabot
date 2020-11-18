@@ -30,7 +30,6 @@ module.exports = ({ server, twitchClient }) => {
     });
 
     socket.on("frame.handles.getCoords", () => {
-      console.log("prout");
       socket.emit("frame.handles.coords", frameStore.get("coords"));
     });
   });
