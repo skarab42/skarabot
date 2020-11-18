@@ -116,6 +116,6 @@ fetch("/users")
 // TODO dégage moi ça de là!!!!!
 socket.on("play.sound", ({ file }) => {
   const audio = new Audio(`download/${file}`);
-  audio.volume = 1;
+  audio.volume = 0.5;
   audio.play();
 });
