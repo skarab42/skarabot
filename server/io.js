@@ -1,3 +1,4 @@
+const frameStore = require("./store/wall-frame");
 const users = require("./libs/users");
 const logs = require("./libs/logs");
 
@@ -21,6 +22,16 @@ module.exports = ({ server, twitchClient }) => {
 
     socket.on("video-play", ({ user, channel }) => {
       twitchClient.chat.say(channel, `Vous regardez twitch.tv/${user.name}`);
+    });
+
+    socket.on("frame.handles.coords", (coords) => {
+      frameStore.set("coords", coords);
+      socket.broadcast.emit("frame.handles.coords", coords);
+    });
+
+    socket.on("frame.handles.getCoords", () => {
+      console.log("prout");
+      socket.emit("frame.handles.coords", frameStore.get("coords"));
     });
   });
 

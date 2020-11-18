@@ -8,20 +8,24 @@
         margin: 0;
       }
 
-      #player {
-        top: 120px;
-        left: 70px;
-        width: 700px;
-        height: 500px;
+      #players {
         position: absolute;
-        background-color: green;
-        transform: perspective(30cm) rotateZ(5deg) rotatex(5deg) rotateY(30deg);
+      }
+
+      #handles > .handle {
+        opacity: 0.5;
+        cursor: pointer;
+        border-radius: 50%;
+        background-color: red;
       }
     </style>
   </head>
   <body>
     <div id="wall">
-      <div id="player"></div>
+      <div id="players">
+        <div id="youtube-player"></div>
+      </div>
+      <div id="handles"></div>
     </div>
     <script type="module" src="js/wall-frame.js"></script>
   </body>

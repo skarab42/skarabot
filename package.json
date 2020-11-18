@@ -10,6 +10,7 @@
     "lint": "eslint --fix ./server ./client && yarn prettify"
   },
   "dependencies": {
+    "PerspectiveTransform.js": "https://github.com/edankwan/PerspectiveTransform.js",
     "animejs": "^3.2.1",
     "axios": "^0.21.0",
     "chalk": "^4.1.0",
