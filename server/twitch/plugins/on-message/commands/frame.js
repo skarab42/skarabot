@@ -1,9 +1,11 @@
+const { getRandomVideoByUserName, getStreamByUserName } = require("../utils");
 const urlParser = require("js-video-url-parser/lib/base");
 require("js-video-url-parser/lib/provider/youtube");
 require("js-video-url-parser/lib/provider/twitch");
-const { getRandomVideoByUserName, getStreamByUserName } = require("../utils");
 
-module.exports = async ({ command, message, client }) => {
+const cooldownTimeout = 15;
+
+module.exports = async ({ command, message, client, cooldown }) => {
   const { user } = message.data;
   let [url] = command.args;
 
@@ -24,6 +26,8 @@ module.exports = async ({ command, message, client }) => {
     client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
     return;
   }
+
+  if (cooldown("cmd.frame", cooldownTimeout)) return;
 
   if (target.provider === "twitch" && target.mediaType === "stream") {
     const stream = await getStreamByUserName({ client, name: target.channel });

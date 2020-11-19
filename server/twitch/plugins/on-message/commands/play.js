@@ -1,10 +1,9 @@
 const { downloadDir } = require("../config/download");
 const fs = require("fs");
 
-let lastPlayTime = 0;
-const playCooldown = 1000 * 15;
+const cooldownTimeout = 15;
 
-module.exports = ({ command, message, client }) => {
+module.exports = ({ command, message, client, cooldown }) => {
   let [name] = command.args;
 
   if (!name) {
@@ -27,14 +26,7 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
-  const elapsed = message.data.timestamp - lastPlayTime;
+  if (cooldown("cmd.play", cooldownTimeout)) return;
 
-  if (elapsed < playCooldown) {
-    const rest = parseInt((playCooldown - elapsed) / 1000);
-    client.chat.say(message.channel, `!play cooldown (~${rest}s)`);
-    return;
-  }
-
-  lastPlayTime = message.data.timestamp;
   client.io.emit("play.sound", { file: matchFile });
 };

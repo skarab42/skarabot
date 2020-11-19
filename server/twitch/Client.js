@@ -1,5 +1,6 @@
-const AuthProvider = require("./AuthProvider");
 const { ApiClient } = require("twitch");
+const AuthProvider = require("./AuthProvider");
+const cooldown = require("./plugins/cooldown");
 const { ChatClient } = require("twitch-chat-client");
 
 module.exports = class Client {
@@ -16,7 +17,8 @@ module.exports = class Client {
     this.chat.onMessage(async (channel, user, message, msg) => {
       message = { channel, user, message, msg, data: {} };
       message.msg._tags = Object.fromEntries(msg._tags || []);
-      this._onMessage({ message, client: this });
+      const cd = cooldown.bind(null, this, message);
+      this._onMessage({ message, client: this, cooldown: cd });
     });
   }
 

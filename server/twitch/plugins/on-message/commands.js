@@ -1,6 +1,6 @@
 const commands = require("./commands/index");
 
-module.exports = ({ message, client }, next) => {
+module.exports = ({ message, client, cooldown }, next) => {
   const text = message.message;
 
   if (text[0] !== "!" || text[1] === "!") {
@@ -13,7 +13,7 @@ module.exports = ({ message, client }, next) => {
   const commandFn = commands[name];
 
   if (typeof commandFn === "function") {
-    commandFn({ command, message, client });
+    commandFn({ command, message, client, cooldown });
   } else {
     command.name = "alias";
     command.args.unshift(name);
