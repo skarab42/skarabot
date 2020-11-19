@@ -1,6 +1,6 @@
 const { default: animejs } = require("animejs");
 const socket = require("socket.io-client")();
-const random = require("./utils/random");
+const random = require("./random");
 
 const playDuration = 30; // seconds
 const videoWidth = 600;

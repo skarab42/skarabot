@@ -1,6 +1,6 @@
 const { default: anime } = require("animejs");
 const socket = require("socket.io-client")();
-const random = require("./utils/random");
+const random = require("./libs/random");
 
 const imgSize = { width: 100, height: 100 };
 const $wall = document.querySelector("#wall");

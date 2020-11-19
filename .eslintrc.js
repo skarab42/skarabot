@@ -23,5 +23,6 @@ module.exports = {
   },
   globals: {
     Twitch: true,
+    PerspectiveTransform: true,
   },
 };

@@ -1,7 +1,7 @@
 const socket = require("socket.io-client")();
-const shuffle = require("./utils/shuffle");
-const counter = require("./counter");
-const player = require("./player");
+const shuffle = require("./libs/shuffle");
+const counter = require("./libs/counter");
+const player = require("./libs/player");
 
 let queue = [];
 let lock = false;
