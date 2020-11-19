@@ -16,21 +16,12 @@ module.exports = async ({ message, client }, next) => {
     return next();
   }
 
-  // if (message.data.badges.broadcaster) {
-  //   console.log("MOI MOI");
-  // } else
   if (user.viewCount < minViewCount || elapsed < delayMs) {
     return next();
   }
 
   const channel = await client.api.kraken.channels.getChannel(user.id);
-
-  function userBanner() {
-    client.chat.say(
-      message.channel,
-      `${sayMessage} -> ${user.name} http://twitch.tv/${user.name}`
-    );
-  }
+  const banner = `${sayMessage} -> ${user.name} | http://twitch.tv/${user.name}`;
 
   client.api.helix.videos
     .getVideosByUser(user.id)
@@ -39,23 +30,22 @@ module.exports = async ({ message, client }, next) => {
       users.update(user);
 
       if (!data.length) {
-        userBanner();
+        client.chat.say(message.channel, banner);
         return next();
       }
 
       let { id, url, duration } = data[0]._data;
       duration = humanTimeToTimestamp(duration);
 
-      // if (!message.data.badges.broadcaster) {
-      client.chat.say(message.channel, `${sayMessage} -> ${user.name} ${url}`);
-      // }
+      client.chat.say(message.channel, `${banner} | ${url} |`);
 
       if (!channel._data.mature) {
-        client.io.emit("video.push", {
-          id,
-          user,
-          channel: message.channel,
+        client.io.emit("frame.push", {
+          provider: "twitch",
+          mediaType: "video",
           duration,
+          user,
+          id,
         });
       }
 
