@@ -19,16 +19,37 @@ function shuffle(o) {
   return o;
 }
 
-async function isMatureChannel({ client, id }) {
-  const channel = await client.api.kraken.channels.getChannel(id);
+async function getChannel({ client, user }) {
+  return await client.api.kraken.channels.getChannel(user);
+}
+
+async function getChannelByName({ client, name }) {
+  const user = await getUserByName({ client, name });
+  return await getChannel({ client, user });
+}
+
+async function isMatureChannel({ client, user }) {
+  const channel = await getChannel({ client, user });
   return channel ? channel._data.mature : null;
 }
 
+async function getUserByName({ client, name }) {
+  return await client.api.helix.users.getUserByName(name);
+}
+
+async function getVideosByUser({ client, user }) {
+  return await client.api.helix.videos.getVideosByUser(user);
+}
+
+async function getStreamByUserName({ client, name }) {
+  return await client.api.helix.streams.getStreamByUserName(name);
+}
+
 async function getVideosByUserName({ client, name, mature = false }) {
-  const id = await client.api.helix.users.getUserByName(name);
-  const { data } = await client.api.helix.videos.getVideosByUser(id);
+  const user = await getUserByName({ client, name });
+  const { data } = await getVideosByUser({ client, user });
   if (!data.length) return null;
-  if (!mature && (await isMatureChannel({ client, id }))) return null;
+  if (!mature && (await isMatureChannel({ client, user }))) return null;
   return data.map((d) => d._data);
 }
 
@@ -47,6 +68,11 @@ async function getRandomVideoByUserName({
 
 module.exports = {
   shuffle,
+  getChannel,
+  getChannelByName,
+  getStreamByUserName,
+  getUserByName,
+  getVideosByUser,
   getRandomVideoByUserName,
   humanTimeToTimestamp,
 };

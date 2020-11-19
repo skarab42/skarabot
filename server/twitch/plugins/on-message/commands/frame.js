@@ -1,6 +1,7 @@
 const urlParser = require("js-video-url-parser/lib/base");
 require("js-video-url-parser/lib/provider/youtube");
 require("js-video-url-parser/lib/provider/twitch");
+const { getRandomVideoByUserName, getStreamByUserName } = require("../utils");
 
 module.exports = async ({ command, message, client }) => {
   const { user } = message.data;
@@ -10,7 +11,7 @@ module.exports = async ({ command, message, client }) => {
     url = `https://twitch.tv/${url}`;
   }
 
-  const target = urlParser.parse(url);
+  let target = urlParser.parse(url);
 
   if (!target) {
     return client.chat.say(
@@ -22,6 +23,25 @@ module.exports = async ({ command, message, client }) => {
   if (!message.data.badges.broadcaster && target.provider !== "twitch") {
     client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
     return;
+  }
+
+  if (target.provider === "twitch" && target.mediaType === "stream") {
+    const stream = await getStreamByUserName({ client, name: target.channel });
+
+    if (!stream) {
+      const video = await getRandomVideoByUserName({
+        client,
+        name: target.channel,
+        channel: message.channel,
+      });
+      if (!video) {
+        return client.chat.say(
+          message.channel,
+          `Aucune vidéo trouvé chez ${target.channel}`
+        );
+      }
+      target = { ...target, ...video, mediaType: "video" };
+    }
   }
 
   client.io.emit("frame.push", target);
