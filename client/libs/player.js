@@ -13,6 +13,8 @@ const $counter = document.querySelector("#counter");
 const $video = document.querySelector("#video");
 const $title = document.querySelector("#title");
 
+let player;
+
 function anime(targets) {
   let top = window.innerHeight / 2 - videoSize.height / 2 - 40;
 
@@ -33,11 +35,18 @@ function showVideo(show = true) {
   $video.style.display = show ? "block" : "none";
   $video.style.top = `-${videoSize.height}px`;
   $video.style.left = `${window.innerWidth / 2 - videoSize.width / 2}px`;
-  anime($video);
+  show && anime($video);
 }
 
 function setTitle(user) {
   $title.innerHTML = user ? `${user.name} présente ...` : "";
+}
+
+function removePlayer() {
+  if (!player) return;
+  showVideo(false);
+  player._iframe.remove();
+  player = null;
 }
 
 function playAndDestroy(video, next) {
@@ -45,7 +54,7 @@ function playAndDestroy(video, next) {
   const max = parseInt(video.duration * 0.75);
   const timestamp = parseInt(random(min, max));
 
-  let player = new Twitch.Player("player", {
+  player = new Twitch.Player("player", {
     autoplay: false,
     video: video.id,
     ...videoSize,
@@ -59,7 +68,6 @@ function playAndDestroy(video, next) {
       socket.emit("video-play", video);
     }, playDuration / 2);
     setTimeout(() => {
-      showVideo(false);
       removePlayer();
       next();
     }, playDuration * 1000);
@@ -70,13 +78,9 @@ function playAndDestroy(video, next) {
     player.setVolume(0);
     player.play();
   });
-
-  const removePlayer = () => {
-    player._iframe.remove();
-    player = null;
-  };
 }
 
 module.exports = {
-  playAndDestroy,
+  play: playAndDestroy,
+  remove: removePlayer,
 };

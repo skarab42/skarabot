@@ -25,7 +25,7 @@ function processQueue() {
   if (!queue.length || lock) return;
   lock = true;
 
-  player.playAndDestroy(queue.shift(), next);
+  player.play(queue.shift(), next);
 }
 
 function videoPush(video) {
@@ -43,6 +43,7 @@ function pauseStart({ minutes, videos }) {
 
 function pauseStop() {
   showOverlay(false);
+  player.remove();
   counter.stop();
   clearQueue();
 }
