@@ -1,4 +1,4 @@
-const { shuffle, humanTimeToTimestamp } = require("../utils");
+const { shuffle, getVideoByUserName } = require("../utils");
 const store = require("../../../../store/pause-channels");
 
 // DONE: command !pause <min>
@@ -13,17 +13,6 @@ const store = require("../../../../store/pause-channels");
 // TODO: show live stream first ???
 
 let channels = store.get("channels");
-
-async function getVideoByUserName({ client, name, channel }) {
-  const userId = await client.api.helix.users.getUserByName(name);
-  const { data } = await client.api.helix.videos.getVideosByUser(userId);
-  if (!data.length) return null;
-  const userChannel = await client.api.kraken.channels.getChannel(userId);
-  if (userChannel._data.mature) return null;
-  let { id, duration } = shuffle(data)[0]._data;
-  duration = humanTimeToTimestamp(duration);
-  return { id, user: { name }, channel, duration };
-}
 
 module.exports = ({ command, message, client }) => {
   const user = message.data.user;
