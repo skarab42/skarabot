@@ -1,4 +1,4 @@
-const { shuffle, getVideoByUserName } = require("../utils");
+const { shuffle, getRandomVideoByUserName } = require("../utils");
 const store = require("../../../../store/pause-channels");
 
 // DONE: command !pause <min>
@@ -57,7 +57,7 @@ module.exports = ({ command, message, client }) => {
   }
 
   const promises = channels.map((name) =>
-    getVideoByUserName({ client, name, channel: message.channel })
+    getRandomVideoByUserName({ client, name, channel: message.channel })
   );
 
   Promise.all(promises)

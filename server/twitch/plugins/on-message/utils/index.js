@@ -32,7 +32,12 @@ async function getVideosByUserName({ client, name, mature = false }) {
   return data.map((d) => d._data);
 }
 
-async function getVideoByUserName({ client, name, channel, mature = false }) {
+async function getRandomVideoByUserName({
+  client,
+  name,
+  channel,
+  mature = false,
+}) {
   const videos = await getVideosByUserName({ client, name, mature });
   if (!videos) return null;
   let { id, duration } = shuffle(videos)[0];
@@ -42,6 +47,6 @@ async function getVideoByUserName({ client, name, channel, mature = false }) {
 
 module.exports = {
   shuffle,
-  getVideoByUserName,
+  getRandomVideoByUserName,
   humanTimeToTimestamp,
 };
