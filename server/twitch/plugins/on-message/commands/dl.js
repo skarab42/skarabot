@@ -7,7 +7,10 @@ module.exports = ({ command, message, client }) => {
   const user = message.data.user;
   let [name, url] = command.args;
 
-  if (!message.data.badges.broadcaster) {
+  const badges = message.data.badges;
+  const sudo = badges.broadcaster || badges.moderator;
+
+  if (!sudo) {
     client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
     return;
   }

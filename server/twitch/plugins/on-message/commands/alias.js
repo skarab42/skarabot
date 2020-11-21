@@ -5,7 +5,8 @@ module.exports = ({ command, message, client }) => {
   let value = args.join(" ").trim();
 
   const user = message.user;
-  const sudo = message.data.badges.broadcaster;
+  const badges = message.data.badges;
+  const sudo = badges.broadcaster || badges.moderator;
 
   if (!name) {
     client.chat.say(message.channel, `Usage: !alias <name> <value>`);
