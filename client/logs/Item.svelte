@@ -35,7 +35,7 @@
     <div class="flex space-x-2 bg-black bg-opacity-25 rounded overflow-hidden">
       {#if backgroundImage}
         <div
-          class="w-10 bg-cover bg-no-repeat bg-right"
+          class="w-10 bg-cover bg-no-repeat bg-center"
           style={backgroundImage} />
       {/if}
       <div class="p-2 font-bold truncate">{item.data.user}</div>
