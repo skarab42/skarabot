@@ -41,7 +41,7 @@ module.exports = async ({ command, message, client, cooldown }) => {
       if (!video) {
         return client.chat.say(
           message.channel,
-          `Aucune vidéo trouvé chez ${target.channel}`
+          `Aucune vidéo "publique" trouvé chez ${target.channel}`
         );
       }
       target = { ...target, ...video, mediaType: "video" };
