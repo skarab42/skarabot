@@ -1,7 +1,7 @@
 const cooldownIds = {};
 
 module.exports = function cooldown(client, message, id, seconds = 1) {
-  if (message.data.badges.broadcaster) {
+  if (message.data.badges.broadcaster || message.data.badges.moderator) {
     return false;
   }
 
