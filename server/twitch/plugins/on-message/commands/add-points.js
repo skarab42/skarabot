@@ -4,7 +4,7 @@ module.exports = ({ command, message, client }) => {
   const user = message.data.user;
   let [nick, points] = command.args;
 
-  if (!message.data.badges.broadcaster) {
+  if (!(message.data.badges.broadcaster || message.data.badges.moderator)) {
     client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
     return;
   }
