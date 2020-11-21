@@ -7,6 +7,7 @@ const size = { width: 700, height: 500 };
 const edit = window.location.search.includes("edit");
 const $players = document.querySelector("#players");
 const $handles = document.querySelector("#handles");
+const $twitchPlayer = document.querySelector("#twitch-player");
 const transform = new PerspectiveTransform(
   $players,
   size.width,
@@ -19,9 +20,11 @@ const handles = {};
 let twitchIframe = null;
 
 const removeTwitchPlayer = () => {
-  if (!twitchIframe) return;
-  twitchIframe._iframe.remove();
-  twitchIframe = null;
+  if (twitchIframe) {
+    twitchIframe._iframe.remove();
+    twitchIframe = null;
+  }
+  $twitchPlayer.innerHTML = "";
 };
 
 $players.style.opacity = edit ? 0.5 : 1;
@@ -76,6 +79,32 @@ const player = youtubePlayer("youtube-player", { ...size });
 
 player.mute();
 
+function twitchPlayer(props) {
+  twitchIframe = new Twitch.Player("twitch-player", {
+    autoplay: true,
+    ...props,
+  });
+}
+
+function twitchClipPlayer({ id }) {
+  const url = "https://clips.twitch.tv/embed";
+  const $iframe = document.createElement("iframe");
+  $iframe.setAttribute(
+    "src",
+    `${url}?clip=${id}?mute=true&autoplay=true&parent=localhost`
+  );
+  $iframe.setAttribute("allowfullscreen", `false`);
+  $iframe.setAttribute("frameborder", `0`);
+  $iframe.setAttribute("scrolling", `no`);
+  $iframe.setAttribute("width", `100%`);
+  $iframe.setAttribute("height", `100%`);
+  removeTwitchPlayer();
+  $twitchPlayer.append($iframe);
+  setTimeout(() => {
+    $iframe && $iframe.remove();
+  }, 65000);
+}
+
 socket.on("frame.push", (target) => {
   removeTwitchPlayer();
 
@@ -93,7 +122,11 @@ socket.on("frame.push", (target) => {
       props.video = target.id;
     }
 
-    twitchPlayer({ ...size, ...props, muted: true });
+    if (target.mediaType === "clip") {
+      twitchClipPlayer(target);
+    } else {
+      twitchPlayer({ ...size, ...props, muted: true });
+    }
   }
 });
 
@@ -106,10 +139,3 @@ socket.on("frame.handles.coords", (coords) => {
   });
   transform.update();
 });
-
-function twitchPlayer(props) {
-  twitchIframe = new Twitch.Player("twitch-player", {
-    autoplay: true,
-    ...props,
-  });
-}
