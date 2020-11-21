@@ -1,6 +1,10 @@
 const cooldownIds = {};
 
 module.exports = function cooldown(client, message, id, seconds = 1) {
+  if (message.data.badges.broadcaster) {
+    return false;
+  }
+
   const now = Date.now();
   const timeout = seconds * 1000;
   const elapsed = now - (cooldownIds[id] || 0);
