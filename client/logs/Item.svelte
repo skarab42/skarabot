@@ -23,7 +23,8 @@
     : "";
 
   function elsapsed(timestamp) {
-    return ms(Date.now() - timestamp);
+    const millis = Date.now() - timestamp;
+    return millis > 1000 ? ms(millis) : "now";
   }
 </script>
 
