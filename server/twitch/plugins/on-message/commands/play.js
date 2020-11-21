@@ -7,7 +7,7 @@ module.exports = ({ command, message, client, cooldown }) => {
   let [name] = command.args;
 
   if (!name) {
-    client.chat.say(message.channel, `Usage: !play <name>`);
+    client.chat.say(message.channel, `Usage: !play <name> | !dl <url>`);
     return;
   }
 
