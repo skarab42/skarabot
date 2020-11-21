@@ -5,11 +5,20 @@ require("js-video-url-parser/lib/provider/twitch");
 
 const cooldownTimeout = 15;
 
+let currentChannel = null;
+
 module.exports = async ({ command, message, client, cooldown }) => {
   const { user } = message.data;
   let [url] = command.args;
 
-  if (url.match(/^[a-z0-9_]+$/i)) {
+  if (!url && currentChannel) {
+    return client.chat.say(
+      message.channel,
+      `Vous regardez ${currentChannel} !`
+    );
+  }
+
+  if ((url || "").match(/^[a-z0-9_]+$/i)) {
     url = `https://twitch.tv/${url}`;
   }
 
@@ -21,6 +30,9 @@ module.exports = async ({ command, message, client, cooldown }) => {
       `Usage: !frame <url> (youtube|twitch)`
     );
   }
+
+  currentChannel =
+    target.provider === "twitch" ? `twitch.tv/${target.channel} !` : url;
 
   if (!message.data.badges.broadcaster && target.provider !== "twitch") {
     client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
