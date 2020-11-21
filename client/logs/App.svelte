@@ -17,6 +17,8 @@
 
   $: filteredLogs = logs.filter(({ type }) => filters[type]).reverse();
 
+  window.setInterval(() => (logs = logs), 1000);
+
   // TODO print/log error
   function onError(error) {
     // eslint-disable-next-line
