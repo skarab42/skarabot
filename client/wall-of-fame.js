@@ -7,8 +7,8 @@ const $wall = document.querySelector("#wall");
 
 const startScale = 5;
 const blinkTime = 1000;
-const animeDuration = 3000;
-const showTimeout = 5000;
+const animeDuration = 5000;
+const showTimeout = 8000;
 let showTimeoutId = null;
 
 let usersCount = 0;
@@ -40,6 +40,7 @@ function addSticker({ id, avatarURL, position }, index) {
   $img.style.position = "absolute";
   $img.style.top = `${window.innerHeight / 2 - h / 2 + y}px`;
   $img.style.left = `${window.innerWidth / 2 - w / 2 + x}px`;
+  $img.style.boxShadow = "10px 20px 30px rgba(0,0,0,0.5)";
   $img.style.borderRadius = random(0, 100) + "%";
   $img.style.zIndex = index;
   $img.onload = () => {
@@ -50,8 +51,13 @@ function addSticker({ id, avatarURL, position }, index) {
       left: position.x,
       width: imgSize.width,
       height: imgSize.height,
+      scale: (index / usersCount) + 0.2,
       delay: random(0, 2000),
+      rotate: random(-5, 5),
       duration: animeDuration,
+      changeComplete: function () {
+        $img.style.filter = `blur(${(1 - (index / usersCount)) * 4}px)`;
+      }
     });
     $wall.append($img);
   };
