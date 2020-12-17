@@ -27,6 +27,8 @@
     const millis = Date.now() - timestamp;
     return millis > 1000 ? ms(millis) : "now";
   }
+
+  // $: console.log(item);
 </script>
 
 <div
@@ -34,18 +36,25 @@
   out:fade
   class="flex items-center {color} bg-opacity-50 text-light rounded">
   <div class="p-2 flex-auto text-xl">
-    <div class="flex space-x-2 bg-black bg-opacity-25 rounded overflow-hidden">
+    <div
+      class="flex items-center space-x-2 bg-black bg-opacity-25 rounded overflow-hidden">
       {#if backgroundImage}
         <div
-          class="w-10 bg-cover bg-no-repeat bg-center"
+          class="w-12 h-12 bg-cover bg-no-repeat bg-center"
           style={backgroundImage} />
       {/if}
-      <div class="p-2 font-bold truncate">{item.data.user}</div>
-      <div class="p-2 flex items-center space-x-2  opacity-50">
+      {#if item.data.team}
+        <i
+          class="p-1 devicon-{item.data.team}-plain text-4xl"
+          style="color:{item.data.color || 'rgba(0,0,0,0.5)'}" />
+      {/if}
+      <div class="flex-auto font-bold truncate">{item.data.user}</div>
+      <div class="flex items-center pr-2 space-x-2 opacity-50">
         <Icon icon={MdAccessTime} />
         <span>{elsapsed(item.time)}</span>
       </div>
     </div>
+
     <div class="p-2" style="font-size:{fontSize}px">{item.data.text}</div>
   </div>
   {#if !isOverlay}

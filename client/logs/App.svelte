@@ -71,7 +71,7 @@
 {/if}
 
 <div class="m-5 flex flex-col space-y-2">
-  {#each filteredLogs as item}
+  {#each filteredLogs as item (item.id)}
     <Item {item} {isOverlay} on:remove={onRemove} />
   {:else}
     <div class="p-2 bg-blue-400">✔ La liste est vide...</div>

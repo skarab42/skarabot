@@ -1,9 +1,11 @@
 const logs = require("../../../libs/logs");
 
 module.exports = ({ message, client }, next) => {
-  const { avatarURL } = message.data.user;
+  const { team, color, avatarURL } = message.data.user;
   const text = message.message;
   const { user } = message;
+
+  if (text[0] === '!') return next();
 
   let type = 'message';
 
@@ -13,7 +15,7 @@ module.exports = ({ message, client }, next) => {
     type = 'question'
   }
 
-  logs.add(type, { user, avatarURL, text });
+  logs.add(type, { user, team, color, avatarURL, text });
   client.io.emit("logs.update", logs.getAll());
 
   next();
