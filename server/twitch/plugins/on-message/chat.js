@@ -1,12 +1,11 @@
 const logs = require("../../../libs/logs");
 
 module.exports = ({ message, client }, next) => {
-  const { team, color, avatarURL } = message.data.user;
-  let { user, emotes } = message;
+  const { id } = message.data.user;
   const text = message.message;
+  let { emotes } = message;
 
   if (text[0] === '!') return next();
-
 
   let type = 'message';
 
@@ -18,7 +17,7 @@ module.exports = ({ message, client }, next) => {
 
   emotes = emotes.map(({id, name, type, text}) => ({id, name, type, text}))
 
-  logs.add(type, { user, team, color, avatarURL, emotes });
+  logs.add(type, { userId: id, emotes });
   client.io.emit("logs.update", logs.getAll());
 
   next();

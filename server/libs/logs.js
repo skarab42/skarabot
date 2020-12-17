@@ -1,4 +1,5 @@
 const logsStore = require("../store/logs");
+const users = require("../libs/users");
 const { v4: uuid } = require("uuid");
 
 function create(type, data) {
@@ -6,14 +7,24 @@ function create(type, data) {
 }
 
 function getAll() {
-  return logsStore.get("logs", []);
+  return logsStore.get("logs", []).map(log => {
+    return { ...log, user: users.get(log.data.userId) }
+  });
+}
+
+function set(logs) {
+  logsStore.set(`logs`, logs.map(log => {
+    let logCopy = { ...log };
+    delete logCopy.user;
+    return logCopy;
+  }));
 }
 
 function add(type, data) {
   const logs = getAll();
   const log = create(type, data);
   logs.push(log);
-  logsStore.set(`logs`, logs);
+  set(logs);
   return log;
 }
 
