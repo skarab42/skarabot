@@ -41,7 +41,7 @@
   in:fade
   out:fade
   class="flex items-center {color} bg-opacity-50 text-light rounded">
-  <div class="p-2 flex-auto text-xl">
+  <div class="flex-auto text-xl">
     <div
       class="flex items-center space-x-2 bg-black bg-opacity-25 rounded overflow-hidden">
       {#if backgroundImage}
