@@ -1,6 +1,7 @@
 const open = require("open");
 const EventEmitter = require("events");
 const { AccessToken } = require("twitch");
+const twitchStore = require("../store/twitch");
 
 const authBaseURL = "https://id.twitch.tv/oauth2/authorize?response_type=token";
 
@@ -28,6 +29,13 @@ module.exports = class AuthProvider extends EventEmitter {
     this.tokenType = "user";
     this.accessToken = null;
     this.currentScopes = [];
+
+    const accessToken = twitchStore.get('accessToken');
+
+    if (!forceVerify && accessToken) {
+      this.accessToken = new AccessToken(accessToken);
+      this.currentScopes = accessToken.scope;
+    }
 
     this.__resolve = null;
   }
@@ -65,15 +73,16 @@ module.exports = class AuthProvider extends EventEmitter {
         return resolve(this.accessToken);
       }
 
-      this.__resolve = (accessToken) => {
+      this.__resolve = (access_token) => {
         scopes.forEach((scope) => this.currentScopes.push(scope));
 
-        this.accessToken = new AccessToken({
-          access_token: accessToken,
-          scope: this.currentScopes,
-          refresh_token: "",
-        });
+        const accessToken = {
+          access_token: access_token,
+          scope: this.currentScopes
+        };
 
+        this.accessToken = new AccessToken(accessToken);
+        twitchStore.set('accessToken', accessToken);
         resolve(this.accessToken);
       };
 
