@@ -6,6 +6,7 @@
 
   let logs = [];
   let filters = {
+    message: true,
     question: true,
     idea: true,
   };
@@ -57,20 +58,15 @@
 
 {#if !isOverlay}
   <div class="pt-5 px-5 flex space-x-2 uppercase">
-    <label class={labelClass}>
-      <input
-        type="checkbox"
-        bind:checked={filters.question}
-        on:change={onFiltersChange} />
-      <span>questions</span>
-    </label>
-    <label class={labelClass}>
-      <input
-        type="checkbox"
-        bind:checked={filters.idea}
-        on:change={onFiltersChange} />
-      <span>ideas</span>
-    </label>
+    {#each Object.keys(filters) as filter}
+      <label class={labelClass}>
+        <input
+          type="checkbox"
+          bind:checked={filters[filter]}
+          on:change={onFiltersChange} />
+        <span>{filter}</span>
+      </label>
+    {/each}
   </div>
 {/if}
 

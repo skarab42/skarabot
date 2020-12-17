@@ -12,7 +12,8 @@
   const dispatch = createEventDispatcher();
 
   let colors = {
-    question: "bg-purple-700",
+    message: "bg-purple-700",
+    question: "bg-red-700",
     idea: "bg-blue-700",
   };
 
