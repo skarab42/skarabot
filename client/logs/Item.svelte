@@ -18,7 +18,7 @@
   };
 
   $: color = colors[item.type];
-  $: fontSize = item.data.text.length > 24 ? 24 : 42;
+  $: fontSize = 24; //item.data.text.length > 24 ? 24 : 42;
   $: backgroundImage = item.data.avatarURL
     ? `background-image: url(${item.data.avatarURL})`
     : "";
@@ -27,8 +27,14 @@
     const millis = Date.now() - timestamp;
     return millis > 1000 ? ms(millis) : "now";
   }
+  
+  function getEmoteURL(id) {
+    return `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`
+  }
 
-  // $: console.log(item);
+  function getItemEmotes(data) {
+    return data.emotes || [data.text];
+  }
 </script>
 
 <div
@@ -54,8 +60,15 @@
         <span>{elsapsed(item.time)}</span>
       </div>
     </div>
-
-    <div class="p-2" style="font-size:{fontSize}px">{item.data.text}</div>
+    <div class="p-2" style="font-size:{fontSize}px">
+      {#each getItemEmotes(item.data) as token}
+        {#if token.type === 'emote'}
+          <img class="inline" src="{getEmoteURL(token.id)}" alt="{token.name}" />
+        {:else}
+          {token.text}
+        {/if}
+      {/each}
+    </div>
   </div>
   {#if !isOverlay}
     <div class="p-2 cursor-pointer" on:click={dispatch('remove', item.id)}>

@@ -15,7 +15,8 @@ module.exports = class Client {
     this.chat.connect();
     this.onMessageCallbacks = [];
     this.chat.onMessage(async (channel, user, message, msg) => {
-      message = { channel, user, message, msg, data: {} };
+      const emotes = msg.parseEmotes();
+      message = { channel, user, message, emotes, msg, data: {} };
       message.msg._tags = Object.fromEntries(msg._tags || []);
       const cd = cooldown.bind(null, this, message);
       this._onMessage({ message, client: this, cooldown: cd });
