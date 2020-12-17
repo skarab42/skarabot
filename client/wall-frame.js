@@ -84,6 +84,10 @@ function twitchPlayer(props) {
     autoplay: true,
     ...props,
   });
+
+  twitchIframe.addEventListener(Twitch.Player.ENDED, () => {
+    twitchIframe.play();
+  });
 }
 
 function twitchClipPlayer({ id }) {
@@ -100,9 +104,6 @@ function twitchClipPlayer({ id }) {
   $iframe.setAttribute("height", `100%`);
   removeTwitchPlayer();
   $twitchPlayer.append($iframe);
-  setTimeout(() => {
-    $iframe && $iframe.remove();
-  }, 65000);
 }
 
 socket.on("frame.push", (target) => {
