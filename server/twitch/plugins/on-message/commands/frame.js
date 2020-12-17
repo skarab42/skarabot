@@ -47,6 +47,7 @@ module.exports = async ({ command, message, client, cooldown }) => {
     if (!stream) {
       const video = await getRandomVideoByUserName({
         client,
+        mature: true,
         name: target.channel,
         channel: message.channel,
       });

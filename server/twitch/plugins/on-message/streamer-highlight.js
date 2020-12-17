@@ -1,4 +1,4 @@
-const { humanTimeToTimestamp } = require("./utils");
+const frameCommand = require("./commands/frame");
 const users = require("../../../libs/users");
 
 const delayH = 2;
@@ -7,7 +7,7 @@ const minViewCount = 500;
 
 const sayMessage = "C'est un avion ? une fusée ? non c'est un streamer Twitch";
 
-module.exports = async ({ message, client }, next) => {
+module.exports = async ({ message, client, cooldown }, next) => {
   const user = message.data.user;
   const now = message.data.timestamp;
   const elapsed = message.data.timestamp - user.lastHighlight;
@@ -20,7 +20,7 @@ module.exports = async ({ message, client }, next) => {
     return next();
   }
 
-  const channel = await client.api.kraken.channels.getChannel(user.id);
+  // const channel = await client.api.kraken.channels.getChannel(user.id);
   const banner = `${sayMessage} -> ${user.name} | http://twitch.tv/${user.name}`;
 
   client.api.helix.videos
@@ -34,20 +34,14 @@ module.exports = async ({ message, client }, next) => {
         return next();
       }
 
-      let { id, url, duration } = data[0]._data;
-      duration = humanTimeToTimestamp(duration);
+      let { url } = data[0]._data;
 
       client.chat.say(message.channel, `${banner} | ${url} |`);
 
-      if (!channel._data.mature) {
-        client.io.emit("frame.push", {
-          provider: "twitch",
-          mediaType: "video",
-          duration,
-          user,
-          id,
-        });
-      }
+      // if (!channel._data.mature) {
+      const command = { name: "frame", args: [user.name] };
+      frameCommand({ command, message, client, cooldown });
+      // }
 
       next();
     })
