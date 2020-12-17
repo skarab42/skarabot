@@ -1,5 +1,7 @@
 const alias = require("../../../../store/alias");
 
+const ignores = [];
+
 module.exports = ({ command, message, client }) => {
   let [name, ...args] = command.args;
   let value = args.join(" ").trim();
@@ -17,7 +19,7 @@ module.exports = ({ command, message, client }) => {
     sudo && alias.set(`list.${name.slice(1)}`, value);
   } else if (name[0] === "-") {
     sudo && alias.delete(`list.${name.slice(1)}`);
-  } else {
+  } else if (!ignores.includes(name)) {
     value = alias.get(`list.${name}`);
     const text = value || `!${name} !?! C'est pas faux @${user} skarab1337`;
     client.chat.say(message.channel, text);
