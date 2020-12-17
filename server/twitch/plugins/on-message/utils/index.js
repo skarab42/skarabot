@@ -47,6 +47,7 @@ async function getStreamByUserName({ client, name }) {
 
 async function getVideosByUserName({ client, name, mature = false }) {
   const user = await getUserByName({ client, name });
+  if (!user) return null;
   const { data } = await getVideosByUser({ client, user });
   if (!data.length) return null;
   if (!mature && (await isMatureChannel({ client, user }))) return null;
@@ -60,7 +61,7 @@ async function getRandomVideoByUserName({
   mature = false,
 }) {
   const videos = await getVideosByUserName({ client, name, mature });
-  if (!videos) return null;
+  if (!videos || !videos.length) return null;
   let { id, duration } = shuffle(videos)[0];
   duration = humanTimeToTimestamp(duration);
   return { id, user: { name }, channel, duration };
