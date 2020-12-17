@@ -4,4 +4,4 @@ const defaults = {
   list: {}
 };
 
-module.exports = create({ name: "users", defaults });
+module.exports = create({ name: "teams", defaults });
