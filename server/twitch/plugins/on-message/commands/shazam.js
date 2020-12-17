@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const userDir = envPaths("marv").data;
-const songFile = path.join(userDir, "files/lorem.txt");
+const songFile = path.join(userDir, "upload/files/shazam.txt");
 
 module.exports = ({ message, client }) => {
   const title = fs.readFileSync(songFile);
