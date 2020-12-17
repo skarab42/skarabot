@@ -16,7 +16,7 @@
   let labelClass =
     "px-2 text-gray-400 bg-purple-700 rounded p-1 cursor-pointer";
 
-  $: filteredLogs = logs.filter(({ type }) => filters[type]).reverse();
+  $: filteredLogs = logs.filter(({ type }) => filters[type]).reverse().slice(0, 20);
 
   window.setInterval(() => (logs = logs), 1000);
 
