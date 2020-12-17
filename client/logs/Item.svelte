@@ -51,7 +51,7 @@
       {/if}
       {#if item.data.team}
         <i
-          class="p-1 devicon-{item.data.team}-plain text-4xl"
+          class="p-1 devicon-{item.data.team.toLowerCase()}-plain text-4xl"
           style="color:{item.data.color || 'rgba(0,0,0,0.5)'}" />
       {/if}
       <div class="flex-auto font-bold truncate">{item.data.user}</div>
