@@ -19,6 +19,7 @@
 
   let badgeColors = {
     vip: "bg-red-600",
+    founder: "bg-pink-600",
     premium: "bg-purple-600",
     subscriber: "bg-blue-600",
     moderator: "bg-green-600",
@@ -54,7 +55,6 @@
           div.innerHTML = teamIcon;
           div.firstChild.removeAttribute("width");
           div.firstChild.removeAttribute("height");
-          console.log(div.firstChild);
           teamIcon = div.innerHTML;
         }
       });
@@ -95,8 +95,8 @@
       <div class="relative w-40">
         {#each badges as [key, val], i}
           <div
-            class="absolute text-center origin-center truncate px-10 {badgeColors[key] || 'bg-gray-500'} bg-opacity-75 transform -rotate-45"
-            style="top:-5px;left:{i * 20}px;font-size:8px;">
+            class="absolute h-4 text-center origin-center truncate {badgeColors[key] || 'bg-gray-500'} bg-opacity-75 transform -rotate-45"
+            style="width:120px;top:-5px;left:{i * 25}px;font-size:8px;">
             {key}
             #{val}
           </div>
