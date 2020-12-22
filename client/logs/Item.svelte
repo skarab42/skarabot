@@ -53,9 +53,10 @@
           teamIcon = await res.text();
           const div = document.createElement("div");
           div.innerHTML = teamIcon;
-          div.firstChild.removeAttribute("width");
-          div.firstChild.removeAttribute("height");
+          div.firstElementChild.removeAttribute("width");
+          div.firstElementChild.removeAttribute("height");
           teamIcon = div.innerHTML;
+          console.log(teamIcon);
         }
       });
     } catch (error) {
