@@ -11,7 +11,7 @@ try {
 
   logs.getAll().forEach(({ time, data }) => {
     chatMessages.push({
-      userId: data.userId,
+      viewerId: parseInt(data.userId),
       time: new Date(time),
       message: computeMessage(data.emotes),
       createdAt: now,

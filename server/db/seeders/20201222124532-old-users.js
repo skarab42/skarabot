@@ -9,11 +9,19 @@ try {
     const avatarURL = user.avatarURL && user.avatarURL.replace(baseURL, '');
 
     viewers.push({
-      userId: user.id,
+      id: parseInt(user.id),
       name: user.name,
       avatarURL,
       createdAt: new Date(user.firstSeen),
-      updatedAt: new Date(user.lastSeen)
+      updatedAt: new Date(user.lastSeen),
+      lastHighlight: new Date(user.lastHighlight),
+      messageCount: parseInt(user.messageCount),
+      viewCount: parseInt(user.viewCount),
+      points: parseInt(user.points),
+      position: JSON.stringify({
+        x: parseInt(user.position.x),
+        y: parseInt(user.position.y)
+      })
     });
   });
 } catch (error) {

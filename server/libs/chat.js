@@ -1,7 +1,8 @@
 const ChatMessage = require('../db/models/ChatMessage');
 
 async function addMessage(message) {
-    return await ChatMessage.create(message);
+    const messageModel = await ChatMessage.create(message);
+    return getMessageById(messageModel.id);
 }
 
 function computeMessage(emotes) {
@@ -13,8 +14,12 @@ function computeMessage(emotes) {
     }).join('');
 }
 
+async function getMessageById(id) {
+    return await ChatMessage.findOne({ where: { id }, include: "Viewer" });
+}
+
 async function getLastMessages({ limit = 10 } = {}) {
-    const messages = await ChatMessage.findAll({ limit, order: [['time', 'DESC']] });
+    const messages = await ChatMessage.findAll({ include: "Viewer", limit, order: [['time', 'DESC']] });
     return messages.map(message => message.toJSON());
 }
 

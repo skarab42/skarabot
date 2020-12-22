@@ -4,7 +4,7 @@ module.exports = async ({ message, client }, next) => {
   if (message.message[0] === '!') return next();
 
   const messageModel = await addMessage({
-    userId: message.data.user.id,
+    viewerId: message.data.user.id,
     time: new Date(message.data.timestamp),
     message: computeMessage(message.emotes)
   });

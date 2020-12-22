@@ -6,7 +6,7 @@ const chatMessagesTable = tableFactory({
     type: Sequelize.DATE,
     allowNull: false,
   },
-  userId: {
+  viewerId: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },

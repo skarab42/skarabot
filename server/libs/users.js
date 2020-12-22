@@ -1,5 +1,4 @@
 const usersStore = require("../store/users");
-// const fetch = require("node-fetch");
 
 function create(user) {
   return {
@@ -16,22 +15,6 @@ function create(user) {
     ...user,
   };
 }
-
-// const screenSize = { width: 1920, height: 1080 };
-// const imgSize = { width: 100, height: 100 };
-// screenSize.width -= imgSize.width;
-// screenSize.height -= imgSize.height;
-//
-// function random(min, max) {
-//   return Math.random() * (max - min) + min;
-// }
-//
-// Object.values(getAll()).forEach(user => {
-//   update({
-//     ...user,
-//     lastHighlight: 0
-//   });
-// });
 
 function set(id, user) {
   usersStore.set(`list.${id}`, user);

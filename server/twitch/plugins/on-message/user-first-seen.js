@@ -1,13 +1,5 @@
 const users = require("../../../libs/users");
 
-// Object.values(users.getAll()).forEach(user => {
-//   if (user.avatarURL && user.avatarURL.includes("/user-default-pictures-uv/")) {
-//     // user.avatarURL = null;
-//     // users.update(user);
-//     console.log(user);
-//   }
-// });
-
 let queueTimeoutId = null;
 const queueTimeout = 5000;
 const usersQueue = new Map();

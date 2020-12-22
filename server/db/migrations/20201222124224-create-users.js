@@ -2,11 +2,6 @@ const { Sequelize } = require("sequelize");
 const tableFactory = require("../tableFactory");
 
 const viewersTable = tableFactory({
-  userId: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    unique: true
-  },
   name: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -15,6 +10,30 @@ const viewersTable = tableFactory({
   avatarURL: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  messageCount: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: 0
+  },
+  viewCount: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: 0
+  },
+  lastHighlight: {
+    type: Sequelize.DATE,
+    allowNull: true
+  },
+  points: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: 0
+  },
+  position: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: '{"x":0,"y":0}'
   }
 });
 
