@@ -13,10 +13,6 @@
   socket.on("chat.new-message", (message) => {
     messages = [message, ...messages];
   });
-
-  setInterval(() => {
-    messages = messages;
-  }, 1000);
 </script>
 
 <div class="p-4 flex flex-col space-y-4">
