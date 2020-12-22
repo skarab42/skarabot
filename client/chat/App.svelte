@@ -13,6 +13,15 @@
   socket.on("chat.new-message", (message) => {
     messages = [message, ...messages];
   });
+
+  socket.on("viewers.update", (Viewer) => {
+    messages = messages.map((message) => {
+      if (message.Viewer.id === Viewer.id) {
+        message.Viewer = Viewer;
+      }
+      return message;
+    });
+  });
 </script>
 
 <div class="p-4 flex flex-col space-y-4">

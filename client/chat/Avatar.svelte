@@ -5,8 +5,7 @@
   export { cls as class };
 
   const baseURL = "https://static-cdn.jtvnw.net/jtv_user_pictures/";
-  const url = `${baseURL}/${viewer.avatarURL}`;
-  const style = `background-image: url(${url})`;
+  $: style = `background-image: url(${baseURL}/${viewer.avatarURL})`;
 </script>
 
 {#if viewer.avatarURL}

@@ -1,4 +1,5 @@
 const users = require("../../../libs/users");
+const { updateViewer, getViewerById } = require('../../../libs/viewers');
 
 let queueTimeoutId = null;
 const queueTimeout = 5000;
@@ -16,22 +17,28 @@ function clearQueue() {
   queueTimeoutId = null;
 }
 
-function updateUser({ helixUser, client }) {
+async function updateUser({ helixUser, client }) {
   const { _data } = helixUser;
   const id = _data["id"];
+
   let avatarURL = _data["profile_image_url"] || null;
 
   if (avatarURL && avatarURL.includes("/user-default-pictures-uv/")) {
     avatarURL = null;
   }
 
-  const user = users.update({
-    id,
-    avatarURL,
-    viewCount: _data["view_count"] || 0,
-  });
+  if (avatarURL) {
+    avatarURL = avatarURL.split('/').pop();
+  }
+
+  const viewCount = _data["view_count"] || 0;
+  const user = users.update({ id, avatarURL, viewCount });
+
+  await updateViewer({ id, avatarURL, viewCount });
+  const viewer = await getViewerById(id);
 
   avatarURL && client.io.emit("wof.add-user", user);
+  viewer && client.io.emit("viewers.update", viewer);
 }
 
 function processQueue(client) {
