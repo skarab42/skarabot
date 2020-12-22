@@ -1,6 +1,6 @@
+const { getLastMessages } = require("./libs/chat");
 const frameStore = require("./store/wall-frame");
 const users = require("./libs/users");
-const logs = require("./libs/logs");
 
 module.exports = ({ server, twitchClient }) => {
   const io = require("socket.io")(server);
@@ -12,12 +12,8 @@ module.exports = ({ server, twitchClient }) => {
       users.update(user);
     });
 
-    socket.on("logs.remove", (id) => {
-      io.emit("logs.update", logs.delete(id));
-    });
-
-    socket.on("logs.filtersChange", (filters) => {
-      socket.broadcast.emit("logs.filtersChange", filters);
+    socket.on("chat.get-last-messages", async (options, cb) => {
+      cb(await getLastMessages(options))
     });
 
     socket.on("video-play", ({ user, channel }) => {

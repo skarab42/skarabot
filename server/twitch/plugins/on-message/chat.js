@@ -1,24 +1,15 @@
-const logs = require("../../../libs/logs");
+const { addMessage, computeMessage } = require('../../../libs/chat');
 
-module.exports = ({ message, client }, next) => {
-  const { id } = message.data.user;
-  const text = message.message;
-  let { emotes } = message;
+module.exports = async ({ message, client }, next) => {
+  if (message.message[0] === '!') return next();
 
-  if (text[0] === '!') return next();
+  const messageModel = await addMessage({
+    userId: message.data.user.id,
+    time: new Date(message.data.timestamp),
+    message: computeMessage(message.emotes)
+  });
 
-  let type = 'message';
-
-  if (text.includes("@idée")) {
-    type = 'idea'
-  } else if (text.includes("@question")) {
-    type = 'question'
-  }
-
-  emotes = emotes.map(({id, name, type, text}) => ({id, name, type, text}))
-
-  logs.add(type, { userId: id, emotes });
-  client.io.emit("logs.update", logs.getAll());
+  client.io.emit("chat.new-message", messageModel.toJSON());
 
   next();
 };
