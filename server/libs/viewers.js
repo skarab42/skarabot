@@ -1,4 +1,5 @@
 const Viewer = require("../db/models/Viewer");
+const { Op } = require("sequelize");
 
 async function addViewer(viewer) {
   return await Viewer.create(viewer);
@@ -24,6 +25,7 @@ async function updateViewer(viewer) {
 async function getFamouseViewers({ limit = 100 } = {}) {
   const viewers = await Viewer.findAll({
     limit,
+    where: { avatarURL: { [Op.ne]: null } },
     order: [["updatedAt", "DESC"]],
   });
   return viewers.map((viewer) => viewer.toJSON());

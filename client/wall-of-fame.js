@@ -1,4 +1,5 @@
 const { default: anime } = require("animejs");
+const { playSound } = require("./libs/sound");
 const socket = require("socket.io-client")();
 const random = require("./libs/random");
 
@@ -12,7 +13,7 @@ const animeDuration = 5000;
 const showTimeout = 8000;
 let showTimeoutId = null;
 
-let usersCount = 0;
+let viewerCount = 0;
 
 hide();
 
@@ -32,7 +33,7 @@ function show(timeout = 0) {
   showTimeoutId = setTimeout(hide, timeout || showTimeout);
 }
 
-function addSticker({ id, avatarURL, position }, index) {
+function addSticker({ id, avatarURL, badges, position }, index) {
   const [w, h] = [imgSize.width * startScale, imgSize.height * startScale];
   const [x, y] = [random(-200, 200), random(-200, 200)];
   const $img = new Image(w, h);
@@ -43,7 +44,20 @@ function addSticker({ id, avatarURL, position }, index) {
   $img.style.left = `${window.innerWidth / 2 - w / 2 + x}px`;
   $img.style.boxShadow = "10px 20px 30px rgba(0,0,0,0.5)";
   $img.style.borderRadius = random(0, 100) + "%";
+
+  if (badges.subscriber) {
+    $img.style.border = "15px rgba(237,16,226,0.5) solid";
+    index = viewerCount;
+  } else if (badges.vip) {
+    $img.style.border = "15px rgba(237,189,16,0.5) solid";
+    index = viewerCount;
+  } else if (badges.moderator) {
+    $img.style.border = "15px rgba(123,16,237,0.5) solid";
+    index = viewerCount;
+  }
+
   $img.style.zIndex = index;
+
   $img.onload = () => {
     show();
     anime({
@@ -52,12 +66,12 @@ function addSticker({ id, avatarURL, position }, index) {
       left: position.x,
       width: imgSize.width,
       height: imgSize.height,
-      scale: index / usersCount + 0.5,
+      scale: index / viewerCount + 0.2,
       delay: random(0, 2000),
       rotate: random(-5, 5),
       duration: animeDuration,
       changeComplete: function () {
-        $img.style.filter = `blur(${(1 - index / usersCount) * 4}px)`;
+        $img.style.filter = `blur(${(1 - index / viewerCount) * 4}px)`;
       },
     });
     $wall.append($img);
@@ -69,30 +83,16 @@ function addSticker({ id, avatarURL, position }, index) {
   };
 }
 
-function addStickers(users) {
-  const usersArr = Object.values(users)
-    .map(({ id, avatarURL, position, lastSeen }) => {
-      return avatarURL ? { id, avatarURL, position, lastSeen } : null;
-    })
-    .filter((item) => item)
-    .sort((a, b) => a.lastSeen - b.lastSeen);
-  usersCount = usersArr.length;
-  usersArr.forEach(addSticker);
+function addStickers(viewers) {
+  viewerCount += viewers.length;
+  viewers.forEach(addSticker);
 }
 
-socket.on("wof.move", (chatMessage) => {
-  const { id, position } = chatMessage.data.user;
-  const $img = document.querySelector(`#user-${id}`);
-  $img.style.top = `${position.y}px`;
-  $img.style.left = `${position.x}px`;
-  $img.style.zIndex = usersCount;
-});
+function addViewer(viewer) {
+  addSticker(viewer, ++viewerCount);
+}
 
-socket.on("wof.add-user", (viewer) => {
-  addSticker(viewer, usersCount);
-});
-
-socket.on("wof.blink", ({ user, count }) => {
+function blink({ user, count }) {
   const timeout = count * blinkTime;
   const duration = blinkTime / 2;
   const keyframes = [];
@@ -106,7 +106,7 @@ socket.on("wof.blink", ({ user, count }) => {
 
   const filter = $img.style.filter;
   const zIndex = $img.style.zIndex;
-  $img.style.zIndex = usersCount;
+  $img.style.zIndex = viewerCount;
   $img.style.filter = "none";
 
   show(timeout);
@@ -118,13 +118,20 @@ socket.on("wof.blink", ({ user, count }) => {
       $img.style.filter = filter;
     },
   });
-});
+}
 
-socket.emit("viewers.get-famouses", { limit: 500 }, addStickers);
+function move(chatMessage) {
+  const { id, position } = chatMessage.data.user;
+  const $img = document.querySelector(`#user-${id}`);
+  $img.style.top = `${position.y}px`;
+  $img.style.left = `${position.x}px`;
+  $img.style.zIndex = viewerCount;
+}
 
-// TODO dégage moi ça de là!!!!!
-socket.on("play.sound", ({ file }) => {
-  const audio = new Audio(`download/${file}`);
-  audio.volume = 0.5;
-  audio.play();
-});
+socket.on("wof.move", move);
+socket.on("wof.blink", blink);
+socket.on("wof.add-viewer", addViewer);
+
+socket.on("play.sound", playSound);
+
+socket.emit("viewers.get-famouses", { limit: 1000 }, addStickers);

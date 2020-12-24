@@ -13,7 +13,7 @@ module.exports = ({ message, client }, next) => {
       y: random(0, screenLimit.y),
     };
 
-    client.emit("wof.add-user", viewer);
+    client.emit("wof.add-viewer", viewer);
   }
 
   next();
