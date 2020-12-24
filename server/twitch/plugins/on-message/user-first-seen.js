@@ -16,7 +16,7 @@ function clearQueue() {
 
 async function updateUser({ helixUser, client }) {
   const { _data } = helixUser;
-  const id = _data["id"];
+  const id = parseInt(_data["id"]);
   const { data } = viewerQueue.get(id);
   const viewer = data.viewer;
 

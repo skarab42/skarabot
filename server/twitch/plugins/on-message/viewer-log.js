@@ -2,7 +2,7 @@ const { addViewer, getViewerById } = require("../../../libs/viewers");
 
 module.exports = async ({ message }, next) => {
   const { msg, data } = message;
-  const id = msg._tags["user-id"];
+  const id = parseInt(msg._tags["user-id"]);
 
   data.viewer = await getViewerById(id);
 
