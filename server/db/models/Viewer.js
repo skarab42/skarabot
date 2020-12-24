@@ -11,6 +11,14 @@ const Viewer = sequelize.define("Viewer", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  team: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  teamColor: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   badges: {
     type: DataTypes.STRING,
     allowNull: false,

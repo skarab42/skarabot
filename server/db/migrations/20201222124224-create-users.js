@@ -11,6 +11,14 @@ const viewersTable = tableFactory({
     type: Sequelize.STRING,
     allowNull: true,
   },
+  team: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  teamColor: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
   badges: {
     type: Sequelize.STRING,
     allowNull: false,

@@ -12,6 +12,8 @@ try {
       id: parseInt(user.id),
       name: user.name,
       avatarURL,
+      team: user.team || null,
+      teamColor: user.color || null,
       badges: "{}",
       messageCount: parseInt(user.messageCount),
       viewCount: parseInt(user.viewCount),
