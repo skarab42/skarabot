@@ -52,7 +52,7 @@ function addSticker({ id, avatarURL, position }, index) {
       left: position.x,
       width: imgSize.width,
       height: imgSize.height,
-      scale: index / usersCount + 0.2,
+      scale: index / usersCount + 0.5,
       delay: random(0, 2000),
       rotate: random(-5, 5),
       duration: animeDuration,
