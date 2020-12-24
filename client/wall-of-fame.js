@@ -14,6 +14,7 @@ const showTimeout = 8000;
 let showTimeoutId = null;
 
 let viewerCount = 0;
+const viewerIds = new Map();
 
 hide();
 
@@ -34,9 +35,14 @@ function show(timeout = 0) {
 }
 
 function addSticker({ id, avatarURL, badges, position }, index) {
+  if (viewerIds.has(id)) return;
+
+  viewerIds.set(id, true);
+
   const [w, h] = [imgSize.width * startScale, imgSize.height * startScale];
   const [x, y] = [random(-200, 200), random(-200, 200)];
   const $img = new Image(w, h);
+
   $img.src = `${baseURL}/${avatarURL}`;
   $img.id = `user-${id}`;
   $img.style.position = "absolute";
