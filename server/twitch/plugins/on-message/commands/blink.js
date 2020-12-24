@@ -1,4 +1,4 @@
-const { getViewerByName } = require('../../../../libs/viewers');
+const { getViewerByName } = require("../../../../libs/viewers");
 
 const maxCount = 42;
 const costRatio = 10;

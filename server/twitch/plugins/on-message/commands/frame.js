@@ -35,7 +35,10 @@ module.exports = async ({ command, message, client, cooldown }) => {
     target.provider === "twitch" ? `twitch.tv/${target.channel} !` : url;
 
   if (!viewer.badges.broadcaster && target.provider !== "twitch") {
-    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
+    client.chat.say(
+      message.channel,
+      `Usage: pas pour toi ${viewer.name} Kappa`
+    );
     return;
   }
 

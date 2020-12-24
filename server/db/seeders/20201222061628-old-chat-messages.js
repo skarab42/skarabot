@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-const { computeMessage } = require('../../libs/chat');
+const { computeMessage } = require("../../libs/chat");
 
 const chatMessages = [];
 
 try {
-  require.resolve('../../store/logs')
-  const logs = require('../../libs/logs')
+  require.resolve("../../store/logs");
+  const logs = require("../../libs/logs");
   const now = new Date();
 
   logs.getAll().forEach(({ time, data }) => {
@@ -15,7 +15,7 @@ try {
       time: new Date(time),
       message: computeMessage(data.emotes),
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
     });
   });
 } catch (error) {
@@ -24,6 +24,6 @@ try {
 
 module.exports = {
   up: async ({ context }) => {
-    await context.bulkInsert('ChatMessages', chatMessages);
+    await context.bulkInsert("ChatMessages", chatMessages);
   },
 };

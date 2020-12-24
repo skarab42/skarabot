@@ -30,7 +30,7 @@ module.exports = class AuthProvider extends EventEmitter {
     this.accessToken = null;
     this.currentScopes = [];
 
-    const accessToken = twitchStore.get('accessToken');
+    const accessToken = twitchStore.get("accessToken");
 
     if (!forceVerify && accessToken) {
       this.accessToken = new AccessToken(accessToken);
@@ -78,11 +78,11 @@ module.exports = class AuthProvider extends EventEmitter {
 
         const accessToken = {
           access_token: access_token,
-          scope: this.currentScopes
+          scope: this.currentScopes,
         };
 
         this.accessToken = new AccessToken(accessToken);
-        twitchStore.set('accessToken', accessToken);
+        twitchStore.set("accessToken", accessToken);
         resolve(this.accessToken);
       };
 

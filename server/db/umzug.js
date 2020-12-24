@@ -12,7 +12,7 @@ function factory(pattern, modelName) {
 }
 
 const migrations = factory("migrations/*.js", "SequelizeMigrations");
-const seeders = factory("seeders/*.js", "SequelizeSeeders")
+const seeders = factory("seeders/*.js", "SequelizeSeeders");
 
 module.exports = {
   async up() {

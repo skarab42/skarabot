@@ -9,5 +9,5 @@
 </script>
 
 {#if viewer.avatarURL}
-  <div {style} class="bg-cover bg-center {cls}" />
+  <div style="{style}" class="bg-cover bg-center {cls}"></div>
 {/if}

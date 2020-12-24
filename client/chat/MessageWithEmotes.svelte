@@ -25,7 +25,7 @@
 <div class="p-2 flex items-center space-x-1">
   {#each tokens as token}
     {#if token.type === 'emote'}
-      <img class="inline" src={getEmoteURL(token.id)} alt={token.name} />
+      <img class="inline" src="{getEmoteURL(token.id)}" alt="{token.name}" />
     {:else}
       <div class="inline">{token.text}</div>
     {/if}

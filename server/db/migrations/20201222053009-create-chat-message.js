@@ -13,11 +13,11 @@ const chatMessagesTable = tableFactory({
   message: {
     type: Sequelize.TEXT,
     allowNull: false,
-  }
+  },
 });
 
 module.exports = {
   up: async ({ context }) => {
     await context.createTable("ChatMessages", chatMessagesTable);
-  }
+  },
 };

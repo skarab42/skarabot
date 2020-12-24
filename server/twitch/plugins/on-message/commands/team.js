@@ -11,5 +11,8 @@ module.exports = ({ command, message, client }) => {
     viewer.team = team;
   }
 
-  client.chat.say(message.channel, `${viewer.name} tu fais parti de la team ${viewer.team}!`);
+  client.chat.say(
+    message.channel,
+    `${viewer.name} tu fais parti de la team ${viewer.team}!`
+  );
 };

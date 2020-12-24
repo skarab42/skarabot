@@ -16,7 +16,10 @@
   let labelClass =
     "px-2 text-gray-400 bg-purple-700 rounded p-1 cursor-pointer";
 
-  $: filteredLogs = logs.filter(({ type }) => filters[type]).reverse().slice(0, 20);
+  $: filteredLogs = logs
+    .filter(({ type }) => filters[type])
+    .reverse()
+    .slice(0, 20);
 
   window.setInterval(() => (logs = logs), 1000);
 
@@ -59,11 +62,12 @@
 {#if !isOverlay}
   <div class="pt-5 px-5 flex space-x-2 uppercase">
     {#each Object.keys(filters) as filter}
-      <label class={labelClass}>
+      <label class="{labelClass}">
         <input
           type="checkbox"
-          bind:checked={filters[filter]}
-          on:change={onFiltersChange} />
+          bind:checked="{filters[filter]}"
+          on:change="{onFiltersChange}"
+        />
         <span>{filter}</span>
       </label>
     {/each}
@@ -72,7 +76,7 @@
 
 <div class="m-5 flex flex-col space-y-2">
   {#each filteredLogs as item (item.id)}
-    <Item {item} {isOverlay} on:remove={onRemove} />
+    <Item item="{item}" isOverlay="{isOverlay}" on:remove="{onRemove}" />
   {:else}
     <div class="p-2 bg-blue-400">✔ La liste est vide...</div>
   {/each}

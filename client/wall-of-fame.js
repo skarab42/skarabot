@@ -4,7 +4,7 @@ const random = require("./libs/random");
 
 const imgSize = { width: 100, height: 100 };
 const $wall = document.querySelector("#wall");
-const baseURL = 'https://static-cdn.jtvnw.net/jtv_user_pictures/';
+const baseURL = "https://static-cdn.jtvnw.net/jtv_user_pictures/";
 
 const startScale = 5;
 const blinkTime = 1000;
@@ -52,13 +52,13 @@ function addSticker({ id, avatarURL, position }, index) {
       left: position.x,
       width: imgSize.width,
       height: imgSize.height,
-      scale: (index / usersCount) + 0.2,
+      scale: index / usersCount + 0.2,
       delay: random(0, 2000),
       rotate: random(-5, 5),
       duration: animeDuration,
       changeComplete: function () {
-        $img.style.filter = `blur(${(1 - (index / usersCount)) * 4}px)`;
-      }
+        $img.style.filter = `blur(${(1 - index / usersCount) * 4}px)`;
+      },
     });
     $wall.append($img);
   };
@@ -89,7 +89,7 @@ socket.on("wof.move", (chatMessage) => {
 });
 
 socket.on("wof.add-user", (viewer) => {
-  addSticker(viewer, usersCount)
+  addSticker(viewer, usersCount);
 });
 
 socket.on("wof.blink", ({ user, count }) => {
@@ -117,7 +117,7 @@ socket.on("wof.blink", ({ user, count }) => {
   });
 });
 
-socket.emit('viewers.get-famouses', { limit: 500 }, addStickers);
+socket.emit("viewers.get-famouses", { limit: 500 }, addStickers);
 
 // TODO dégage moi ça de là!!!!!
 socket.on("play.sound", ({ file }) => {

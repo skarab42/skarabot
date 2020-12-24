@@ -72,53 +72,63 @@
 <div
   in:fade
   out:fade
-  class="flex items-center {color} bg-opacity-50 text-light rounded">
+  class="flex items-center {color} bg-opacity-50 text-light rounded"
+>
   <div class="flex-auto text-xl">
     <div
-      class="flex items-center space-x-2 bg-black bg-opacity-25 rounded overflow-hidden">
+      class="flex items-center space-x-2 bg-black bg-opacity-25 rounded overflow-hidden"
+    >
       {#if backgroundImage}
         <div
           class="w-12 h-12 bg-cover bg-no-repeat bg-center"
-          style={backgroundImage} />
+          style="{backgroundImage}"
+        ></div>
       {/if}
       {#if teamIcon}
         <div
           class="p-2 w-12 h-12"
-          style="fill:{item.user.color || 'rgba(0,0,0,0.5)'}">
+          style="fill:{item.user.color || 'rgba(0,0,0,0.5)'}"
+        >
           {@html teamIcon}
         </div>
       {:else if item.user.team}
         <i
           class="p-1 devicon-{item.user.team.toLowerCase()}-plain text-4xl"
-          style="color:{item.user.color || 'rgba(0,0,0,0.5)'}" />
+          style="color:{item.user.color || 'rgba(0,0,0,0.5)'}"
+        ></i>
       {/if}
       <div class="flex-auto font-bold truncate">{item.user.name}</div>
       <div class="relative w-40">
         {#each badges as [key, val], i}
           <div
             class="absolute h-4 text-center origin-center truncate {badgeColors[key] || 'bg-gray-500'} bg-opacity-75 transform -rotate-45"
-            style="width:120px;top:-5px;left:{i * 25}px;font-size:8px;">
+            style="width:120px;top:-5px;left:{i * 25}px;font-size:8px;"
+          >
             {key}
             #{val}
           </div>
         {/each}
       </div>
       <div class="flex items-center pr-2 space-x-2 opacity-50">
-        <Icon icon={MdAccessTime} />
+        <Icon icon="{MdAccessTime}" />
         <span>{elsapsed(item.time)}</span>
       </div>
     </div>
     <div class="p-2" style="font-size:{fontSize}px">
       {#each item.data.emotes as token}
         {#if token.type === 'emote'}
-          <img class="inline" src={getEmoteURL(token.id)} alt={token.name} />
+          <img
+            class="inline"
+            src="{getEmoteURL(token.id)}"
+            alt="{token.name}"
+          />
         {:else}{token.text}{/if}
       {/each}
     </div>
   </div>
   {#if !isOverlay}
-    <div class="p-2 cursor-pointer" on:click={dispatch('remove', item.id)}>
-      <Icon icon={MdDeleteForever} size={24} />
+    <div class="p-2 cursor-pointer" on:click="{dispatch('remove', item.id)}">
+      <Icon icon="{MdDeleteForever}" size="{24}" />
     </div>
   {/if}
 </div>

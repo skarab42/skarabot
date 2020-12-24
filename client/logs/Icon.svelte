@@ -5,6 +5,6 @@
   $: style = `width:${size}px;height:${size}px;`;
 </script>
 
-<div on:click {...$$restProps} {style}>
-  <svelte:component this={icon} />
+<div on:click {...$$restProps} style="{style}">
+  <svelte:component this="{icon}" />
 </div>

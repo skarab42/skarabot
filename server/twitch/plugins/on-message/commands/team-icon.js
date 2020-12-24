@@ -14,7 +14,10 @@ module.exports = ({ command, message, client }) => {
   const sudo = badges.broadcaster || badges.moderator;
 
   if (!sudo) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
+    client.chat.say(
+      message.channel,
+      `Usage: pas pour toi ${viewer.name} Kappa`
+    );
     return;
   }
 
@@ -40,7 +43,7 @@ module.exports = ({ command, message, client }) => {
   })
     .then((response) => {
       const icon = `${team}.${ext}`;
-      fs.writeFileSync(path.join(downloadDir, 'icons', icon), response.data);
+      fs.writeFileSync(path.join(downloadDir, "icons", icon), response.data);
       client.chat.say(message.channel, `Icone de la team ${team} téléchargé!`);
       // teamsStore.set(team, { name: team, icon })
     })

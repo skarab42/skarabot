@@ -1,6 +1,6 @@
 const { name } = require("../package");
 const envPaths = require("env-paths");
-const path = require('path');
+const path = require("path");
 
 const port = 4224;
 const host = "localhost";
@@ -20,7 +20,7 @@ module.exports = {
   },
   db: {
     dialect: "sqlite",
-    storage: path.join(userDir, 'db.sqlite'),
+    storage: path.join(userDir, "db.sqlite"),
     logging: false, // watch ? console.log : false,
   },
   twitch: {

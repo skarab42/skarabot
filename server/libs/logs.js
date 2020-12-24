@@ -7,17 +7,20 @@ function create(type, data) {
 }
 
 function getAll() {
-  return logsStore.get("logs", []).map(log => {
-    return { ...log, user: users.get(log.data.userId) }
+  return logsStore.get("logs", []).map((log) => {
+    return { ...log, user: users.get(log.data.userId) };
   });
 }
 
 function set(logs) {
-  logsStore.set(`logs`, logs.map(log => {
-    let logCopy = { ...log };
-    delete logCopy.user;
-    return logCopy;
-  }));
+  logsStore.set(
+    `logs`,
+    logs.map((log) => {
+      let logCopy = { ...log };
+      delete logCopy.user;
+      return logCopy;
+    })
+  );
 }
 
 function add(type, data) {

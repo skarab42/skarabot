@@ -1,11 +1,14 @@
-const { getViewerByName } = require('../../../../libs/viewers');
+const { getViewerByName } = require("../../../../libs/viewers");
 
 module.exports = async ({ command, message, client }) => {
   const viewer = message.data.viewer;
   let [nick, points] = command.args;
 
   if (!(viewer.badges.broadcaster || viewer.badges.moderator)) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
+    client.chat.say(
+      message.channel,
+      `Usage: pas pour toi ${viewer.name} Kappa`
+    );
     return;
   }
 

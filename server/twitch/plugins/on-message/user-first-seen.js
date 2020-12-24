@@ -27,7 +27,7 @@ async function updateUser({ helixUser, client }) {
   }
 
   if (avatarURL) {
-    avatarURL = avatarURL.split('/').pop();
+    avatarURL = avatarURL.split("/").pop();
   }
 
   const viewCount = _data["view_count"] || 0;
@@ -45,9 +45,11 @@ function processQueue(client) {
 
   client.api.helix.users
     .getUsersByIds(ids)
-    .then((helixUsers) => Promise.all(
-      helixUsers.map((helixUser) => updateUser({ helixUser, client }))
-    ))
+    .then((helixUsers) =>
+      Promise.all(
+        helixUsers.map((helixUser) => updateUser({ helixUser, client }))
+      )
+    )
     .catch(error)
     .then(clearQueue);
 }

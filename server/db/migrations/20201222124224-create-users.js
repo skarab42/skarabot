@@ -5,45 +5,45 @@ const viewersTable = tableFactory({
   name: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true
+    unique: true,
   },
   avatarURL: {
     type: Sequelize.STRING,
-    allowNull: true
+    allowNull: true,
   },
   badges: {
     type: Sequelize.STRING,
     allowNull: false,
-    defaultValue: '{}',
+    defaultValue: "{}",
   },
   messageCount: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: 0
+    defaultValue: 0,
   },
   viewCount: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: 0
+    defaultValue: 0,
   },
   points: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: 0
+    defaultValue: 0,
   },
   position: {
     type: Sequelize.STRING,
     allowNull: false,
-    defaultValue: '{"x":0,"y":0}'
+    defaultValue: '{"x":0,"y":0}',
   },
   lastHighlight: {
     type: Sequelize.DATE,
-    allowNull: true
-  }
+    allowNull: true,
+  },
 });
 
 module.exports = {
   up: async ({ context }) => {
     await context.createTable("Viewers", viewersTable);
-  }
+  },
 };

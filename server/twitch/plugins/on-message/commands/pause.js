@@ -19,7 +19,10 @@ module.exports = ({ command, message, client }) => {
   let input = command.args.join(" ");
 
   if (!viewer.badges.broadcaster) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
+    client.chat.say(
+      message.channel,
+      `Usage: pas pour toi ${viewer.name} Kappa`
+    );
     return;
   }
 
@@ -66,6 +69,7 @@ module.exports = ({ command, message, client }) => {
       client.emit("pause.start", { minutes, videos: shuffle(videos) });
     })
     .catch((error) => {
+      // eslint-disable-next-line no-console
       console.log("ERROR >>>", error);
     });
 };

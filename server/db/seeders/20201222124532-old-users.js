@@ -1,12 +1,12 @@
 const viewers = [];
 
 try {
-  require.resolve('../../store/users')
-  const users = require('../../libs/users')
-  const baseURL = 'https://static-cdn.jtvnw.net/jtv_user_pictures/';
+  require.resolve("../../store/users");
+  const users = require("../../libs/users");
+  const baseURL = "https://static-cdn.jtvnw.net/jtv_user_pictures/";
 
-  Object.values(users.getAll()).forEach(user => {
-    const avatarURL = user.avatarURL && user.avatarURL.replace(baseURL, '');
+  Object.values(users.getAll()).forEach((user) => {
+    const avatarURL = user.avatarURL && user.avatarURL.replace(baseURL, "");
 
     viewers.push({
       id: parseInt(user.id),
@@ -18,11 +18,11 @@ try {
       points: parseInt(user.points),
       position: JSON.stringify({
         x: parseInt(user.position.x),
-        y: parseInt(user.position.y)
+        y: parseInt(user.position.y),
       }),
       lastHighlight: new Date(user.lastHighlight),
       createdAt: new Date(user.firstSeen),
-      updatedAt: new Date(user.lastSeen)
+      updatedAt: new Date(user.lastSeen),
     });
   });
 } catch (error) {
@@ -31,6 +31,6 @@ try {
 
 module.exports = {
   up: async ({ context }) => {
-    await context.bulkInsert('Viewers', viewers);
+    await context.bulkInsert("Viewers", viewers);
   },
 };

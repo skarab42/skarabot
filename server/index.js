@@ -1,6 +1,6 @@
 const { name, version } = require("../package.json");
 const TwitchClient = require("./twitch/Client");
-const umzug = require('./db/umzug');
+const umzug = require("./db/umzug");
 const config = require("./config");
 const socketIO = require("./io");
 const polka = require("polka");
@@ -40,5 +40,5 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
     .onMessage(require("./twitch/plugins/on-message/streamer-highlight"))
     .onMessage(require("./twitch/plugins/on-message/faudrey_voir"))
     .onMessage(require("./twitch/plugins/on-message/commands"))
-    .onMessage(require("./twitch/plugins/on-message/viewer-save"))
-})()
+    .onMessage(require("./twitch/plugins/on-message/viewer-save"));
+})();

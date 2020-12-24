@@ -7,7 +7,6 @@ function getHeight() {
 }
 
 function stop() {
-  const lines = document.getElementsByClassName("line");
   const root = document.querySelector("#root");
   const text = document.querySelector("#text");
 

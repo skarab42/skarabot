@@ -4,7 +4,7 @@ function create(team) {
   return {
     name: null,
     icon: null,
-    ...team
+    ...team,
   };
 }
 

@@ -1,4 +1,4 @@
-const { getFamouseViewers, updateViewer } = require('./libs/viewers');
+const { getFamouseViewers, updateViewer } = require("./libs/viewers");
 const { getLastMessages } = require("./libs/chat");
 const frameStore = require("./store/wall-frame");
 
@@ -11,11 +11,11 @@ module.exports = ({ server, twitchClient }) => {
     });
 
     socket.on("chat.get-last-messages", async (options, cb) => {
-      cb(await getLastMessages(options))
+      cb(await getLastMessages(options));
     });
 
     socket.on("viewers.get-famouses", async (options, cb) => {
-      cb(await getFamouseViewers(options))
+      cb(await getFamouseViewers(options));
     });
 
     socket.on("video-play", ({ user, channel }) => {

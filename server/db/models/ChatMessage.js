@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../index");
-const Viewer = require('./Viewer');
+const Viewer = require("./Viewer");
 
 const ChatMessage = sequelize.define("ChatMessage", {
   time: {

@@ -5,8 +5,8 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  plugins: ["svelte3"],
-  extends: "eslint:recommended",
+  plugins: ["svelte3", "prettier"],
+  extends: ["eslint:recommended", "plugin:prettier/recommended"],
   overrides: [
     {
       files: ["**/*.svelte"],

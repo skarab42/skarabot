@@ -112,7 +112,7 @@ socket.on("frame.push", (target) => {
   if (target.provider === "youtube") {
     player.loadVideoById(target.id);
     player.playVideo().then(() => {
-      console.log("playing...", target.id);
+      // console.log("playing...", target.id);
     });
   } else if (target.provider === "twitch") {
     let props = { channel: null, video: null };

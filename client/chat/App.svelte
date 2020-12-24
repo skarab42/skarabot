@@ -26,6 +26,6 @@
 
 <div class="p-4 flex flex-col space-y-4">
   {#each messages as data (data.id)}
-    <Message {data} />
+    <Message data="{data}" />
   {/each}
 </div>

@@ -11,5 +11,8 @@ module.exports = ({ command, message, client }) => {
     viewer.color = color;
   }
 
-  client.chat.say(message.channel, `${viewer.name} tu as la couleur ${viewer.color}!`);
+  client.chat.say(
+    message.channel,
+    `${viewer.name} tu as la couleur ${viewer.color}!`
+  );
 };

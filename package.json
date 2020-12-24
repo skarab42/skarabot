@@ -7,7 +7,7 @@
     "watch": "rollup -c -w",
     "build": "rollup -c",
     "prettify": "prettier --write ./server ./client",
-    "lint": "eslint --fix ./server ./client && yarn prettify"
+    "lint": "eslint --fix ./server"
   },
   "dependencies": {
     "PerspectiveTransform.js": "https://github.com/edankwan/PerspectiveTransform.js",
@@ -38,10 +38,12 @@
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "chokidar": "^3.4.2",
-    "eslint": "^7.12.0",
-    "eslint-plugin-svelte3": "^2.7.3",
-    "prettier": "^2.1.2",
-    "prettier-plugin-svelte": "^1.4.1",
+    "eslint": "^7.16.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-svelte3": "^3.0.0",
+    "prettier": "^2.2.1",
+    "prettier-plugin-svelte": "^1.4.2",
     "rollup": "^2.29.0",
     "rollup-plugin-cleaner": "^1.0.0",
     "rollup-plugin-livereload": "^2.0.0",

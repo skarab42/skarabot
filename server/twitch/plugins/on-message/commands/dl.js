@@ -11,7 +11,10 @@ module.exports = ({ command, message, client }) => {
   const sudo = badges.broadcaster || badges.moderator;
 
   if (!sudo) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
+    client.chat.say(
+      message.channel,
+      `Usage: pas pour toi ${viewer.name} Kappa`
+    );
     return;
   }
 
