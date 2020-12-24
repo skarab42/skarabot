@@ -1,9 +1,6 @@
-const users = require("../../../libs/users");
-const { updateViewer, getViewerById } = require('../../../libs/viewers');
-
 let queueTimeoutId = null;
-const queueTimeout = 5000;
-const usersQueue = new Map();
+const queueTimeout = 2000;
+const viewerQueue = new Map();
 
 // TODO print/log error....
 function error(...args) {
@@ -12,7 +9,7 @@ function error(...args) {
 }
 
 function clearQueue() {
-  usersQueue.clear();
+  viewerQueue.clear();
   clearTimeout(queueTimeoutId);
   queueTimeoutId = null;
 }
@@ -20,6 +17,8 @@ function clearQueue() {
 async function updateUser({ helixUser, client }) {
   const { _data } = helixUser;
   const id = _data["id"];
+  const { data } = viewerQueue.get(id);
+  const viewer = data.viewer;
 
   let avatarURL = _data["profile_image_url"] || null;
 
@@ -32,37 +31,42 @@ async function updateUser({ helixUser, client }) {
   }
 
   const viewCount = _data["view_count"] || 0;
-  const user = users.update({ id, avatarURL, viewCount });
 
-  await updateViewer({ id, avatarURL, viewCount });
-  const viewer = await getViewerById(id);
+  viewer.avatarURL = avatarURL;
+  viewer.viewCount = viewCount;
 
-  avatarURL && client.io.emit("wof.add-user", user);
-  viewer && client.io.emit("viewers.update", viewer);
+  await viewer.save();
+
+  client.io.emit("viewers.update", viewer);
 }
 
 function processQueue(client) {
+  const ids = [...viewerQueue.keys()];
+
   client.api.helix.users
-    .getUsersByIds([...usersQueue.keys()])
-    .then((helixUsers) =>
-      helixUsers.forEach((helixUser) => updateUser({ helixUser, client }))
-    )
+    .getUsersByIds(ids)
+    .then((helixUsers) => Promise.all(
+      helixUsers.map((helixUser) => updateUser({ helixUser, client }))
+    ))
     .catch(error)
     .then(clearQueue);
 }
 
 module.exports = ({ message, client }, next) => {
-  const { user } = message.data;
+  const viewer = message.data.viewer;
 
-  if (message.data.startTime < user.lastSeen) {
+  const updatedAt = new Date(viewer.updatedAt).getTime();
+  message.data.isFirstMessage = message.data.startTime > updatedAt;
+
+  if (viewer.messageCount > 1 && !message.data.isFirstMessage) {
     return next();
   }
 
-  if (!usersQueue.has(user.id)) {
-    usersQueue.set(user.id, message);
+  if (!viewerQueue.has(viewer.id)) {
+    viewerQueue.set(viewer.id, message);
   }
 
-  if (!queueTimeoutId && usersQueue.size) {
+  if (!queueTimeoutId && viewerQueue.size) {
     queueTimeoutId = setTimeout(processQueue.bind(null, client), queueTimeout);
   }
 

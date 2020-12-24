@@ -1,5 +1,5 @@
 module.exports = ({ message, client }) => {
-  const user = message.data.user;
-  const points = Math.floor(user.points);
-  client.chat.say(message.channel, `${user.name} tu as ${points}pts.`);
+  const viewer = message.data.viewer;
+  const points = Math.floor(viewer.points);
+  client.chat.say(message.channel, `${viewer.name} tu as ${points}pts.`);
 };

@@ -11,6 +11,17 @@ const Viewer = sequelize.define("Viewer", {
     type: DataTypes.STRING,
     allowNull: true
   },
+  badges: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: '{}',
+    get() {
+      return JSON.parse(this.getDataValue("badges"));
+    },
+    set(badges) {
+      this.setDataValue("badges", JSON.stringify(badges));
+    }
+  },
   messageCount: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -21,10 +32,6 @@ const Viewer = sequelize.define("Viewer", {
     allowNull: false,
     defaultValue: 0
   },
-  lastHighlight: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
   points: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -33,7 +40,17 @@ const Viewer = sequelize.define("Viewer", {
   position: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: '{"x":0,"y":0}'
+    defaultValue: '{"x":0,"y":0}',
+    get() {
+      return JSON.parse(this.getDataValue("position"));
+    },
+    set(position) {
+      this.setDataValue("position", JSON.stringify(position));
+    }
+  },
+  lastHighlight: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
 });
 

@@ -9,13 +9,12 @@ const path = require("path");
 const allowedExtensions = ["svg"];
 
 module.exports = ({ command, message, client }) => {
-  const user = message.data.user;
-
-  const badges = message.data.badges;
+  const viewer = message.data.viewer;
+  const badges = viewer.badges;
   const sudo = badges.broadcaster || badges.moderator;
 
   if (!sudo) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
+    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
     return;
   }
 

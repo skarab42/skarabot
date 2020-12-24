@@ -1,7 +1,5 @@
-const users = require("../../../../libs/users");
-
 module.exports = ({ command, message, client }) => {
-  const user = message.data.user;
+  const viewer = message.data.viewer;
   const team = command.args[0];
 
   if (command.args.length > 1) {
@@ -10,9 +8,8 @@ module.exports = ({ command, message, client }) => {
   }
 
   if (command.args.length === 1) {
-    user.team = team;
-    users.update(user);
+    viewer.team = team;
   }
 
-  client.chat.say(message.channel, `${user.name} tu fais parti de la team ${user.team}!`);
+  client.chat.say(message.channel, `${viewer.name} tu fais parti de la team ${viewer.team}!`);
 };

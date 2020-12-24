@@ -15,11 +15,11 @@ const store = require("../../../../store/pause-channels");
 let channels = store.get("channels");
 
 module.exports = ({ command, message, client }) => {
-  const user = message.data.user;
+  const viewer = message.data.viewer;
   let input = command.args.join(" ");
 
-  if (!message.data.badges.broadcaster) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
+  if (!viewer.badges.broadcaster) {
+    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
     return;
   }
 

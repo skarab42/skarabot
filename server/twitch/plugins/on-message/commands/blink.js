@@ -1,10 +1,10 @@
-const users = require("../../../../libs/users");
+const { getViewerByName } = require('../../../../libs/viewers');
 
 const maxCount = 42;
 const costRatio = 10;
 
-module.exports = ({ command, message, client }) => {
-  const user = message.data.user;
+module.exports = async ({ command, message, client }) => {
+  const viewer = message.data.viewer;
   let [count, target] = command.args;
 
   count = parseInt(count);
@@ -13,7 +13,7 @@ module.exports = ({ command, message, client }) => {
     count = maxCount;
     client.chat.say(
       message.channel,
-      `Désolé ${user.name} tu vas blinker que ${maxCount}x.`
+      `Désolé ${viewer.name} tu vas blinker que ${maxCount}x.`
     );
   }
 
@@ -24,10 +24,10 @@ module.exports = ({ command, message, client }) => {
 
   const cost = Math.abs(count * costRatio);
 
-  if (user.points < cost) {
+  if (viewer.points < cost) {
     client.chat.say(
       message.channel,
-      `Désolé ${user.name} tu n'as pas assez de points pour blinker (cost: ${cost}).`
+      `Désolé ${viewer.name} tu n'as pas assez de points pour blinker (cost: ${cost}).`
     );
     return;
   }
@@ -35,18 +35,18 @@ module.exports = ({ command, message, client }) => {
   let targetUser = null;
 
   if (target) {
-    targetUser = users.getByName(target);
+    targetUser = await getViewerByName(target);
+
     if (!targetUser || !targetUser.avatarURL) {
       client.chat.say(
         message.channel,
-        `Désolé ${user.name} "${target}" est introuvable sur le mur.`
+        `Désolé ${viewer.name} "${target}" est introuvable sur le mur.`
       );
       return;
     }
   }
 
-  user.points -= cost;
-  users.update(user);
+  viewer.points -= cost;
 
-  client.io.emit("wof.blink", { user: targetUser || user, count });
+  client.io.emit("wof.blink", { user: targetUser || viewer, count });
 };

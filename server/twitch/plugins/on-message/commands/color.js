@@ -1,7 +1,5 @@
-const users = require("../../../../libs/users");
-
 module.exports = ({ command, message, client }) => {
-  const user = message.data.user;
+  const viewer = message.data.viewer;
   const color = command.args[0];
 
   if (command.args.length > 1) {
@@ -10,9 +8,8 @@ module.exports = ({ command, message, client }) => {
   }
 
   if (command.args.length === 1) {
-    user.color = color;
-    users.update(user);
+    viewer.color = color;
   }
 
-  client.chat.say(message.channel, `${user.name} tu as la couleur ${user.color}!`);
+  client.chat.say(message.channel, `${viewer.name} tu as la couleur ${viewer.color}!`);
 };

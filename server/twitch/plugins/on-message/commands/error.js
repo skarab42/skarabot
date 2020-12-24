@@ -1,17 +1,16 @@
-const users = require("../../../../libs/users");
 const chalk = require("chalk");
 
 const cost = 10;
 const colors = new chalk.Instance({ level: 3 });
 
 module.exports = ({ command, message, client }) => {
-  const user = message.data.user;
+  const viewer = message.data.viewer;
   let errorMessage = command.args.join(" ").trim();
 
-  if (user.points < cost) {
+  if (viewer.points < cost) {
     return client.chat.say(
       message.channel,
-      `Désolé ${user.name} tu n'as pas assez de points pour troller (cost: ${cost}).`
+      `Désolé ${viewer.name} tu n'as pas assez de points pour troller (cost: ${cost}).`
     );
   }
 
@@ -19,8 +18,7 @@ module.exports = ({ command, message, client }) => {
     return client.chat.say(message.channel, `Usage: !error <message>`);
   }
 
-  user.points -= cost;
-  users.update(user);
+  viewer.points -= cost;
 
   // eslint-disable-next-line no-console
   console.log(colors.red.bold(errorMessage));

@@ -4,6 +4,7 @@ const random = require("./libs/random");
 
 const imgSize = { width: 100, height: 100 };
 const $wall = document.querySelector("#wall");
+const baseURL = 'https://static-cdn.jtvnw.net/jtv_user_pictures/';
 
 const startScale = 5;
 const blinkTime = 1000;
@@ -35,7 +36,7 @@ function addSticker({ id, avatarURL, position }, index) {
   const [w, h] = [imgSize.width * startScale, imgSize.height * startScale];
   const [x, y] = [random(-200, 200), random(-200, 200)];
   const $img = new Image(w, h);
-  $img.src = avatarURL;
+  $img.src = `${baseURL}/${avatarURL}`;
   $img.id = `user-${id}`;
   $img.style.position = "absolute";
   $img.style.top = `${window.innerHeight / 2 - h / 2 + y}px`;
@@ -87,7 +88,9 @@ socket.on("wof.move", (chatMessage) => {
   $img.style.zIndex = usersCount;
 });
 
-socket.on("wof.add-user", (user) => addSticker(user, usersCount));
+socket.on("wof.add-user", (viewer) => {
+  addSticker(viewer, usersCount)
+});
 
 socket.on("wof.blink", ({ user, count }) => {
   const timeout = count * blinkTime;
@@ -114,10 +117,7 @@ socket.on("wof.blink", ({ user, count }) => {
   });
 });
 
-fetch("/users")
-  .then((response) => response.json())
-  .then(addStickers)
-  .catch(onError);
+socket.emit('viewers.get-famouses', { limit: 500 }, addStickers);
 
 // TODO dégage moi ça de là!!!!!
 socket.on("play.sound", ({ file }) => {

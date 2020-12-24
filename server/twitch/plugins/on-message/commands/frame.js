@@ -8,7 +8,7 @@ const cooldownTimeout = 15;
 let currentChannel = null;
 
 module.exports = async ({ command, message, client, cooldown }) => {
-  const { user } = message.data;
+  const viewer = message.data.viewer;
   let [url] = command.args;
 
   if (!url && currentChannel) {
@@ -34,8 +34,8 @@ module.exports = async ({ command, message, client, cooldown }) => {
   currentChannel =
     target.provider === "twitch" ? `twitch.tv/${target.channel} !` : url;
 
-  if (!message.data.badges.broadcaster && target.provider !== "twitch") {
-    client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
+  if (!viewer.badges.broadcaster && target.provider !== "twitch") {
+    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
     return;
   }
 

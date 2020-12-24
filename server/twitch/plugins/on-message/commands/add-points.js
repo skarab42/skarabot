@@ -1,11 +1,11 @@
-const users = require("../../../../libs/users");
+const { getViewerByName } = require('../../../../libs/viewers');
 
-module.exports = ({ command, message, client }) => {
-  const user = message.data.user;
+module.exports = async ({ command, message, client }) => {
+  const viewer = message.data.viewer;
   let [nick, points] = command.args;
 
-  if (!(message.data.badges.broadcaster || message.data.badges.moderator)) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
+  if (!(viewer.badges.broadcaster || viewer.badges.moderator)) {
+    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
     return;
   }
 
@@ -16,21 +16,16 @@ module.exports = ({ command, message, client }) => {
     return;
   }
 
-  let userStore = users.getByName(nick);
+  let targetViewer = await getViewerByName(nick);
 
-  if (!userStore) {
+  if (!targetViewer) {
     client.chat.say(message.channel, `L'utilisateur ${nick} est introuvable!`);
     return;
   }
 
-  if (userStore.id === user.id) {
-    userStore = user;
-  }
+  targetViewer.points += points;
+  await targetViewer.save();
 
-  userStore.points += points;
-  users.update(userStore);
-
-  const cleanPoints = Math.floor(userStore.points);
-
+  const cleanPoints = Math.floor(targetViewer.points);
   client.chat.say(message.channel, `${nick} tu as ${cleanPoints}pts.`);
 };

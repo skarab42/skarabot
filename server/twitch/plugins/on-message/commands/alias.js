@@ -3,11 +3,12 @@ const alias = require("../../../../store/alias");
 const ignores = [];
 
 module.exports = ({ command, message, client }) => {
+  const viewer = message.data.viewer;
   let [name, ...args] = command.args;
   let value = args.join(" ").trim();
 
   const user = message.user;
-  const badges = message.data.badges;
+  const badges = viewer.badges;
   const sudo = badges.broadcaster || badges.moderator;
 
   if (!name) {

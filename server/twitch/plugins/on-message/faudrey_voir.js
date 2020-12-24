@@ -7,13 +7,13 @@ const clips = {
 };
 
 module.exports = async ({ message, client }, next) => {
-  const user = message.data.user;
+  const viewer = message.data.viewer;
 
-  if (message.data.startTime < user.lastSeen) {
+  if (!message.data.isFirstMessage) {
     return next();
   }
 
-  const name = user.name.toLowerCase();
+  const name = viewer.name.toLowerCase();
   const clip = clips[name];
 
   if (clip) {

@@ -12,16 +12,17 @@ try {
       id: parseInt(user.id),
       name: user.name,
       avatarURL,
-      createdAt: new Date(user.firstSeen),
-      updatedAt: new Date(user.lastSeen),
-      lastHighlight: new Date(user.lastHighlight),
+      badges: "{}",
       messageCount: parseInt(user.messageCount),
       viewCount: parseInt(user.viewCount),
       points: parseInt(user.points),
       position: JSON.stringify({
         x: parseInt(user.position.x),
         y: parseInt(user.position.y)
-      })
+      }),
+      lastHighlight: new Date(user.lastHighlight),
+      createdAt: new Date(user.firstSeen),
+      updatedAt: new Date(user.lastSeen)
     });
   });
 } catch (error) {

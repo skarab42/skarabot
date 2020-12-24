@@ -4,14 +4,14 @@ const axios = require("axios");
 const path = require("path");
 
 module.exports = ({ command, message, client }) => {
-  const user = message.data.user;
+  const viewer = message.data.viewer;
   let [name, url] = command.args;
 
-  const badges = message.data.badges;
+  const badges = viewer.badges;
   const sudo = badges.broadcaster || badges.moderator;
 
   if (!sudo) {
-    client.chat.say(message.channel, `Usage: pas pour toi ${user.name} Kappa`);
+    client.chat.say(message.channel, `Usage: pas pour toi ${viewer.name} Kappa`);
     return;
   }
 

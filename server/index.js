@@ -1,6 +1,4 @@
 const { name, version } = require("../package.json");
-const userAPI = require("./twitch/plugins/user-api");
-const logsAPI = require("./twitch/plugins/logs-api");
 const TwitchClient = require("./twitch/Client");
 const umzug = require('./db/umzug');
 const config = require("./config");
@@ -20,8 +18,6 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
     .use(userServ)
     .use(publicServ)
     .use(twitchAuth)
-    .use(userAPI)
-    .use(logsAPI)
     .listen(config.server.port, async (err) => {
       if (err) throw err;
       /* eslint-disable no-console */
@@ -34,8 +30,8 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
     .setSocketIO(socketIO({ server, twitchClient }))
     .onMessage(require("./twitch/plugins/on-message/timestamp"))
     .onMessage(require("./twitch/plugins/on-message/start-time"))
-    .onMessage(require("./twitch/plugins/on-message/user-log"))
-    .onMessage(require("./twitch/plugins/on-message/user-badges"))
+    .onMessage(require("./twitch/plugins/on-message/viewer-log"))
+    .onMessage(require("./twitch/plugins/on-message/viewer-badges"))
     .onMessage(require("./twitch/plugins/on-message/user-first-seen"))
     .onMessage(require("./twitch/plugins/on-message/user-rewards"))
     .onMessage(require("./twitch/plugins/on-message/terminal-chat"))
@@ -44,6 +40,5 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
     .onMessage(require("./twitch/plugins/on-message/streamer-highlight"))
     .onMessage(require("./twitch/plugins/on-message/faudrey_voir"))
     .onMessage(require("./twitch/plugins/on-message/commands"))
-    .onMessage(require("./twitch/plugins/on-message/emit"))
-    .onMessage(require("./twitch/plugins/on-message/user-last-seen"));
+    .onMessage(require("./twitch/plugins/on-message/viewer-save"))
 })()
