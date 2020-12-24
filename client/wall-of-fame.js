@@ -104,8 +104,10 @@ socket.on("wof.blink", ({ user, count }) => {
   const targets = `#user-${user.id}`;
   const $img = document.querySelector(targets);
 
+  const filter = $img.style.filter;
   const zIndex = $img.style.zIndex;
   $img.style.zIndex = usersCount;
+  $img.style.filter = "none";
 
   show(timeout);
   anime({
@@ -113,6 +115,7 @@ socket.on("wof.blink", ({ user, count }) => {
     keyframes,
     complete: () => {
       $img.style.zIndex = zIndex;
+      $img.style.filter = filter;
     },
   });
 });
