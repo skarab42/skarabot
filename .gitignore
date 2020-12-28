@@ -1,4 +1,8 @@
 node_modules/
 public/js/
+
 *_.*
 *_
+
+.env.local
+.env.*.local
