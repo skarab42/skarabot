@@ -6,23 +6,31 @@
 
   const emotePrefix = "[:emote|";
 
+  let textLength = 0;
+
   message.split(regexp).forEach((line) => {
     if (line.startsWith(emotePrefix)) {
       let [tag, text] = line.split("]");
       const [id, name] = tag.slice(emotePrefix.length).split("|");
       tokens.push({ type: "emote", id, name });
-      text && tokens.push({ type: "text", text });
+      if (text) {
+        textLength += text.length;
+        tokens.push({ type: "text", text });
+      }
     } else {
+      textLength += line.length;
       tokens.push({ type: "text", text: line });
     }
   });
+
+  let fontSize = textLength < 10 ? "text-4xl" : "text-xl";
 
   function getEmoteURL(id) {
     return `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`;
   }
 </script>
 
-<div class="p-2 flex items-center space-x-1">
+<div class="p-2 {fontSize}">
   {#each tokens as token}
     {#if token.type === 'emote'}
       <img class="inline" src="{getEmoteURL(token.id)}" alt="{token.name}" />

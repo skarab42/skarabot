@@ -1,9 +1,11 @@
 <script>
   import ms from "ms";
+  import Team from "./Team.svelte";
   import Avatar from "./Avatar.svelte";
   import MessageWithEmotes from "./MessageWithEmotes.svelte";
 
   export let data;
+  export let viewers;
 
   $: time = elsapsed(data.time);
   $: name = data.Viewer ? data.Viewer.name : data.id;
@@ -26,6 +28,7 @@
 <div class="bg-purple-700 bg-opacity-75 text-gray-300 rounded overflow-hidden">
   <div class="flex items-center bg-black bg-opacity-50">
     <Avatar viewer="{data.Viewer}" class="w-10 h-10" />
+    <Team viewers="{viewers}" viewer="{data.Viewer}" class="w-10 h-10" />
     <div class="p-2">{name}</div>
     <div class="flex-auto"></div>
     <div class="p-2 opacity-50">{time}</div>

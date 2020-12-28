@@ -2,8 +2,12 @@ const { getFamouseViewers, updateViewer } = require("./libs/viewers");
 const { getLastMessages } = require("./libs/chat");
 const frameStore = require("./store/wall-frame");
 
-module.exports = ({ server, twitchClient }) => {
-  const io = require("socket.io")(server);
+let io = null;
+
+module.exports = ({ server, twitchClient } = {}) => {
+  if (io) return io;
+
+  io = require("socket.io")(server);
 
   io.on("connection", (socket) => {
     socket.on("wof.image-not-found", (id) => {

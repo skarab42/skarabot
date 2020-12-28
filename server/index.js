@@ -1,5 +1,6 @@
 const { name, version } = require("../package.json");
 const TwitchClient = require("./twitch/Client");
+const firebase = require("./libs/firebase");
 const umzug = require("./db/umzug");
 const config = require("./config");
 const socketIO = require("./io");
@@ -18,6 +19,7 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
     .use(userServ)
     .use(publicServ)
     .use(twitchAuth)
+    .get("/teamChange", firebase.onTeamChange)
     .listen(config.server.port, async (err) => {
       if (err) throw err;
       /* eslint-disable no-console */
