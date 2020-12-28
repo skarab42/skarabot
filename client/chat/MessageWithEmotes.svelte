@@ -23,7 +23,7 @@
     }
   });
 
-  let fontSize = textLength < 10 ? "text-4xl" : "text-xl";
+  let fontSize = textLength < 15 ? "text-4xl" : "text-xl";
 
   function getEmoteURL(id) {
     return `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`;
