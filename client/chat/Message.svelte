@@ -32,7 +32,7 @@
   <div class="flex items-center space-x-2 bg-black bg-opacity-50">
     <Avatar viewer="{data.viewer}" class="w-12 h-12" />
     <Team team="{data.team}" />
-    <div class="font-goldman text-2xl truncate">{name}</div>
+    <div class="px-2 font-goldman text-2xl truncate">{name}</div>
     <div class="flex-auto"></div>
     <div class="px-2 opacity-50">{time}</div>
   </div>

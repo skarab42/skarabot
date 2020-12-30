@@ -14,7 +14,7 @@
 </script>
 
 {#if svg}
-  <div class="w-10 h-10" style="fill:{team.color}">
+  <div class="ml-2 w-10 h-10" style="fill:{team.color}">
     {@html svg}
   </div>
 {/if}
