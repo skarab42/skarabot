@@ -2,8 +2,13 @@ const axios = require("axios");
 
 let fetchedViewers = {};
 
+const dev = false;
+const funcURL = dev
+  ? "http://localhost:5001/skara-bot/us-central1"
+  : "https://us-central1-skara-bot.cloudfunctions.net";
+
 async function fetchViewers(ids) {
-  const url = "http://localhost:5001/skara-bot/us-central1/getViewers";
+  const url = `${funcURL}/getViewers`;
   const res = await axios(url, { method: "POST", data: ids });
   fetchedViewers = { ...fetchedViewers, ...res.data };
   return res.data;
