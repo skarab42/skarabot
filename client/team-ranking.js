@@ -1,5 +1,5 @@
-const socket = require("socket.io-client")();
+"use strict";
 
-socket.on("team.ranking", (ranking) => {
-  console.log(ranking);
-});
+import App from "./team-ranking/App.svelte";
+
+new App({ target: document.body });

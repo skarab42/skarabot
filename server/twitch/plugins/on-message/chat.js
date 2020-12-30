@@ -1,6 +1,9 @@
 const { addMessage, computeMessage } = require("../../../libs/chat");
-
-const ranking = {};
+const {
+  addTeam,
+  getTeamByName,
+  getRanking,
+} = require("../../../libs/teamRanking");
 
 module.exports = async ({ message, client }, next) => {
   if (message.message[0] === "!") return next();
@@ -14,13 +17,24 @@ module.exports = async ({ message, client }, next) => {
   const team = message.data.team;
 
   if (team) {
-    if (!ranking[team.name]) {
-      ranking[team.name] = { messageCount: 0 };
+    let teamRanking = await getTeamByName(team.name);
+
+    if (!teamRanking) {
+      teamRanking = await addTeam({
+        team: team.name,
+        messageCount: 1,
+        totalMessageCount: 1,
+      });
+      client.io.emit("team.newRanking", teamRanking);
+    } else {
+      teamRanking.messageCount++;
+      teamRanking.totalMessageCount++;
+      await teamRanking.save();
     }
-    ranking[team.name].messageCount++;
+
+    client.io.emit("team.ranking", await getRanking());
   }
 
-  client.io.emit("team.ranking", ranking);
   client.io.emit("chat.new-message", {
     ...messageModel.get({ plain: true }),
     team,

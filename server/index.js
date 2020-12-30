@@ -1,7 +1,7 @@
 require("dotenv-flow").config();
 
+const { twitchClient, twitchAuth } = require("./twitch");
 const { name, version } = require("../package.json");
-const TwitchClient = require("./twitch/Client");
 const firebase = require("./libs/firebase");
 const localtunnel = require("localtunnel");
 const umzug = require("./db/umzug");
@@ -10,8 +10,6 @@ const socketIO = require("./io");
 const polka = require("polka");
 const sirv = require("sirv");
 
-const twitchClient = new TwitchClient(config.twitch);
-const twitchAuth = twitchClient.auth.bind(twitchClient);
 const userServ = sirv(config.server.userDir, { dev: true });
 const publicServ = sirv(config.server.publicPath, { dev: true });
 

@@ -1,4 +1,5 @@
 const { getFamouseViewers, updateViewer } = require("./libs/viewers");
+const { getRanking } = require("./libs/teamRanking");
 const { fetchViewers } = require("./libs/firebase");
 const { getLastMessages } = require("./libs/chat");
 const frameStore = require("./store/wall-frame");
@@ -24,11 +25,15 @@ module.exports = ({ server, twitchClient } = {}) => {
         return !viewer
           ? message
           : {
-              ...message,
-              team: { name: viewer.team, color: viewer.color },
-            };
+            ...message,
+            team: { name: viewer.team, color: viewer.color },
+          };
       });
       cb(messages);
+    });
+
+    socket.on("team.getRanking", async (cb) => {
+      cb(await getRanking());
     });
 
     socket.on("viewers.get-famouses", async (options, cb) => {
