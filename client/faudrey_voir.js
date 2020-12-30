@@ -1,3 +1,4 @@
+const { playSound } = require("./libs/sound");
 const socket = require("socket.io-client")();
 const glitch = require("./libs/glitch");
 
@@ -44,3 +45,4 @@ function faudreyVoir({ name, clip }) {
 }
 
 socket.on("faudrey_voir", faudreyVoir);
+socket.on("play.sound", playSound);
