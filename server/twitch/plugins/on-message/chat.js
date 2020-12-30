@@ -20,9 +20,9 @@ module.exports = async ({ message, client }, next) => {
     ranking[team.name].messageCount++;
   }
 
+  client.io.emit("team.ranking", ranking);
   client.io.emit("chat.new-message", {
     ...messageModel.get({ plain: true }),
-    ranking,
     team,
   });
 
