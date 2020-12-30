@@ -18,6 +18,6 @@ const ChatMessage = sequelize.define("ChatMessage", {
 });
 
 Viewer.hasMany(ChatMessage);
-ChatMessage.belongsTo(Viewer);
+ChatMessage.belongsTo(Viewer, { as: "viewer" });
 
 module.exports = ChatMessage;

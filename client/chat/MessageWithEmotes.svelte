@@ -30,7 +30,7 @@
   }
 </script>
 
-<div class="p-2 {fontSize}">
+<div class="p-2 font-confortaa {fontSize}">
   {#each tokens as token}
     {#if token.type === 'emote'}
       <img class="inline" src="{getEmoteURL(token.id)}" alt="{token.name}" />

@@ -1,12 +1,14 @@
 <script>
   import ms from "ms";
+  import Team from "./Team.svelte";
   import Avatar from "./Avatar.svelte";
+  import { slide } from "svelte/transition";
   import MessageWithEmotes from "./MessageWithEmotes.svelte";
 
   export let data;
 
   $: time = elsapsed(data.time);
-  $: name = data.Viewer ? data.Viewer.name : data.id;
+  $: name = data.viewer.name;
 
   function dateToTimestamp(time) {
     return new Date(time).getTime();
@@ -23,12 +25,16 @@
   }, 1000);
 </script>
 
-<div class="bg-purple-700 bg-opacity-75 text-gray-300 rounded overflow-hidden">
-  <div class="flex items-center bg-black bg-opacity-50">
-    <Avatar viewer="{data.Viewer}" class="w-10 h-10" />
-    <div class="p-2">{name}</div>
+<div
+  transition:slide|local
+  class="bg-purple-700 bg-opacity-75 text-gray-300 rounded overflow-hidden"
+>
+  <div class="flex items-center space-x-2 bg-black bg-opacity-50">
+    <Avatar viewer="{data.viewer}" class="w-12 h-12" />
+    <Team team="{data.team}" />
+    <div class="font-goldman text-2xl truncate">{name}</div>
     <div class="flex-auto"></div>
-    <div class="p-2 opacity-50">{time}</div>
+    <div class="px-2 opacity-50">{time}</div>
   </div>
   <MessageWithEmotes message="{data.message}" />
 </div>

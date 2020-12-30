@@ -1,5 +1,7 @@
 const { addMessage, computeMessage } = require("../../../libs/chat");
 
+const ranking = {};
+
 module.exports = async ({ message, client }, next) => {
   if (message.message[0] === "!") return next();
 
@@ -9,7 +11,20 @@ module.exports = async ({ message, client }, next) => {
     message: computeMessage(message.emotes),
   });
 
-  client.io.emit("chat.new-message", messageModel.toJSON());
+  const team = message.data.team;
+
+  if (team) {
+    if (!ranking[team.name]) {
+      ranking[team.name] = { messageCount: 0 };
+    }
+    ranking[team.name].messageCount++;
+  }
+
+  client.io.emit("chat.new-message", {
+    ...messageModel.get({ plain: true }),
+    ranking,
+    team,
+  });
 
   next();
 };

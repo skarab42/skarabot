@@ -1,4 +1,5 @@
 const ChatMessage = require("../db/models/ChatMessage");
+const Viewer = require("../db/models/Viewer");
 
 async function addMessage(message) {
   const messageModel = await ChatMessage.create(message);
@@ -17,15 +18,19 @@ function computeMessage(emotes) {
 }
 
 async function getMessageById(id) {
-  return await ChatMessage.findOne({ where: { id }, include: "Viewer" });
+  return await ChatMessage.findOne({
+    where: { id },
+    include: [{ model: Viewer, as: "viewer" }],
+  });
 }
 
 async function getLastMessages({ limit = 10 } = {}) {
   const messages = await ChatMessage.findAll({
-    include: "Viewer",
-    limit,
+    include: [{ model: Viewer, as: "viewer" }],
     order: [["time", "DESC"]],
+    limit,
   });
+  // const userIds = [];
   return messages.map((message) => message.toJSON());
 }
 

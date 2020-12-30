@@ -1,4 +1,5 @@
 const { getFamouseViewers, updateViewer } = require("./libs/viewers");
+const { fetchViewers } = require("./libs/firebase");
 const { getLastMessages } = require("./libs/chat");
 const frameStore = require("./store/wall-frame");
 
@@ -15,7 +16,19 @@ module.exports = ({ server, twitchClient } = {}) => {
     });
 
     socket.on("chat.get-last-messages", async (options, cb) => {
-      cb(await getLastMessages(options));
+      let messages = await getLastMessages(options);
+      const ids = messages.map((message) => message.viewer.id);
+      const viewers = await fetchViewers(ids);
+      messages = messages.map((message) => {
+        const viewer = viewers[message.viewer.id];
+        return !viewer
+          ? message
+          : {
+              ...message,
+              team: { name: viewer.team, color: viewer.color },
+            };
+      });
+      cb(messages);
     });
 
     socket.on("viewers.get-famouses", async (options, cb) => {
