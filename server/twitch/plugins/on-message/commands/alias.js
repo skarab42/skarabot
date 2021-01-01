@@ -1,6 +1,6 @@
 const alias = require("../../../../store/alias");
 
-const ignores = [];
+const ignores = ["theme", "line", "highlight"];
 
 module.exports = ({ command, message, client }) => {
   const viewer = message.data.viewer;
