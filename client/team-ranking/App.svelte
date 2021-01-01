@@ -12,20 +12,14 @@
   }
 
   async function fetchIcon({ team }) {
-    icons[team] = await fetchSVG(team);
+    return icons[team] || (await fetchSVG(team));
   }
 
   function setRanking(newRanking) {
     ranking = newRanking;
   }
 
-  function onGetRanking(newRanking) {
-    setRanking(newRanking);
-    Promise.all(newRanking.map(fetchIcon));
-  }
-
-  socket.emit("team.getRanking", onGetRanking);
-  socket.on("team.newRanking", fetchIcon);
+  socket.emit("team.getRanking", setRanking);
   socket.on("team.ranking", setRanking);
 </script>
 
@@ -35,9 +29,11 @@
       class="px-2 flex items-center justify-center bg-gray-700 rounded overflow-hidden shadow-xl"
     >
       <div class="w-10 h-10 text-pink-500 fill-current">
-        {#if icons[team.team]}
-          {@html icons[team.team]}
-        {:else}{team.team}{/if}
+        {#await fetchIcon(team)}
+          {team.team}
+        {:then svg}
+          {@html svg}
+        {/await}
       </div>
       <div class="p-2 text-bold text-2xl">{team.messageCount}</div>
     </div>
