@@ -27,8 +27,10 @@ module.exports = ({ command, message, client }) => {
     client.chat.say(message.channel, `Usage: !move <int> <int>`);
   } else {
     viewer.points -= cost;
-    viewer.position.x = minMax(0, screenLimit.x, viewer.position.x + offsets.x);
-    viewer.position.y = minMax(0, screenLimit.y, viewer.position.y + offsets.y);
+    viewer.position = {
+      x: minMax(0, screenLimit.x, viewer.position.x + offsets.x),
+      y: minMax(0, screenLimit.y, viewer.position.y + offsets.y),
+    };
 
     client.emit("wof.move", message);
   }
