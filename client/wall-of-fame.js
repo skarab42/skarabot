@@ -3,7 +3,7 @@ const socket = require("socket.io-client")();
 const random = require("./libs/random");
 
 const imgSize = { width: 100, height: 100 };
-const $wall = document.querySelector("#wall");
+const $wall = document.getElementById("wall");
 const baseURL = "https://static-cdn.jtvnw.net/jtv_user_pictures/";
 
 const startScale = 5;
@@ -34,7 +34,9 @@ function show(timeout = 0) {
 }
 
 function addSticker({ id, avatarURL, badges, position }, index) {
-  if (viewerIds.has(id)) return;
+  if (viewerIds.has(id)) {
+    document.getElementById(`user-${id}`).remove();
+  }
 
   viewerIds.set(id, true);
 
@@ -126,8 +128,8 @@ function blink({ user, count }) {
 }
 
 function move(chatMessage) {
-  const { id, position } = chatMessage.data.user;
-  const $img = document.querySelector(`#user-${id}`);
+  const { id, position } = chatMessage.data.viewer;
+  const $img = document.getElementById(`user-${id}`);
   $img.style.top = `${position.y}px`;
   $img.style.left = `${position.x}px`;
   $img.style.zIndex = viewerCount;
@@ -137,4 +139,4 @@ socket.on("wof.move", move);
 socket.on("wof.blink", blink);
 socket.on("wof.add-viewer", addViewer);
 
-socket.emit("viewers.get-famouses", { limit: 1000 }, addStickers);
+socket.emit("viewers.get-famouses", { limit: 500 }, addStickers);

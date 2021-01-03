@@ -4,15 +4,19 @@ function random(min, max) {
   return parseInt(Math.random() * (max - min) + min);
 }
 
+function setRandomPosition(viewer) {
+  if (viewer.messageCount > 1) return;
+  viewer.position = {
+    x: random(0, screenLimit.x),
+    y: random(0, screenLimit.y),
+  };
+}
+
 module.exports = ({ message, client }, next) => {
   const viewer = message.data.viewer;
 
   if (message.data.isFirstMessage) {
-    viewer.position = {
-      x: random(0, screenLimit.x),
-      y: random(0, screenLimit.y),
-    };
-
+    setRandomPosition(viewer);
     client.emit("wof.add-viewer", viewer);
   }
 
