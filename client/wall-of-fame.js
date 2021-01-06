@@ -54,13 +54,10 @@ function addSticker({ id, avatarURL, badges, position }, index) {
 
   if (badges.subscriber) {
     $img.style.border = "15px rgba(237,16,226,0.5) solid";
-    index = viewerCount;
   } else if (badges.vip) {
     $img.style.border = "15px rgba(237,189,16,0.5) solid";
-    index = viewerCount;
   } else if (badges.moderator) {
     $img.style.border = "15px rgba(123,16,237,0.5) solid";
-    index = viewerCount;
   }
 
   $img.style.zIndex = index;
@@ -112,7 +109,7 @@ function blink({ user, count }) {
   const $img = document.querySelector(targets);
 
   const filter = $img.style.filter;
-  const zIndex = $img.style.zIndex;
+  // const zIndex = $img.style.zIndex;
   $img.style.zIndex = viewerCount;
   $img.style.filter = "none";
 
@@ -121,7 +118,7 @@ function blink({ user, count }) {
     targets,
     keyframes,
     complete: () => {
-      $img.style.zIndex = zIndex;
+      // $img.style.zIndex = zIndex;
       $img.style.filter = filter;
     },
   });
