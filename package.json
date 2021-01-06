@@ -12,7 +12,7 @@
   "dependencies": {
     "PerspectiveTransform.js": "https://github.com/edankwan/PerspectiveTransform.js",
     "animejs": "^3.2.1",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "conf": "^7.1.2",
     "dotenv-flow": "^3.2.0",
