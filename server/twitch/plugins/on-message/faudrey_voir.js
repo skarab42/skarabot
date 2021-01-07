@@ -1,10 +1,4 @@
-const clips = {
-  faudrey_voir: {
-    id: "IntelligentArtisticWatermelonFunRun",
-    channel: "faudrey_voir",
-    duration: 15, // seconds
-  },
-};
+const clips = require("../../../store/clips");
 
 module.exports = async ({ message, client }, next) => {
   const viewer = message.data.viewer;
@@ -14,10 +8,11 @@ module.exports = async ({ message, client }, next) => {
   }
 
   const name = viewer.name.toLowerCase();
-  const clip = clips[name];
+  const clip = clips.get(`list.${name}`);
 
   if (clip) {
     client.io.emit("faudrey_voir", { name, clip });
+    client.chat.say(message.channel, `INTRUSION DE twitch.tv/${name}`);
   }
 
   next();
