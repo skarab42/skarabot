@@ -70,7 +70,7 @@
     <div
       class="bg-green-700 text-gray-300 font-bold text-4xl text-center uppercase rounded"
     >
-      {countdown ? ms(countdown * 1000) : 'FINI'}
+      {#if countdown}VOTEZ {ms(countdown * 1000)}{:else}FINI!{/if}
     </div>
   </div>
   <div class="container flex flex-col space-y-2">

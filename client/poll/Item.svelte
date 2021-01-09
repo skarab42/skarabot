@@ -2,11 +2,7 @@
   export let item;
   export let total;
 
-  console.log(item);
-
   $: percent = Math.round((item.points / total) * 100);
-
-  // $: console.log({ percent, total });
 </script>
 
 <div class="flex text-gray-400 rounded overflow-hidden">
