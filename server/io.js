@@ -3,6 +3,7 @@ const { getRanking } = require("./libs/teamRanking");
 const { fetchViewers } = require("./libs/firebase");
 const { getLastMessages } = require("./libs/chat");
 const frameStore = require("./store/wall-frame");
+const poll = require("./store/poll");
 
 let io = null;
 
@@ -25,9 +26,9 @@ module.exports = ({ server, twitchClient } = {}) => {
         return !viewer
           ? message
           : {
-            ...message,
-            team: { name: viewer.team, color: viewer.color },
-          };
+              ...message,
+              team: { name: viewer.team, color: viewer.color },
+            };
       });
       cb(messages);
     });
@@ -51,6 +52,10 @@ module.exports = ({ server, twitchClient } = {}) => {
 
     socket.on("frame.handles.getCoords", () => {
       socket.emit("frame.handles.coords", frameStore.get("coords"));
+    });
+
+    socket.on("poll.get-items", async (cb) => {
+      cb(poll.get(`items`));
     });
   });
 

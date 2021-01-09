@@ -6,7 +6,7 @@ const {
 } = require("../../../libs/teamRanking");
 
 module.exports = async ({ message, client }, next) => {
-  if (message.message[0] === "!") return next();
+  if (["!", "+", "-"].includes(message.message[0])) return next();
 
   const messageModel = await addMessage({
     viewerId: message.data.viewer.id,
