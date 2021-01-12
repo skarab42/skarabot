@@ -15,6 +15,19 @@ const actions = {
     poll.set(`started`, false);
     twitchClient.io.emit("poll.stop");
   },
+  reset() {
+    poll.set(`watching`, false);
+    poll.set(`started`, false);
+    poll.set(`items`, {});
+    poll.set(`logs`, {});
+    twitchClient.io.emit("poll.reset");
+  },
+  show() {
+    twitchClient.io.emit("poll.show");
+  },
+  hide() {
+    twitchClient.io.emit("poll.hide");
+  },
 };
 
 module.exports = async ({ command, message, client, isModo }) => {

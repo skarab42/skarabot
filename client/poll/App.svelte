@@ -4,7 +4,7 @@
 
   const socket = io();
 
-  let lastUpdateName = null;
+  let lastUpdatedItem = null;
   let stopTimeoutId = null;
   let started = false;
   let visible = false;
@@ -39,8 +39,25 @@
   }
 
   function onUpdate(state) {
-    lastUpdateName = state.name;
+    lastUpdatedItem = state.currentItem;
     onState(state);
+  }
+
+  function onReset() {
+    lastUpdatedItem = null;
+    stopTimeoutId = null;
+    started = false;
+    visible = false;
+    items = [];
+    total = 0;
+  }
+
+  function onShow() {
+    visible = true;
+  }
+
+  function onHide() {
+    visible = false;
   }
 
   socket.emit("poll.state", onState);
@@ -48,9 +65,12 @@
   socket.on("poll.start", onStart);
   socket.on("poll.stop", onStop);
   socket.on("poll.update", onUpdate);
+  socket.on("poll.reset", onReset);
+  socket.on("poll.show", onShow);
+  socket.on("poll.hide", onHide);
 </script>
 
-<div class="p-5 container {visible ? '' : 'hidden'}">
+<div class="p-5 container {visible || started ? '' : 'hidden'}">
   <div
     class="uppercase text-gray-300 text-4xl text-center {titleColor} rounded"
   >
