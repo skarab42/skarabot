@@ -2,10 +2,13 @@
   import io from "socket.io-client";
   import Items from "./Items.svelte";
   import boom from "./boom";
+  import ms from "ms";
 
   const socket = io();
 
+  let countdown = 0;
   let currentName = null;
+  let countdownIntervalId = null;
   let stopTimeoutId = null;
   let started = false;
   let visible = false;
@@ -41,17 +44,25 @@
     }
   }
 
-  function onStart() {
+  function onTick() {
+    countdown -= 1000;
+  }
+
+  function onStart({ duration }) {
     clearTimeout(stopTimeoutId);
     started = true;
     visible = true;
+    countdown = duration * 1000;
+    countdownIntervalId = setInterval(onTick, 1000);
     // TODO play sound
   }
 
   function onStop() {
-    started = false;
     // TODO play sound
     stopTimeoutId = setTimeout(() => (visible = false), 15000);
+    clearInterval(countdownIntervalId);
+    started = false;
+    countdown = 0;
   }
 
   function onUpdate(state) {
@@ -90,7 +101,7 @@
   <div
     class="uppercase text-gray-300 text-4xl text-center {titleColor} rounded"
   >
-    {started ? 'started' : 'stopped'}
+    {started ? `votez ${ms(countdown)}` : 'fini !!!'}
   </div>
   <Items items="{items}" />
 </div>

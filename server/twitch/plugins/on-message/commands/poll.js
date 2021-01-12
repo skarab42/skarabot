@@ -4,11 +4,13 @@ const { twitchClient } = require("../../../index");
 poll.set(`started`, false);
 
 const actions = {
-  start() {
+  start(duration = 42) {
     if (poll.get(`started`)) return;
+    duration = parseInt(duration);
     poll.set(`logs`, {});
     poll.set(`started`, true);
-    twitchClient.io.emit("poll.start");
+    setTimeout(this.stop, duration * 1000);
+    twitchClient.io.emit("poll.start", { duration });
   },
   stop() {
     if (!poll.get(`started`)) return;
@@ -33,7 +35,7 @@ const actions = {
 module.exports = async ({ command, message, client, isModo }) => {
   if (!isModo()) return;
 
-  let [action] = command.args;
+  let [action, ...args] = command.args;
   const actionNames = Object.keys(actions);
 
   if (!action || !actionNames.includes(action)) {
@@ -43,5 +45,5 @@ module.exports = async ({ command, message, client, isModo }) => {
     );
   }
 
-  actions[action]();
+  actions[action](...args);
 };
