@@ -14,17 +14,10 @@ const store = require("../../../../store/pause-channels");
 
 let channels = store.get("channels");
 
-module.exports = ({ command, message, client }) => {
-  const viewer = message.data.viewer;
+module.exports = ({ command, message, client, isModo }) => {
   let input = command.args.join(" ");
 
-  if (!viewer.badges.broadcaster) {
-    client.chat.say(
-      message.channel,
-      `Usage: pas pour toi ${viewer.name} Kappa`
-    );
-    return;
-  }
+  if (!isModo()) return;
 
   if (input === "stop") {
     return client.emit("pause.stop");

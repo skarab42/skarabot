@@ -1,16 +1,9 @@
 const { getViewerByName } = require("../../../../libs/viewers");
 
-module.exports = async ({ command, message, client }) => {
-  const viewer = message.data.viewer;
+module.exports = async ({ command, message, client, isModo }) => {
   let [nick, points] = command.args;
 
-  if (!(viewer.badges.broadcaster || viewer.badges.moderator)) {
-    client.chat.say(
-      message.channel,
-      `Usage: pas pour toi ${viewer.name} Kappa`
-    );
-    return;
-  }
+  if (!isModo()) return;
 
   points = parseInt(points);
 

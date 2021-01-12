@@ -1,25 +1,34 @@
 const { ApiClient } = require("twitch");
 const AuthProvider = require("./AuthProvider");
-const cooldown = require("./plugins/cooldown");
 const { ChatClient } = require("twitch-chat-client");
+
+const isModoPlugin = require("./plugins/isModo");
+const cooldownPlugin = require("./plugins/cooldown");
 
 module.exports = class Client {
   constructor(config) {
     this.config = config;
+
     this.authProvider = new AuthProvider(config);
     this.api = new ApiClient({ authProvider: this.authProvider });
     this.chat = new ChatClient(this.authProvider, {
       channels: config.channels,
     });
+
     this.io = null;
     this.chat.connect();
     this.onMessageCallbacks = [];
+
     this.chat.onMessage(async (channel, user, message, msg) => {
       const emotes = msg.parseEmotes();
+
       message = { channel, user, message, emotes, msg, data: {} };
       message.msg._tags = Object.fromEntries(msg._tags || []);
-      const cd = cooldown.bind(null, this, message);
-      this._onMessage({ message, client: this, cooldown: cd });
+
+      const isModo = isModoPlugin.bind(null, this, message);
+      const cooldown = cooldownPlugin.bind(null, this, message);
+
+      this._onMessage({ message, client: this, cooldown, isModo });
     });
   }
 

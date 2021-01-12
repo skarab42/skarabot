@@ -7,8 +7,7 @@ const cooldownTimeout = 15;
 
 let currentChannel = null;
 
-module.exports = async ({ command, message, client, cooldown }) => {
-  const viewer = message.data.viewer;
+module.exports = async ({ command, message, client, cooldown, isModo }) => {
   let [url] = command.args;
 
   if (!url && currentChannel) {
@@ -34,14 +33,7 @@ module.exports = async ({ command, message, client, cooldown }) => {
   currentChannel =
     target.provider === "twitch" ? `twitch.tv/${target.channel} !` : url;
 
-  if (!viewer.badges.broadcaster && target.provider !== "twitch") {
-    client.chat.say(
-      message.channel,
-      `Usage: pas pour toi ${viewer.name} Kappa`
-    );
-    return;
-  }
-
+  if (!isModo({ silent: true }) && target.provider !== "twitch") return;
   if (cooldown("cmd.frame", cooldownTimeout)) return;
 
   if (target.provider === "twitch" && target.mediaType === "stream") {

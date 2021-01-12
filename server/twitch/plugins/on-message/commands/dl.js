@@ -3,20 +3,10 @@ const fs = require("fs-extra");
 const axios = require("axios");
 const path = require("path");
 
-module.exports = ({ command, message, client }) => {
-  const viewer = message.data.viewer;
+module.exports = ({ command, message, client, isModo }) => {
   let [name, url] = command.args;
 
-  const badges = viewer.badges;
-  const sudo = badges.broadcaster || badges.moderator;
-
-  if (!sudo) {
-    client.chat.say(
-      message.channel,
-      `Usage: pas pour toi ${viewer.name} Kappa`
-    );
-    return;
-  }
+  if (!isModo()) return;
 
   const ext = (url || "").split(".").pop();
 
