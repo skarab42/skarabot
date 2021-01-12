@@ -1,70 +1,34 @@
 const poll = require("../../../../store/poll");
+const { twitchClient } = require("../../../index");
 
-const defaultDuration = 42;
+poll.set(`started`, false);
 
-module.exports = async ({ command, message, client }) => {
-  const viewer = message.data.viewer;
-  let [action, duration, ...includes] = command.args;
-
-  if (!(viewer.badges.broadcaster || viewer.badges.moderator)) {
-    client.chat.say(
-      message.channel,
-      `Usage: pas pour toi ${viewer.name} Kappa`
-    );
-    return;
-  }
-
-  const stop = () => {
-    client.emit("poll.stop");
+const actions = {
+  start() {
+    if (poll.get(`started`)) return;
+    poll.set(`logs`, {});
+    poll.set(`started`, true);
+    twitchClient.io.emit("poll.start");
+  },
+  stop() {
+    if (!poll.get(`started`)) return;
     poll.set(`started`, false);
-    client.chat.say(message.channel, `Les votes sont terminés.`);
-  };
+    twitchClient.io.emit("poll.stop");
+  },
+};
 
-  const funcs = {
-    stop,
-    start: () => {
-      duration = parseInt(duration || defaultDuration);
+module.exports = async ({ command, message, client, isModo }) => {
+  if (!isModo()) return;
 
-      poll.set(`started`, true);
-      client.emit("poll.start", { duration });
-      setTimeout(stop, duration * 1000);
+  let [action] = command.args;
+  const actionNames = Object.keys(actions);
 
-      client.chat.say(
-        message.channel,
-        `Les votes sont ouverts durant ${duration} sec.`
-      );
-    },
-    hide: () => {
-      client.emit("poll.hide");
-    },
-    reset: () => {
-      poll.set(`items`, {});
-      poll.set(`started`, false);
-      poll.set(`includes`, null);
-      client.emit("poll.reset");
-      client.chat.say(message.channel, `Les votes sont remis a zéro.`);
-    },
-    includes: () => {
-      if (!duration) {
-        poll.set(`includes`, null);
-        return;
-      }
-      poll.set(
-        `includes`,
-        [duration, ...includes].map((item) => item.toUpperCase())
-      );
-    },
-  };
-
-  const funcKeys = Object.keys(funcs);
-
-  if (!action || !funcKeys.includes(action)) {
-    client.chat.say(
+  if (!action || !actionNames.includes(action)) {
+    return client.chat.say(
       message.channel,
-      `Usage: !poll <${funcKeys.join("|")}> [duration]`
+      `Usage: !poll <${actionNames.join("|")}>`
     );
-    return;
   }
 
-  funcs[action]();
+  actions[action]();
 };

@@ -1,81 +1,60 @@
 <script>
   import io from "socket.io-client";
-  import Item from "./Item.svelte";
-  import ms from "ms";
+  import Items from "./Items.svelte";
 
   const socket = io();
 
+  let lastUpdateName = null;
+  let stopTimeoutId = null;
+  let started = false;
   let visible = false;
+  let items = [];
+  let total = 0;
 
-  let items = {};
-  let podium = [];
-  let countdown = 0;
-  let intervalId = null;
-  let currentName = null;
+  $: titleColor = started ? "bg-green-600" : "bg-orange-600";
 
-  $: {
-    const p1 = podium.findIndex((item) => item.name === currentName);
-    podium = Object.entries(items)
-      .sort(([, a], [, b]) => {
-        return b - a;
-      })
-      .map(([name, points]) => ({ name, points }));
-    const p2 = podium.findIndex((item) => item.name === currentName);
-
-    if (p1 !== -1) {
-      const diff = p1 - p2;
-      console.log(currentName, diff);
-    }
+  function onState(state) {
+    started = state.started;
+    items = Object.entries(state.items).sort(([, a], [, b]) => {
+      return b - a;
+    });
+    total = items.reduce((acc, [, points]) => acc + Math.abs(points), 0);
+    items = items.map(([name, points]) => {
+      const percent = total ? Math.round((points / total) * 100) : 0;
+      return { name, points, percent };
+    });
   }
 
-  $: total = podium.reduce((acc, { points }) => acc + Math.abs(points), 0);
-
-  socket.emit("poll.get-items", (initialItems) => {
-    items = initialItems;
-  });
-
-  function tick() {
-    countdown--;
-    console.log({ countdown });
-  }
-
-  socket.on("poll.start", ({ duration }) => {
+  function onStart() {
+    clearTimeout(stopTimeoutId);
+    started = true;
     visible = true;
-    countdown = duration;
-    intervalId = setInterval(tick, 1000);
-  });
+    // TODO play sound
+  }
 
-  socket.on("poll.stop", () => {
-    clearInterval(intervalId);
-    countdown = 0;
-  });
+  function onStop() {
+    started = false;
+    // TODO play sound
+    stopTimeoutId = setTimeout(() => (visible = false), 15000);
+  }
 
-  socket.on("poll.new-item", ({ name, points }) => {
-    currentName = name;
-    items = { ...items, [name]: points };
-  });
+  function onUpdate(state) {
+    lastUpdateName = state.name;
+    onState(state);
+  }
 
-  socket.on("poll.reset", () => {
-    currentName = null;
-    items = {};
-  });
+  socket.emit("poll.state", onState);
 
-  socket.on("poll.hide", () => {
-    visible = false;
-  });
+  socket.on("poll.start", onStart);
+  socket.on("poll.stop", onStop);
+  socket.on("poll.update", onUpdate);
 </script>
 
-<div class="px-20 py-5 h-full {visible ? '' : 'hidden'}">
-  <div class="container mb-5">
-    <div
-      class="bg-green-700 text-gray-300 font-bold text-4xl text-center uppercase rounded"
-    >
-      {#if countdown}VOTEZ {ms(countdown * 1000)}{:else}FINI!{/if}
-    </div>
+<div class="p-5 container {visible ? '' : 'hidden'}">
+  <div
+    class="uppercase text-gray-300 text-4xl text-center {titleColor} rounded"
+  >
+    {started ? 'started' : 'stopped'}
   </div>
-  <div class="container flex flex-col space-y-2">
-    {#each podium as item (item.name)}
-      <Item item="{item}" total="{total}" />
-    {/each}
-  </div>
+  <Items items="{items}" />
 </div>

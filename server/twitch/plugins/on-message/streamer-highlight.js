@@ -6,7 +6,7 @@ const minViewCount = 500;
 
 const sayMessage = "C'est un avion ? une fusée ? non c'est un streamer Twitch";
 
-module.exports = async ({ message, client, cooldown }, next) => {
+module.exports = async ({ message, client, ...helpers }, next) => {
   const viewer = message.data.viewer;
   const now = message.data.timestamp;
   const elapsed = message.data.timestamp - viewer.lastHighlight;
@@ -38,7 +38,7 @@ module.exports = async ({ message, client, cooldown }, next) => {
 
       // if (!channel._data.mature) {
       const command = { name: "frame", args: [viewer.name] };
-      frameCommand({ command, message, client, cooldown });
+      frameCommand({ command, message, client, ...helpers });
       // }
 
       next();

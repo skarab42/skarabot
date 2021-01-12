@@ -54,8 +54,8 @@ module.exports = ({ server, twitchClient } = {}) => {
       socket.emit("frame.handles.coords", frameStore.get("coords"));
     });
 
-    socket.on("poll.get-items", async (cb) => {
-      cb(poll.get(`items`));
+    socket.on("poll.state", async (cb) => {
+      cb(poll.store);
     });
   });
 
