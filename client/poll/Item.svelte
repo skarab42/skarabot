@@ -11,5 +11,9 @@
     {item.percent}%
   </div>
   <div class="p-2 bg-gray-600 rounded-r" style="width:{item.percent}%"></div>
-  <canvas id="canvas-{item.name}" class="absolute inset-0"></canvas>
+  <canvas
+    class="absolute"
+    id="canvas-{item.name}"
+    style="left:150px;width:{item.percent}%;height:100%"
+  ></canvas>
 </div>

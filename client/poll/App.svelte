@@ -1,10 +1,11 @@
 <script>
   import io from "socket.io-client";
   import Items from "./Items.svelte";
+  import boom from "./boom";
 
   const socket = io();
 
-  let lastUpdatedItem = null;
+  let currentName = null;
   let stopTimeoutId = null;
   let started = false;
   let visible = false;
@@ -15,6 +16,9 @@
 
   function onState(state) {
     started = state.started;
+
+    const p1 = items.findIndex((item) => item.name === currentName);
+
     items = Object.entries(state.items).sort(([, a], [, b]) => {
       return b - a;
     });
@@ -23,6 +27,18 @@
       const percent = total ? Math.round((points / total) * 100) : 0;
       return { name, points, percent };
     });
+
+    const p2 = items.findIndex((item) => item.name === currentName);
+
+    if (p1 !== -1) {
+      const diff = p1 - p2;
+      if (diff > 0) {
+        setTimeout(() => boom(currentName), 100);
+      } else if (diff < 0) {
+        currentName = items[p1].name;
+        setTimeout(() => boom(currentName), 100);
+      }
+    }
   }
 
   function onStart() {
@@ -39,12 +55,12 @@
   }
 
   function onUpdate(state) {
-    lastUpdatedItem = state.currentItem;
+    currentName = state.currentItem.name;
     onState(state);
   }
 
   function onReset() {
-    lastUpdatedItem = null;
+    currentName = null;
     stopTimeoutId = null;
     started = false;
     visible = false;
