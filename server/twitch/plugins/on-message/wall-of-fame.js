@@ -5,7 +5,6 @@ function random(min, max) {
 }
 
 function setRandomPosition(viewer) {
-  if (viewer.messageCount > 1) return;
   viewer.position = {
     x: random(0, screenLimit.x),
     y: random(0, screenLimit.y),
@@ -15,7 +14,7 @@ function setRandomPosition(viewer) {
 module.exports = ({ message, client }, next) => {
   const viewer = message.data.viewer;
 
-  if (message.data.isFirstMessage) {
+  if (message.data.isFirstMessage || viewer.messageCount === 1) {
     setRandomPosition(viewer);
     client.emit("wof.add-viewer", viewer);
   }
