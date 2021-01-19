@@ -1,4 +1,5 @@
-const clips = require("../../../../store/clips");
+const clipsStore = require("../../../../store/clips");
+const { random } = require("../utils");
 
 module.exports = async ({ command, message, client, isModo }) => {
   let [channel, id, duration] = command.args;
@@ -13,13 +14,14 @@ module.exports = async ({ command, message, client, isModo }) => {
       return;
     }
 
-    clips.set(`list.${channel}`, { id, channel, duration });
+    clipsStore.set(`list.${channel}`, { id, channel, duration });
     return;
   }
 
-  const clip = clips.get(`list.${channel}`);
+  const clips = clipsStore.get(`list.${channel}`, []);
 
-  if (clip) {
+  if (clips.length) {
+    const clip = clips[random(0, clips.length)];
     client.io.emit("faudrey_voir", { name: channel, clip });
     client.chat.say(message.channel, `INTRUSION DE twitch.tv/${channel}`);
   }
