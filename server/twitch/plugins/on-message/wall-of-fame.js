@@ -1,8 +1,5 @@
 const { screenLimit } = require("./config/wall-of-fame");
-
-function random(min, max) {
-  return parseInt(Math.random() * (max - min) + min);
-}
+const { random } = require("./utils");
 
 function setRandomPosition(viewer) {
   viewer.position = {
