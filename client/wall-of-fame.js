@@ -89,7 +89,7 @@ function addSticker({ id, avatarURL, badges, position }, index) {
 
 function addStickers(viewers) {
   viewerCount += viewers.length;
-  viewers.forEach(addSticker);
+  viewers.reverse().forEach(addSticker);
 }
 
 function addViewer(viewer) {
@@ -133,6 +133,8 @@ function move(chatMessage) {
 }
 
 socket.on("wof.move", move);
+socket.on("wof.show", () => show(5000));
+socket.on("wof.hide", hide);
 socket.on("wof.blink", blink);
 socket.on("wof.add-viewer", addViewer);
 
