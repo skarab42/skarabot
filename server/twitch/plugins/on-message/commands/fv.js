@@ -6,19 +6,21 @@ module.exports = async ({ command, message, client, isModo }) => {
 
   channel = (channel || "faudrey_voir").toLowerCase();
 
+  const clips = clipsStore.get(`list.${channel}`, []);
+
   if (id) {
     if (!isModo()) return;
 
     if (!duration) {
-      client.chat.say(message.channel, `Usage: !fv <id> <duration>`);
+      client.chat.say(message.channel, `Usage: !fv <channel> <id> <duration>`);
       return;
     }
 
-    clipsStore.set(`list.${channel}`, { id, channel, duration });
+    clips.push({ id, channel, duration });
+    clipsStore.set(`list.${channel}`, clips);
+
     return;
   }
-
-  const clips = clipsStore.get(`list.${channel}`, []);
 
   if (clips.length) {
     const clip = clips[random(0, clips.length)];
