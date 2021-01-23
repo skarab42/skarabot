@@ -10,9 +10,10 @@ function setRandomPosition(viewer) {
 
 module.exports = ({ message, client }, next) => {
   const viewer = message.data.viewer;
+  const isFirstMessage = viewer.messageCount === 1;
 
-  if (message.data.isFirstMessage || viewer.messageCount === 1) {
-    setRandomPosition(viewer);
+  if (isFirstMessage || message.data.isFirstMessage) {
+    isFirstMessage && setRandomPosition(viewer);
     client.emit("wof.add-viewer", viewer);
   }
 
