@@ -19,7 +19,7 @@ module.exports = ({ command, message, client, isModo }) => {
     isModo() && alias.delete(`list.${name.slice(1)}`);
   } else if (!ignores.includes(name)) {
     value = alias.get(`list.${name}`);
-    const text = value || `!${name} !?! C'est pas faux @${user} skarab1337`;
-    client.chat.say(message.channel, text);
+    // const text = value || `!${name} !?! C'est pas faux @${user} skarab1337`;
+    value && client.chat.say(message.channel, value);
   }
 };
