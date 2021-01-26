@@ -5,6 +5,9 @@
 
   let ranking = [];
   let icons = {};
+  let chestOwner = null;
+
+  const baseURL = "https://static-cdn.jtvnw.net/jtv_user_pictures/";
 
   async function fetchSVG(name) {
     const res = await fetch(`/images/teams/${name}.svg`);
@@ -19,8 +22,15 @@
     ranking = newRanking;
   }
 
+  function onChestOwner(owner) {
+    chestOwner = owner;
+  }
+
   socket.emit("team.getRanking", setRanking);
+  socket.emit("treasureChest.getOwner", onChestOwner);
+
   socket.on("team.ranking", setRanking);
+  socket.on("treasureChest.newOwner", onChestOwner);
 </script>
 
 <div class="p-4 text-gray-300 flex space-x-2">
@@ -39,3 +49,18 @@
     </div>
   {/each}
 </div>
+
+{#if chestOwner}
+  <div
+    class="absolute rounded overflow-hidden"
+    style="top:340px; width: 100px; height:100px;"
+  >
+    <img src="{baseURL}{chestOwner.avatarURL}" alt="{chestOwner.name}" />
+  </div>
+  <img
+    class="absolute"
+    style="top:290px; left:17px; width: 100px; transform: rotate(15deg)"
+    src="images/crown.png"
+    alt="crown"
+  />
+{/if}

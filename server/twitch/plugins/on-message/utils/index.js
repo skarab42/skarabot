@@ -10,8 +10,20 @@ function humanTimeToTimestamp(input) {
   return timestamp;
 }
 
+function minMax(min, max, value) {
+  return Math.max(min, Math.min(max, value));
+}
+
 function random(min, max) {
   return parseInt(Math.random() * (max - min) + min);
+}
+
+function sqr(a) {
+  return a * a;
+}
+
+function distance(p1, p2) {
+  return Math.round(Math.sqrt(sqr(p2.y - p1.y) + sqr(p2.x - p1.x)));
 }
 
 function shuffle(o) {
@@ -73,7 +85,9 @@ async function getRandomVideoByUserName({
 
 module.exports = {
   random,
+  minMax,
   shuffle,
+  distance,
   getChannel,
   getChannelByName,
   getStreamByUserName,

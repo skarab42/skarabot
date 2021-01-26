@@ -1,4 +1,9 @@
-const { getFamouseViewers, updateViewer } = require("./libs/viewers");
+const {
+  getViewerById,
+  getFamouseViewers,
+  updateViewer,
+} = require("./libs/viewers");
+const treasureStore = require("./store/treasure-chest");
 const { getRanking } = require("./libs/teamRanking");
 const { fetchViewers } = require("./libs/firebase");
 const { getLastMessages } = require("./libs/chat");
@@ -56,6 +61,11 @@ module.exports = ({ server, twitchClient } = {}) => {
 
     socket.on("poll.state", async (cb) => {
       cb(poll.store);
+    });
+
+    socket.on("treasureChest.getOwner", async (cb) => {
+      const ownerId = treasureStore.get("owner");
+      cb(await getViewerById(ownerId));
     });
   });
 

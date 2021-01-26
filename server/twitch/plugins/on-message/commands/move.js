@@ -1,10 +1,15 @@
+const treasureChestStore = require("../../../../store/treasure-chest");
 const { screenLimit } = require("../config/wall-of-fame");
+const { random, distance, minMax } = require("../utils");
 
-function minMax(min, max, value) {
-  return Math.max(min, Math.min(max, value));
+const costRatio = 0.1;
+
+function setRandomPosition() {
+  treasureChestStore.set("position", {
+    x: random(0, screenLimit.x),
+    y: random(0, screenLimit.y),
+  });
 }
-
-// X = cos(Angle) * distance ; Y = -sin(Angle) * distance
 
 module.exports = ({ command, message, client }) => {
   const viewer = message.data.viewer;
@@ -16,7 +21,12 @@ module.exports = ({ command, message, client }) => {
     offsets[key] = parseInt(val);
   });
 
-  const cost = (Math.abs(offsets.x) + Math.abs(offsets.y)) * 0.1;
+  let newPosition = {
+    x: minMax(0, screenLimit.x, viewer.position.x + offsets.x),
+    y: minMax(0, screenLimit.y, viewer.position.y + offsets.y),
+  };
+
+  const cost = Math.ceil(distance(newPosition, viewer.position) * costRatio);
 
   if (viewer.points < cost) {
     client.chat.say(
@@ -27,10 +37,28 @@ module.exports = ({ command, message, client }) => {
     client.chat.say(message.channel, `Usage: !move <int> <int>`);
   } else {
     viewer.points -= cost;
-    viewer.position = {
-      x: minMax(0, screenLimit.x, viewer.position.x + offsets.x),
-      y: minMax(0, screenLimit.y, viewer.position.y + offsets.y),
-    };
+    viewer.position = newPosition;
+
+    const chestPosition = treasureChestStore.get("position");
+    const diff = distance(chestPosition, viewer.position);
+
+    client.chat.say(
+      message.channel,
+      `${viewer.name} [${viewer.position.x},${viewer.position.y}]`
+    );
+
+    if (diff === 0) {
+      let chestPoints = treasureChestStore.get("points");
+      client.chat.say(
+        message.channel,
+        `${viewer.name} a trouvé le trésor (${chestPoints} pts) !!!`
+      );
+      client.emit("treasureChest.newOwner", viewer);
+      treasureChestStore.set("owner", viewer.id);
+      treasureChestStore.set("points", 0);
+      viewer.points += chestPoints;
+      setRandomPosition();
+    }
 
     client.emit("wof.move", message);
   }

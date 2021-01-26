@@ -19,4 +19,6 @@ module.exports = [
   "luvpeekr",
   "redalihey",
   "Iti63hey",
+  "morning",
+  "dag",
 ];
