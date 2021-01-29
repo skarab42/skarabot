@@ -42,10 +42,10 @@ module.exports = ({ command, message, client }) => {
     const chestPosition = treasureChestStore.get("position");
     const diff = distance(chestPosition, viewer.position);
 
-    client.chat.say(
-      message.channel,
-      `${viewer.name} [${viewer.position.x},${viewer.position.y}]`
-    );
+    // client.chat.say(
+    //   message.channel,
+    //   `${viewer.name} [${viewer.position.x},${viewer.position.y}]`
+    // );
 
     if (diff === 0) {
       let chestPoints = treasureChestStore.get("points");
