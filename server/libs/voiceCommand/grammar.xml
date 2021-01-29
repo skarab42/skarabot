@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+
+<grammar root="main" xml:lang="fr-FR" xmlns="http://www.w3.org/2001/06/grammar" version="1.0" tag-format="semantics/1.0"> 
+
+  <rule id="main" scope="public">
+    <example> skarabot prout </example>
+    <one-of>
+      <item><ruleref uri="#command"/></item>
+      <item><ruleref uri="#words"/></item>
+      <item><ruleref uri="#scene"/></item>
+    </one-of>
+  </rule>
+
+  <rule id="command">
+    <ruleref uri="#action"/>
+    <ruleref uri="#object"/>
+  </rule>
+
+  <rule id="scene">
+    <item> scene </item>
+    <ruleref uri="#scenes"/>
+  </rule>
+
+  <rule id="words">
+    <one-of>
+      <item> paillette </item>
+      <item> cotillon </item>
+      <item> nosignal </item>
+    </one-of>
+  </rule>
+
+  <rule id="action">
+    <one-of>
+      <item> skarabot </item>
+      <item> marv </item>
+    </one-of>
+  </rule>
+
+  <rule id="object">
+    <one-of>
+      <item> prout </item>
+      <item> plop </item>
+    </one-of>
+  </rule>
+
+  <rule id="scenes">
+    <one-of>
+      <item> 42 </item>
+      <item> 24 </item>
+    </one-of>
+  </rule>
+
+</grammar>
