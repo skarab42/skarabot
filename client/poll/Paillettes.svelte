@@ -48,7 +48,7 @@
     fire(random(50, 100), {
       spread: random(10, 70),
       angle: random(140, 180),
-      ticks: random(300, 400),
+      ticks: random(50, 100),
       gravity: random(95, 100) / 100,
       // decay: random(85, 90) / 100,
       scalar: random(80, 120) / 100,
