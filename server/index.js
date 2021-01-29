@@ -42,7 +42,8 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
 
   voiceCommand(({ Confidence, Words: words, Text: text }) => {
     const confidence = parseFloat(Confidence);
-    if (confidence < 0.8) return;
+    if (confidence < 0.9) return;
+    console.log({ confidence, words });
     if (text === "paillette") {
       socket.emit("paillettes");
     }
