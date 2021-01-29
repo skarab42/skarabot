@@ -5,15 +5,15 @@ const commandCost = 5;
 const cooldownTimeout = 60;
 
 module.exports = ({ message, client, cooldown }) => {
-  if (cooldown("cmd.gps", cooldownTimeout)) return;
-
   const viewer = message.data.viewer;
+
+  if (cooldown(`cmd.gps:${viewer.name}`, cooldownTimeout)) return;
+
   let chestPoints = treasureChestStore.get("points");
   const chestPosition = treasureChestStore.get("position");
-
   let diff = distance(chestPosition, viewer.position);
 
-  chestPoints += commandCost;
+  chestPoints += commandCost * 2;
   viewer.points -= commandCost;
 
   treasureChestStore.set("points", chestPoints);
