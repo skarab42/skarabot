@@ -9,10 +9,12 @@ function bufferToString(buffer) {
 
 function log(message) {
   // eslint-disable-next-line no-console
-  console.log(bufferToString(message));
+  console.log("[voiceCommand]", bufferToString(message));
 }
 
 function start(onMessage) {
+  log("start");
+
   const child = fork(serverPath, [], {
     stdio: ["pipe", "pipe", "pipe", "ipc"],
   });
@@ -22,9 +24,33 @@ function start(onMessage) {
 
   child.on("message", onMessage);
 
+  function killChild() {
+    child && child.kill();
+  }
+
+  child.on("error", (error) => {
+    log(`error: ${error.message}`);
+    killChild();
+  });
+
   child.on("close", (code) => {
-    log(`exited with code ${code || 0}`);
+    log(`stop with code ${code || 0}`);
+    killChild();
+    start(onMessage);
+  });
+
+  process.on("close", (code) => {
+    killChild();
+    log(`exit with code ${code || 0}`);
   });
 }
+
+start(({ Confidence, Text: text }) => {
+  const confidence = parseFloat(Confidence);
+  if (confidence < 0.9) return;
+  if (text === "paillette") {
+    console.log("paillettes");
+  }
+});
 
 module.exports = start;

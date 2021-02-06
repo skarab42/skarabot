@@ -2,7 +2,7 @@ require("dotenv-flow").config();
 
 const { twitchClient, twitchAuth } = require("./twitch");
 const { name, version } = require("../package.json");
-const voiceCommand = require("./libs/voiceCommand");
+// const voiceCommand = require("./libs/voiceCommand");
 const OBSWebSocket = require("obs-websocket-js");
 const firebase = require("./libs/firebase");
 const localtunnel = require("localtunnel");
@@ -40,24 +40,24 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
 
   obs.connect({ address: "localhost:4444" });
 
-  voiceCommand(({ Confidence, Words: words, Text: text }) => {
-    const confidence = parseFloat(Confidence);
-    if (confidence < 0.9) return;
-    console.log({ confidence, words });
-    if (text === "paillette") {
-      socket.emit("paillettes");
-    }
-    if (words[0].Text === "scene") {
-      obs.send("SetCurrentScene", {
-        "scene-name": `PRINCIPAL ${words[1].Text}`,
-      });
-    }
-    if (text === "nosignal") {
-      obs.send("SetCurrentScene", {
-        "scene-name": `NO SIGNAL`,
-      });
-    }
-  });
+  // voiceCommand(({ Confidence, Text: text }) => {
+  //   const confidence = parseFloat(Confidence);
+  //   if (confidence < 0.9) return;
+  //   // console.log({ confidence, words });
+  //   if (text === "paillette") {
+  //     socket.emit("paillettes");
+  //   }
+  //   // if (words[0].Text === "scene") {
+  //   //   obs.send("SetCurrentScene", {
+  //   //     "scene-name": `PRINCIPAL ${words[1].Text}`,
+  //   //   });
+  //   // }
+  //   // if (text === "nosignal") {
+  //   //   obs.send("SetCurrentScene", {
+  //   //     "scene-name": `NO SIGNAL`,
+  //   //   });
+  //   // }
+  // });
 
   twitchClient
     .setSocketIO(socket)
