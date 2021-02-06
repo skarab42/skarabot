@@ -33,6 +33,13 @@
   socket.on("treasureChest.newOwner", onChestOwner);
 </script>
 
+<style>
+  .text-shadow {
+    line-height: 1em;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.86);
+  }
+</style>
+
 <div class="p-4 text-gray-300 flex space-x-2">
   {#each ranking as team (team.id)}
     <div
@@ -55,7 +62,13 @@
     class="absolute rounded overflow-hidden"
     style="top:340px; width: 100px; height:100px;"
   >
-    <img src="{baseURL}{chestOwner.avatarURL}" alt="{chestOwner.name}" />
+    {#if chestOwner.avatarURL}
+      <img src="{baseURL}{chestOwner.avatarURL}" alt="{chestOwner.name}" />
+    {:else}
+      <div class="text-4xl text-gray-300 text-shadow break-all">
+        {chestOwner.name}
+      </div>
+    {/if}
   </div>
   <img
     class="absolute"
