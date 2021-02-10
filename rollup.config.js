@@ -1,4 +1,4 @@
-import livereload from "rollup-plugin-livereload";
+// import livereload from "rollup-plugin-livereload";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
@@ -35,7 +35,7 @@ export default {
     commonjs(),
     resolve({ browser: true, dedupe: ["svelte"] }),
     svelte({ dev: watch }),
-    watch && livereload(outputDir),
+    // watch && livereload(outputDir),
     watch && spawnServer(serverPath),
     !watch && cleaner({ targets: [outputDir] }),
     !watch && terser(),
