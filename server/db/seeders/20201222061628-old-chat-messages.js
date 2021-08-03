@@ -24,6 +24,8 @@ try {
 
 module.exports = {
   up: async ({ context }) => {
-    await context.bulkInsert("ChatMessages", chatMessages);
+    if (chatMessages.length) {
+      await context.bulkInsert("ChatMessages", chatMessages);
+    }
   },
 };

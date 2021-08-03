@@ -33,6 +33,8 @@ try {
 
 module.exports = {
   up: async ({ context }) => {
-    await context.bulkInsert("Viewers", viewers);
+    if (viewers.length) {
+      await context.bulkInsert("Viewers", viewers);
+    }
   },
 };
