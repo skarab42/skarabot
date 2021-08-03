@@ -2,7 +2,7 @@
   export let message;
 
   const tokens = [];
-  const regexp = /(?=\[\:emote\|[1-9][0-9]*\|[^\]]+\])/i;
+  const regexp = /(?=\[\:emote\|[a-z_0-9]*\|[^\]]+\])/i;
 
   const emotePrefix = "[:emote|";
 
@@ -26,8 +26,9 @@
   let fontSize = textLength < 15 ? "text-4xl" : "text-xl";
 
   function getEmoteURL(id) {
-    return `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`;
+    return `https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/1.0`;
   }
+
 </script>
 
 <div class="p-2 font-confortaa {fontSize}">
