@@ -9,7 +9,7 @@ module.exports = ({ message, client }, next) => {
     return next();
   }
 
-  let [name] = text.slice(1).split(/[ \.]/);
+  let [name] = text.slice(1).split(/[ .]/);
   name = name.trim().toUpperCase().slice(0, 42);
 
   if (!name) return next();
