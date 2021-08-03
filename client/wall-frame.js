@@ -9,7 +9,6 @@ const reset = window.location.search.includes("reset");
 const $players = document.querySelector("#players");
 const $handles = document.querySelector("#handles");
 const $twitchPlayer = document.querySelector("#twitch-player");
-const $title = document.querySelector("#wall h1");
 const transform = new PerspectiveTransform(
   $players,
   size.width,
