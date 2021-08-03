@@ -5,15 +5,26 @@ require("./libs/PerspectiveTransform");
 
 const size = { width: 700, height: 500 };
 const edit = window.location.search.includes("edit");
+const reset = window.location.search.includes("reset");
 const $players = document.querySelector("#players");
 const $handles = document.querySelector("#handles");
 const $twitchPlayer = document.querySelector("#twitch-player");
+const $title = document.querySelector("#wall h1");
 const transform = new PerspectiveTransform(
   $players,
   size.width,
   size.height,
   true
 );
+
+if (reset) {
+  socket.emit("frame.handles.coords", {
+    topLeft: 0,
+    topRight: 0,
+    bottomLeft: 0,
+    bottomRight: 0,
+  });
+}
 
 const handleSize = 42;
 const handles = {};
@@ -132,6 +143,7 @@ socket.on("frame.push", (target) => {
 });
 
 socket.emit("frame.handles.getCoords");
+
 socket.on("frame.handles.coords", (coords) => {
   Object.entries(coords).forEach(([key, val]) => {
     transform[key] = val;
