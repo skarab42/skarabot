@@ -23,11 +23,12 @@
   setInterval(() => {
     time = elsapsed(data.time);
   }, 1000);
+
 </script>
 
 <div
   transition:slide|local
-  class="bg-purple-700 bg-opacity-75 text-gray-300 rounded overflow-hidden"
+  class="bg-black bg-opacity-25 text-gray-300 rounded overflow-hidden"
 >
   <div class="flex items-center space-x-2 bg-black bg-opacity-50">
     <Avatar viewer="{data.viewer}" class="w-12 h-12" />

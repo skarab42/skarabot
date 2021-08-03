@@ -825,17 +825,12 @@ video {
   background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
 }
 
-.bg-purple-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgba(109, 40, 217, var(--tw-bg-opacity));
+.bg-opacity-25 {
+  --tw-bg-opacity: 0.25;
 }
 
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
-}
-
-.bg-opacity-75 {
-  --tw-bg-opacity: 0.75;
 }
 
 .bg-cover {
