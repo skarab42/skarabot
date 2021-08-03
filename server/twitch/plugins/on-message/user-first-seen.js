@@ -1,3 +1,13 @@
+const { screenLimit } = require("./config/wall-of-fame");
+const { random } = require("./utils");
+
+function setRandomPosition(viewer) {
+  viewer.position = {
+    x: random(0, screenLimit.x),
+    y: random(0, screenLimit.y),
+  };
+}
+
 let queueTimeoutId = null;
 const queueTimeout = 2000;
 const viewerQueue = new Map();
@@ -38,6 +48,8 @@ async function updateUser({ helixUser, client }) {
   await viewer.save();
 
   client.io.emit("viewers.update", viewer);
+
+  return data;
 }
 
 function processQueue(client) {
@@ -49,6 +61,20 @@ function processQueue(client) {
       Promise.all(
         helixUsers.map((helixUser) => updateUser({ helixUser, client }))
       )
+        .then((viewers) => {
+          return viewers
+            .filter(({ isFirstMessage, viewer }) => {
+              if (viewer.messageCount === 1) {
+                setRandomPosition(viewer);
+                viewer.save();
+              }
+              return isFirstMessage || viewer.messageCount === 1;
+            })
+            .map((v) => v.viewer);
+        })
+        .then((viewers) => {
+          client.emit("wof.add-viewers", viewers);
+        })
     )
     .catch(error)
     .then(clearQueue);

@@ -96,6 +96,10 @@ function addViewer(viewer) {
   addSticker(viewer, ++viewerCount);
 }
 
+function addViewers(viewers) {
+  viewers.forEach(addViewer);
+}
+
 function blink({ user, count }) {
   const timeout = count * blinkTime;
   const duration = blinkTime / 2;
@@ -109,7 +113,7 @@ function blink({ user, count }) {
   const $img = document.querySelector(targets);
 
   const filter = $img.style.filter;
-  // const zIndex = $img.style.zIndex;
+
   $img.style.zIndex = viewerCount;
   $img.style.filter = "none";
 
@@ -118,7 +122,6 @@ function blink({ user, count }) {
     targets,
     keyframes,
     complete: () => {
-      // $img.style.zIndex = zIndex;
       $img.style.filter = filter;
     },
   });
@@ -137,5 +140,6 @@ socket.on("wof.show", () => show(5000));
 socket.on("wof.hide", hide);
 socket.on("wof.blink", blink);
 socket.on("wof.add-viewer", addViewer);
+socket.on("wof.add-viewers", addViewers);
 
 socket.emit("viewers.get-famouses", { limit: 500 }, addStickers);

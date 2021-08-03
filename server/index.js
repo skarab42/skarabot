@@ -43,7 +43,7 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
     .onMessage(require("./twitch/plugins/on-message/terminal-chat"))
     .onMessage(require("./twitch/plugins/on-message/chat"))
     .onMessage(require("./twitch/plugins/on-message/poll"))
-    .onMessage(require("./twitch/plugins/on-message/wall-of-fame"))
+    // .onMessage(require("./twitch/plugins/on-message/wall-of-fame"))
     .onMessage(require("./twitch/plugins/on-message/streamer-highlight"))
     .onMessage(require("./twitch/plugins/on-message/faudrey_voir"))
     .onMessage(require("./twitch/plugins/on-message/commands"))
