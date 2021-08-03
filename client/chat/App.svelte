@@ -16,14 +16,14 @@
 
   socket.on("chat.new-message", pushMessage);
 
-  socket.on('viewer.teamChange', ({id, ...rest }) => {
+  socket.on("viewer.teamChange", ({ id, ...rest }) => {
     messages = messages.map((message) => {
       if (message.viewer.id === parseInt(id)) {
-        message = { ...message, team:{ color: rest.color, name: rest.team } };
+        message = { ...message, team: { color: rest.color, name: rest.team } };
       }
       return message;
     });
-  })
+  });
 
   function updateViewer(viewer) {
     messages = messages.map((message) => {
@@ -37,16 +37,22 @@
   socket.on("viewers.update", updateViewer);
 </script>
 
-<svelte:head>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Goldman&display=swap" rel="stylesheet">
-</svelte:head>
-
 <style>
-  :global(.font-goldman) { font-family: 'Goldman', cursive }
-  :global(.font-confortaa) { font-family: 'Comfortaa', cursive; }
+  :global(.font-goldman) {
+    font-family: "Goldman", cursive;
+  }
+  :global(.font-confortaa) {
+    font-family: "Comfortaa", cursive;
+  }
 </style>
 
+<svelte:head>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Goldman&display=swap"
+    rel="stylesheet"
+  />
+</svelte:head>
 <div class="p-4 flex flex-col space-y-4">
   {#each messages as data (data.id)}
     <Message data="{data}" />
