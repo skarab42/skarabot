@@ -1,11 +1,8 @@
-require("dotenv-flow").config();
-
 const { twitchClient, twitchAuth } = require("./twitch");
 const { name, version } = require("../package.json");
 // const voiceCommand = require("./libs/voiceCommand");
 const OBSWebSocket = require("obs-websocket-js");
 const firebase = require("./libs/firebase");
-const localtunnel = require("localtunnel");
 const umzug = require("./db/umzug");
 const config = require("./config");
 const socketIO = require("./io");
@@ -17,10 +14,6 @@ const publicServ = sirv(config.server.publicPath, { dev: true });
 
 (async () => {
   await umzug.up();
-  await localtunnel({
-    subdomain: process.env.LOCALTUNEL_SUBDOMAIN,
-    port: config.server.port,
-  });
 
   const { server } = polka()
     .use(userServ)
