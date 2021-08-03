@@ -37,7 +37,7 @@ export default {
     svelte({ dev: watch }),
     // watch && livereload(outputDir),
     watch && spawnServer(serverPath),
-    !watch && cleaner({ targets: [outputDir] }),
+    !watch && cleaner({ targets: [`${outputDir}/js/`] }),
     !watch && terser(),
   ],
 };
