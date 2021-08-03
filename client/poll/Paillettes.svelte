@@ -27,7 +27,7 @@
       angle: 160,
       origin: {
         x: 0.85,
-        y: 0.18,
+        y: 0.25,
       },
       ...options,
     }).then(() => {
@@ -59,6 +59,7 @@
   }
 
   socket.on("paillettes", fires);
+
 </script>
 
 <div class="absolute inset-0" bind:this="{canvasWrapper}"></div>
