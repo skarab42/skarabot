@@ -2,7 +2,7 @@ const frameCommand = require("./commands/frame");
 
 const delayH = 2;
 const delayMs = delayH * 3600000;
-const minViewCount = 500;
+const minViewCount = 1000;
 
 const sayMessage = "C'est un avion ? une fusée ? non c'est un streamer Twitch";
 
