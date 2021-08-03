@@ -6,8 +6,6 @@ module.exports = ({ command, message, client, isModo }) => {
   let [name, ...args] = command.args;
   let value = args.join(" ").trim();
 
-  const user = message.user;
-
   if (!name) {
     client.chat.say(message.channel, `Usage: !alias <name> <value>`);
     return;
@@ -19,7 +17,6 @@ module.exports = ({ command, message, client, isModo }) => {
     isModo() && alias.delete(`list.${name.slice(1)}`);
   } else if (!ignores.includes(name)) {
     value = alias.get(`list.${name}`);
-    // const text = value || `!${name} !?! C'est pas faux @${user} skarab1337`;
     value && client.chat.say(message.channel, value);
   }
 };
