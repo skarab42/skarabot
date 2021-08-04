@@ -7,7 +7,7 @@ const cooldownTimeout = 15;
 
 let currentChannel = null;
 
-module.exports = async ({ command, message, client, cooldown, isModo }) => {
+module.exports = async ({ command, message, client, cooldown, isVip }) => {
   let [url] = command.args;
 
   if (!url && currentChannel) {
@@ -30,11 +30,11 @@ module.exports = async ({ command, message, client, cooldown, isModo }) => {
     );
   }
 
+  if (!isVip({ silent: true }) && target.provider !== "twitch") return;
+  if (cooldown("cmd.frame", cooldownTimeout)) return;
+
   currentChannel =
     target.provider === "twitch" ? `twitch.tv/${target.channel} !` : url;
-
-  if (!isModo({ silent: true }) && target.provider !== "twitch") return;
-  if (cooldown("cmd.frame", cooldownTimeout)) return;
 
   if (target.provider === "twitch" && target.mediaType === "stream") {
     const stream = await getStreamByUserName({ client, name: target.channel });
@@ -42,7 +42,7 @@ module.exports = async ({ command, message, client, cooldown, isModo }) => {
     if (!stream) {
       const video = await getRandomVideoByUserName({
         client,
-        mature: true,
+        mature: false,
         name: target.channel,
         channel: message.channel,
       });

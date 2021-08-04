@@ -2,7 +2,7 @@ const { ApiClient } = require("twitch");
 const AuthProvider = require("./AuthProvider");
 const { ChatClient } = require("twitch-chat-client");
 
-const isModoPlugin = require("./plugins/isModo");
+const rolesPlugin = require("./plugins/roles");
 const cooldownPlugin = require("./plugins/cooldown");
 
 module.exports = class Client {
@@ -25,10 +25,11 @@ module.exports = class Client {
       message = { channel, user, message, emotes, msg, data: {} };
       message.msg._tags = Object.fromEntries(msg._tags || []);
 
-      const isModo = isModoPlugin.bind(null, this, message);
+      const isModo = rolesPlugin.isModo.bind(null, this, message);
+      const isVip = rolesPlugin.isVip.bind(null, this, message);
       const cooldown = cooldownPlugin.bind(null, this, message);
 
-      this._onMessage({ message, client: this, cooldown, isModo });
+      this._onMessage({ message, client: this, cooldown, isModo, isVip });
     });
   }
 
