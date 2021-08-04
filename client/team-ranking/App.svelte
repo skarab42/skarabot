@@ -31,6 +31,7 @@
 
   socket.on("team.ranking", setRanking);
   socket.on("treasureChest.newOwner", onChestOwner);
+
 </script>
 
 <style>
@@ -38,9 +39,10 @@
     line-height: 1em;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.86);
   }
+
 </style>
 
-<div class="p-4 text-gray-300 flex space-x-2">
+<!-- <div class="p-4 text-gray-300 flex space-x-2">
   {#each ranking as team (team.id)}
     <div
       class="px-2 flex items-center justify-center bg-gray-700 rounded overflow-hidden shadow-xl"
@@ -55,7 +57,7 @@
       <div class="p-2 text-bold text-2xl">{team.messageCount}</div>
     </div>
   {/each}
-</div>
+</div> -->
 
 {#if chestOwner}
   <div
