@@ -2,7 +2,7 @@ const soundex = require("soundex");
 
 const messageLengthRatio = 0.01;
 const welcomePoints = 10;
-const replyPoints = 5;
+const replyPoints = 1;
 
 const welcomeSentences = require("./config/welcomeSentences").map((s) =>
   soundex(s)
