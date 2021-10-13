@@ -11,6 +11,7 @@
     "lint": "eslint --fix ./server"
   },
   "dependencies": {
+    "@google-cloud/text-to-speech": "^3.3.1",
     "PerspectiveTransform.js": "https://github.com/edankwan/PerspectiveTransform.js",
     "animejs": "^3.2.1",
     "axios": "^0.21.1",
@@ -28,6 +29,7 @@
     "sequelize": "^6.3.5",
     "sirv": "^1.0.6",
     "socket.io": "^2.3.0",
+    "sound-play": "^1.1.0",
     "soundex": "^0.2.1",
     "sqlite3": "^5.0.0",
     "twitch": "^4.3.6",
