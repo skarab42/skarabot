@@ -1,4 +1,5 @@
 const { default: anime } = require("animejs");
+const { playSound } = require("./libs/sound");
 const socket = require("socket.io-client")();
 const random = require("./libs/random");
 
@@ -143,3 +144,5 @@ socket.on("wof.add-viewer", addViewer);
 socket.on("wof.add-viewers", addViewers);
 
 socket.emit("viewers.get-famouses", { limit: 500 }, addStickers);
+
+socket.on("play.sound", playSound);

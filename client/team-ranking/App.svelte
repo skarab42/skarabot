@@ -59,7 +59,7 @@
   {/each}
 </div> -->
 
-{#if chestOwner}
+<!-- {#if chestOwner}
   <div
     class="absolute rounded overflow-hidden"
     style="top:340px; width: 100px; height:100px;"
@@ -78,4 +78,4 @@
     src="images/crown.png"
     alt="crown"
   />
-{/if}
+{/if} -->
