@@ -31,7 +31,7 @@
     "socket.io": "^2.3.0",
     "sound-play": "^1.1.0",
     "soundex": "^0.2.1",
-    "sqlite3": "^5.0.0",
+    "sqlite3": "^5.0.3",
     "twitch": "^4.3.6",
     "twitch-auth": "^4.3.6",
     "twitch-chat-client": "^4.3.6",
